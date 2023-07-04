@@ -1,1 +1,151 @@
-# Wahlfachprojekt2
+# Wahlfachprojekt 2
+
+..insert description here..
+
+## PXE Booting
+
+### Setting up the nfs01 server
+```bash
+sudo su -
+apt-get update
+
+mkdir -p /mnt/ssd/nfs/worker{01,02,03}
+mkdir -p /mnt/ssd/tftpboot/192.168.1.{211,212,213}
+apt-get install dnsmasq tcpdump nfs-kernel-server
+
+# format the disk /dev/sda to have the following partition table:
+$> fdisk /dev/sda
+Command (m for help): p
+Disk /dev/sda: 238.47 GiB, 256060514304 bytes, 500118192 sectors
+Disk model:
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 33553920 bytes
+Disklabel type: dos
+Disk identifier: 0x9b9b618a
+Device     Boot     Start       End   Sectors   Size Id Type
+/dev/sda1           65535 499114559 499049025   238G 83 Linux
+/dev/sda2       499114560 500118191   1003632 490.1M 83 Linux
+
+echo "proc            /proc           proc    defaults          0       0
+PARTUUID=3631454f-01  /boot           vfat    defaults          0       2
+PARTUUID=3631454f-02  /               ext4    defaults,noatime  0       1
+PARTUUID=9b9b618a-01 /mnt/ssd/nfs ext4 defaults,nofail 0 2
+PARTUUID=9b9b618a-02 /mnt/ssd/tftpboot vfat defaults,nofail,uid=0,gid=0,umask=000 0 0
+" > /etc/fstab
+
+mount -a
+chmod -R 777 /mnt/ssd/tftpboot
+cp -r /boot/* /mnt/ssd/tftpboot/192.168.1.211/
+cp -r /boot/* /mnt/ssd/tftpboot/192.168.1.212/
+cp -r /boot/* /mnt/ssd/tftpboot/192.168.1.213/
+
+echo "[Match]
+Name=eth0
+[Network]
+DHCP=no" > /etc/systemd/network/10-eth0.netdev
+
+echo "[Match]
+Name=eth0
+[Network]
+Address=192.168.1.210/24
+DNS=192.168.1.1 8.8.8.8 8.8.4.4
+Gateway=192.168.1.1" > /etc/systemd/network/11-eth0.network
+
+echo "nameserver 8.8.8.8
+nameserver 8.8.4.4" > /etc/resolv.dnsmasq.conf
+
+
+echo "port=0
+dhcp-range=192.168.1.211,192.168.1.213,12h
+dhcp-host=d8:3a:dd:1d:3e:c6,worker01,192.168.1.211
+#dhcp-host=xx:xx:xx:xx:xx:xx,worker02,192.168.1.212
+#dhcp-host=xx:xx:xx:xx:xx:xx,worker03,192.168.1.213
+#dhcp-range=192.168.1.255,proxy
+log-dhcp
+enable-tftp
+tftp-root=/mnt/ssd/tftpboot
+pxe-service=0,"Raspberry Pi Boot"
+tftp-unique-root
+resolv-file=/etc/resolv.dnsmasq.conf" > /etc/dnsmasq.conf
+
+systemctl enable dnsmasq.service
+systemctl restart dnsmasq.service
+
+echo "/mnt/ssd/nfs/worker01 *(rw,sync,no_subtree_check,no_root_squash)
+/mnt/ssd/nfs/worker02 *(rw,sync,no_subtree_check,no_root_squash)
+/mnt/ssd/nfs/worker03 *(rw,sync,no_subtree_check,no_root_squash)
+/home/denis 192.168.1.0/24(rw,sync,no_subtree_check)" > /etc/exports
+
+systemctl enable rpcbind
+systemctl restart rpcbind
+systemctl enable nfs-kernel-server
+systemctl restart nfs-kernel-server
+
+echo "console=serial0,115200 console=tty root=/dev/nfs nfsroot=192.168.1.210:/mnt/ssd/nfs/worker01,vers=3 rw ip=dhcp rootwait elevator=deadline" > /mnt/ssd/tftpboot/192.168.1.211/cmdline.txt
+echo "console=serial0,115200 console=tty root=/dev/nfs nfsroot=192.168.1.210:/mnt/ssd/nfs/worker02,vers=3 rw ip=dhcp rootwait elevator=deadline" > /mnt/ssd/tftpboot/192.168.1.212/cmdline.txt
+echo "console=serial0,115200 console=tty root=/dev/nfs nfsroot=192.168.1.210:/mnt/ssd/nfs/worker03,vers=3 rw ip=dhcp rootwait elevator=deadline" > /mnt/ssd/tftpboot/192.168.1.213/cmdline.txt
+
+
+# worker01 (on the nfs01 server)
+rsync -xa --exclude /mnt/ssd/nfs / /mnt/ssd/nfs/worker01/
+cd /mnt/ssd/nfs/worker01
+mount --bind /dev dev
+mount --bind /sys sys
+mount --bind /proc proc
+chroot .
+rm /etc/ssh/ssh_host_*
+dpkg-reconfigure openssh-server
+echo "proc            /proc           proc    defaults          0       0" > /etc/fstab
+echo "worker01" > /etc/hostname
+sed -i 's/nfs01/worker01/g' /etc/hosts
+rm /etc/systemd/network/*
+systemctl disable nfs-server.service
+systemctl disable dnsmasq.service
+exit
+umount dev
+umount sys
+umount proc
+
+# worker02 (on the nfs01 server)
+rsync -xa --exclude /mnt/ssd/nfs / /mnt/ssd/nfs/worker02/
+cd /mnt/ssd/nfs/worker01
+mount --bind /dev dev
+mount --bind /sys sys
+mount --bind /proc proc
+chroot .
+rm /etc/ssh/ssh_host_*
+dpkg-reconfigure openssh-server
+echo "proc            /proc           proc    defaults          0       0" > /etc/fstab
+echo "worker02" > /etc/hostname
+sed -i 's/nfs01/worker02/g' /etc/hosts
+rm /etc/systemd/network/*
+systemctl disable nfs-server.service
+systemctl disable dnsmasq.service
+exit
+umount dev
+umount sys
+umount proc
+
+
+# worker03 (on the nfs01 server)
+rsync -xa --exclude /mnt/ssd/nfs / /mnt/ssd/nfs/worker03/
+cd /mnt/ssd/nfs/worker03
+mount --bind /dev dev
+mount --bind /sys sys
+mount --bind /proc proc
+chroot .
+rm /etc/ssh/ssh_host_*
+dpkg-reconfigure openssh-server
+echo "proc            /proc           proc    defaults          0       0" > /etc/fstab
+echo "worker01" > /etc/hostname
+sed -i 's/nfs01/worker03/g' /etc/hosts
+rm /etc/systemd/network/*
+systemctl disable nfs-server.service
+systemctl disable dnsmasq.service
+exit
+umount dev
+umount sys
+umount proc
+
+``` 
