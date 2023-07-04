@@ -88,7 +88,7 @@ echo "console=serial0,115200 console=tty root=/dev/nfs nfsroot=192.168.1.210:/mn
 
 
 # worker01 (on the nfs01 server)
-rsync -xa --exclude /mnt/ssd/nfs / /mnt/ssd/nfs/worker01/
+rsync -xa --exclude /mnt/ssd / /mnt/ssd/nfs/worker01/
 cd /mnt/ssd/nfs/worker01
 mount --bind /dev dev
 mount --bind /sys sys
@@ -108,7 +108,7 @@ umount sys
 umount proc
 
 # worker02 (on the nfs01 server)
-rsync -xa --exclude /mnt/ssd/nfs / /mnt/ssd/nfs/worker02/
+rsync -xa --exclude /mnt/ssd / /mnt/ssd/nfs/worker02/
 cd /mnt/ssd/nfs/worker01
 mount --bind /dev dev
 mount --bind /sys sys
@@ -129,7 +129,7 @@ umount proc
 
 
 # worker03 (on the nfs01 server)
-rsync -xa --exclude /mnt/ssd/nfs / /mnt/ssd/nfs/worker03/
+rsync -xa --exclude /mnt/ssd / /mnt/ssd/nfs/worker03/
 cd /mnt/ssd/nfs/worker03
 mount --bind /dev dev
 mount --bind /sys sys
