@@ -9,6 +9,33 @@
 * Here is a guide how to set the TFTP_IP in the bootconf.txt
   https://rob-ferguson.me/how-to-pxe-boot-your-rpi 
 * Flash the EEPROM on the pi with the new boot order
+
+### Flashing the EEPROM (on worker01, worker02, worker03)
+```bash
+sudo su -
+ls -al /lib/firmware/raspberrypi/bootloader/stable/
+cp /lib/firmware/raspberrypi/bootloader/stable/pieeprom-2022-03-10.bin pieeprom.bin
+
+echo "[all]
+BOOT_UART=0
+WAKE_ON_GPIO=1
+POWER_OFF_ON_HALT=0
+DHCP_TIMEOUT=45000
+DHCP_REQ_TIMEOUT=4000
+TFTP_FILE_TIMEOUT=30000
+TFTP_IP=192.168.1.210
+TFTP_PREFIX=0
+ENABLE_SELF_UPDATE=1
+DISABLE_HDMI=0
+BOOT_ORDER=0x241
+SD_CARD_MAX_RETRIES=3
+NET_BOOT_MAX_RETRIES=5" > bootconf.txt
+
+rpi-eeprom-config --out pieeprom-new.bin --config bootconf.txt pieeprom.bin
+rpi-eeprom-update -d -f ./pieeprom-new.bin
+reboot
+vcgencmd bootloader_config
+```
 ### Setting up the nfs01 server
 ```bash
 sudo su -
