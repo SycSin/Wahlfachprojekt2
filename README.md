@@ -148,7 +148,8 @@ mount --bind /proc proc
 chroot .
 rm /etc/ssh/ssh_host_*
 dpkg-reconfigure openssh-server
-echo "proc            /proc           proc    defaults          0       0" > /etc/fstab
+echo "proc            /proc           proc    defaults          0       0
+192.168.1.210:/mnt/ssd/tftpboot/192.168.1.211/ /boot nfs defaults,vers=3,proto=tcp 0 0" > /etc/fstab
 echo "worker01" > /etc/hostname
 sed -i 's/nfs01/worker01/g' /etc/hosts
 rm /etc/systemd/network/*
@@ -168,7 +169,8 @@ mount --bind /proc proc
 chroot .
 rm /etc/ssh/ssh_host_*
 dpkg-reconfigure openssh-server
-echo "proc            /proc           proc    defaults          0       0" > /etc/fstab
+echo "proc            /proc           proc    defaults          0       0
+192.168.1.210:/mnt/ssd/tftpboot/192.168.1.212/ /boot nfs defaults,vers=3,proto=tcp 0 0" > /etc/fstab
 echo "worker02" > /etc/hostname
 sed -i 's/nfs01/worker02/g' /etc/hosts
 rm /etc/systemd/network/*
@@ -189,8 +191,9 @@ mount --bind /proc proc
 chroot .
 rm /etc/ssh/ssh_host_*
 dpkg-reconfigure openssh-server
-echo "proc            /proc           proc    defaults          0       0" > /etc/fstab
-echo "worker01" > /etc/hostname
+echo "proc            /proc           proc    defaults          0       0
+192.168.1.210:/mnt/ssd/tftpboot/192.168.1.213/ /boot nfs defaults,vers=3,proto=tcp 0 0" > /etc/fstab
+echo "worker03" > /etc/hostname
 sed -i 's/nfs01/worker03/g' /etc/hosts
 rm /etc/systemd/network/*
 systemctl disable nfs-server.service
