@@ -13,7 +13,6 @@
 ### Flashing the EEPROM (on worker01, worker02, worker03)
 ```bash
 sudo su -
-ls -al /lib/firmware/raspberrypi/bootloader/stable/
 cp /lib/firmware/raspberrypi/bootloader/stable/pieeprom-2022-03-10.bin pieeprom.bin
 
 echo "[all]
@@ -36,6 +35,7 @@ rpi-eeprom-update -d -f ./pieeprom-new.bin
 reboot
 vcgencmd bootloader_config
 ```
+
 ### Setting up the nfs01 server
 ```bash
 sudo su -
