@@ -80,6 +80,9 @@ systemctl restart dnsmasq.service
 echo "/mnt/ssd/nfs/worker01 *(rw,sync,no_subtree_check,no_root_squash)
 /mnt/ssd/nfs/worker02 *(rw,sync,no_subtree_check,no_root_squash)
 /mnt/ssd/nfs/worker03 *(rw,sync,no_subtree_check,no_root_squash)
+/mnt/ssd/tftpboot/192.168.1.211 192.168.1.211(rw,sync,no_subtree_check,no_root_squash)
+/mnt/ssd/tftpboot/192.168.1.212 192.168.1.212(rw,sync,no_subtree_check,no_root_squash)
+/mnt/ssd/tftpboot/192.168.1.213 192.168.1.213(rw,sync,no_subtree_check,no_root_squash)
 /home/denis 192.168.1.0/24(rw,sync,no_subtree_check)" > /etc/exports
 
 systemctl enable rpcbind
@@ -90,6 +93,23 @@ systemctl restart nfs-kernel-server
 echo "console=serial0,115200 console=tty root=/dev/nfs nfsroot=192.168.1.210:/mnt/ssd/nfs/worker01,vers=3 rw ip=dhcp rootwait elevator=deadline" > /mnt/ssd/tftpboot/192.168.1.211/cmdline.txt
 echo "console=serial0,115200 console=tty root=/dev/nfs nfsroot=192.168.1.210:/mnt/ssd/nfs/worker02,vers=3 rw ip=dhcp rootwait elevator=deadline" > /mnt/ssd/tftpboot/192.168.1.212/cmdline.txt
 echo "console=serial0,115200 console=tty root=/dev/nfs nfsroot=192.168.1.210:/mnt/ssd/nfs/worker03,vers=3 rw ip=dhcp rootwait elevator=deadline" > /mnt/ssd/tftpboot/192.168.1.213/cmdline.txt
+
+# The delayed nfs-server start workaround is required since the mount-points are not present when starting the nfs-server after rebooting which causes a failed start of the nfs-server
+echo "[Unit]
+Description=Delayed NFS Server Start
+Wants=network-online.target
+After=network-online.target local-fs.target
+ConditionPathExists=/mnt/ssd/nfs/worker01
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/systemctl start nfs-server.service
+
+[Install]
+WantedBy=multi-user.target" > /etc/systemd/system/nfs-delayed.service
+
+systemctl-daemon reload
+systemctl enable nfs-delayed.service
 
 
 # worker01 (on the nfs01 server)
