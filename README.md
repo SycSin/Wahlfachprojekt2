@@ -198,5 +198,10 @@ exit
 umount dev
 umount sys
 umount proc
+```
 
-``` 
+### Setup Jenkins on nfs01
+```bash
+apt install docker.io
+
+```
