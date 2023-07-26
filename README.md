@@ -225,8 +225,9 @@ services:
 
 docker-compose up -d
 
-#go to http://192.168.1.210:8080 on the browser and paste the intialAdminPassword (the password can be retrieved using the following command)
+# Go to http://192.168.1.210:8080 on the browser and paste the intialAdminPassword (the password can be retrieved using the following command), afterwards finish the setup
 docker exec -t jenkins cat /var/jenkins_home/secrets/initialAdminPassword
 
-
+# Generate a public/private keypair and paste the private key to the crendentials tab, and paste the public key to the SSH-Keys for the GitHub account to access this repository
+ssh-keygen -b 4096
 ```
