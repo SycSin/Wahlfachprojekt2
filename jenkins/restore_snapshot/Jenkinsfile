@@ -17,11 +17,12 @@ pipeline {
                     echo "Selected worker: $worker"
                    
                     // Define the target host and SSH credentials ID
+                    def user = "root"
                     def targetHost = "192.168.1.210"
                     def sshCredentials = "jenkins-private-key"
                     
                     // Execute rsync command using ssh command with targetHost and sshCredentials
-                    sh "ssh -o StrictHostKeyChecking=no -l user -i ${sshCredentials} ${targetHost} rsync -a --delete /mnt/ssd/nfs/worker-base-template/ /mnt/ssd/nfs/${worker}"
+                    sh "ssh -o StrictHostKeyChecking=no -l ${user} -i ${sshCredentials} ${targetHost} rsync -a --delete /mnt/ssd/nfs/worker-base-template/ /mnt/ssd/nfs/${worker}"
                 }
             }
         }
