@@ -89,15 +89,11 @@ nameserver 8.8.4.4" > /etc/resolv.dnsmasq.conf
 
 
 echo "port=0
-dhcp-range=192.168.1.211,192.168.1.213,12h
-dhcp-host=d8:3a:dd:1d:3e:c6,worker01,192.168.1.211
-#dhcp-host=xx:xx:xx:xx:xx:xx,worker02,192.168.1.212
-#dhcp-host=xx:xx:xx:xx:xx:xx,worker03,192.168.1.213
-#dhcp-range=192.168.1.255,proxy
+dhcp-range=192.168.1.255,proxy
 log-dhcp
 enable-tftp
 tftp-root=/mnt/ssd/tftpboot
-pxe-service=0,"Raspberry Pi Boot"
+pxe-service=0,Raspberry Pi Boot
 tftp-unique-root
 resolv-file=/etc/resolv.dnsmasq.conf" > /etc/dnsmasq.conf
 
