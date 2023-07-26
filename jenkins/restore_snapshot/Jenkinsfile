@@ -22,7 +22,7 @@ pipeline {
                     def sshCredentials = "jenkins-private-key"
 
                     // Execute rsync command using withCredentials block
-                    withCredentials([sshUserPrivateKey(credentialId: sshCredentials, keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                    withCredentials([sshUserPrivateKey(credentialsId: sshCredentials, keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         sh "ssh -o StrictHostKeyChecking=no -l ${user} -i <<< \$SSH_PRIVATE_KEY ${targetHost} rsync -a --delete /mnt/ssd/nfs/worker-base-template/ /mnt/ssd/nfs/${worker}"
                     }
                 }
@@ -30,4 +30,4 @@ pipeline {
         }
     }
 }
-s
+
