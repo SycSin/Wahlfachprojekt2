@@ -212,6 +212,7 @@ echo "version: '3'
 services:
   jenkins:
     image: jenkins/jenkins:lts
+    restart: unless-stopped
     privileged: true
     user: root
     ports:
