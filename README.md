@@ -202,6 +202,7 @@ umount proc
 
 ### Setup Jenkins on nfs01
 ```bash
+sudo su -
 apt install docker.io
 
 ```
