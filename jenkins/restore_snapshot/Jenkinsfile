@@ -1,6 +1,6 @@
 pipeline {
     agent any
-    
+
     parameters {
         choice(
             choices: 'worker01\nworker02\nworker03',
@@ -8,23 +8,26 @@ pipeline {
             name: 'WORKER'
         )
     }
-    
+
     stages {
         stage('Run rsync on Worker') {
             steps {
                 script {
                     def worker = params.WORKER
                     echo "Selected worker: $worker"
-                   
+
                     // Define the target host and SSH credentials ID
                     def user = "root"
                     def targetHost = "192.168.1.210"
                     def sshCredentials = "jenkins-private-key"
-                    
-                    // Execute rsync command using ssh command with targetHost and sshCredentials
-                    sh "ssh -o StrictHostKeyChecking=no -l ${user} -i ${sshCredentials} ${targetHost} rsync -a --delete /mnt/ssd/nfs/worker-base-template/ /mnt/ssd/nfs/${worker}"
+
+                    // Execute rsync command using sshagent with targetHost and sshCredentials
+                    sshagent(credentials: [ssh(credentialsId: sshCredentials, keyFileVariable: '')]) {
+                        sh "ssh -o StrictHostKeyChecking=no -l ${user} ${targetHost} rsync -a --delete /mnt/ssd/nfs/worker-base-template/ /mnt/ssd/nfs/${worker}"
+                    }
                 }
             }
         }
     }
 }
+
