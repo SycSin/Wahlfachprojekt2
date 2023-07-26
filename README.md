@@ -224,4 +224,9 @@ services:
 " > docker-compose.yml
 
 docker-compose up -d
+
+#go to http://192.168.1.210:8080 on the browser and paste the intialAdminPassword (the password can be retrieved using the following command)
+docker exec -t jenkins cat /var/jenkins_home/secrets/initialAdminPassword
+
+
 ```
