@@ -1,3 +1,5 @@
+import groovy.json.JsonSlurperClassic
+
 pipeline {
     agent any
 
@@ -24,8 +26,9 @@ pipeline {
                     // Retrieve the base64-encoded SSH private key
                     def privateKeyBase64 = credentials("${sshCredentials}")
 
-                    // Decode the base64-encoded private key to get the original SSH private key
-                    def privateKey = privateKeyBase64.decodeBase64().toString()
+                    // Convert the base64 string to byte[] and decode to get the original SSH private key
+                    def privateKeyBytes = privateKeyBase64.getBytes()
+                    def privateKey = privateKeyBytes.decodeBase64().toString()
 
                     // Execute rsync command using withCredentials block
                     withCredentials([sshUserPrivateKey(credentialsId: sshCredentials, keyFileVariable: 'SSH_PRIVATE_KEY')]) {
