@@ -21,9 +21,16 @@ pipeline {
                     def targetHost = "192.168.1.210"
                     def sshCredentials = "jenkins-private-key"
 
-                    // Execute rsync command using sshagent with targetHost and sshCredentials
-                    sshagent(credentials: [ssh(credentialsId: sshCredentials, keyFileVariable: '')]) {
-                        sh "ssh -o StrictHostKeyChecking=no -l ${user} ${targetHost} rsync -a --delete /mnt/ssd/nfs/worker-base-template/ /mnt/ssd/nfs/${worker}"
+                    // Define SSH agent credentials
+                    def sshCredentialsStep = [
+                        $class: 'org.jenkinsci.plugins.credentialsbinding.impl.BindingStep',
+                        credentialsId: sshCredentials,
+                        variable: 'SSH_PRIVATE_KEY'
+                    ]
+
+                    // Execute rsync command using withCredentials block
+                    withCredentials([sshCredentialsStep]) {
+                        sh "ssh -o StrictHostKeyChecking=no -l ${user} -i <<< \$SSH_PRIVATE_KEY ${targetHost} rsync -a --delete /mnt/ssd/nfs/worker-base-template/ /mnt/ssd/nfs/${worker}"
                     }
                 }
             }
