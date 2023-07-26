@@ -21,8 +21,11 @@ pipeline {
                     def targetHost = "192.168.1.210"
                     def sshCredentials = "jenkins-private-key"
 
-                    // Retrieve the SSH private key
-                    def privateKey = credentials("${sshCredentials}")
+                    // Retrieve the base64-encoded SSH private key
+                    def privateKeyBase64 = credentials("${sshCredentials}")
+
+                    // Decode the base64-encoded private key to get the original SSH private key
+                    def privateKey = privateKeyBase64.decodeBase64().toString()
 
                     // Execute rsync command using withCredentials block
                     withCredentials([sshUserPrivateKey(credentialsId: sshCredentials, keyFileVariable: 'SSH_PRIVATE_KEY')]) {
