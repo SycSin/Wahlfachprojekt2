@@ -203,6 +203,25 @@ umount proc
 ### Setup Jenkins on nfs01
 ```bash
 sudo su -
-apt install docker.io
+apt install -y docker.io docker-compose
+usermod -a -G docker denis
+mkdir /opt/jenkins_docker
+cd /opt/jenkins_docker
 
+echo "version: '3'
+services:
+  jenkins:
+    image: jenkins/jenkins:lts
+    privileged: true
+    user: root
+    ports:
+     - 8080:8080
+     - 50000:50000
+    container_name: jenkins
+    volumes:
+      - ./jenkins_configuration:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+" > docker-compose.yml
+
+docker-compose up -d
 ```
