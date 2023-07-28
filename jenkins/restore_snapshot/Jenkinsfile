@@ -23,47 +23,32 @@ pipeline {
                     }
                 }
             }
-        }
-
-        stage('Reboot Worker') {
-            steps {
-                script {
-                    // Load the private key from the credentials using the 'withCredentials' step
-                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
-                        // Connect to the SSH agent using the loaded private key
-                        sshagent(credentials: ['jenkins-private-key']) {
-                            // Reboot the worker
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@${getWorkerIP(params.WORKER)} 'reboot'"
+            post {
+                always {
+                    script {
+                        // Wait for the worker to be healthy
+                        def workerIP = getWorkerIP(params.WORKER)
+                        def timeoutSeconds = 300
+                        def startTime = currentBuild.startTimeInMillis
+                        def endTime = startTime + timeoutSeconds * 1000
+                        
+                        while (System.currentTimeMillis() < endTime) {
+                            try {
+                                // Attempt to connect to the worker over SSH
+                                sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@${workerIP} 'exit'"
+                                echo "Worker is reachable again."
+                                break
+                            } catch (Exception ex) {
+                                echo "Worker is not reachable yet. Retrying in 10 seconds..."
+                                sleep 10
+                            }
                         }
+                        
+                        // Fail the job if the worker is not reachable after the timeout
+                        if (System.currentTimeMillis() >= endTime) {
+                            error "Worker did not boot properly within the specified timeout."
+                        }    
                     }
-                }
-            }
-        }
-        post {
-            always {
-                script {
-                    // Wait for the worker to be healthy
-                    def workerIP = getWorkerIP(params.WORKER)
-                    def timeoutSeconds = 300
-                    def startTime = currentBuild.startTimeInMillis
-                    def endTime = startTime + timeoutSeconds * 1000
-                    
-                    while (System.currentTimeMillis() < endTime) {
-                        try {
-                            // Attempt to connect to the worker over SSH
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@${workerIP} 'exit'"
-                            echo "Worker is reachable again."
-                            break
-                        } catch (Exception ex) {
-                            echo "Worker is not reachable yet. Retrying in 10 seconds..."
-                            sleep 10
-                        }
-                    }
-                    
-                    // Fail the job if the worker is not reachable after the timeout
-                    if (System.currentTimeMillis() >= endTime) {
-                        error "Worker did not boot properly within the specified timeout."
-                    }    
                 }
             }
         }
