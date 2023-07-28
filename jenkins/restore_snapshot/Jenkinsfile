@@ -1,43 +1,27 @@
-import groovy.json.JsonSlurper
-
-@NonCPS
-def decodeBase64String(encodedString) {
-    return encodedString.decodeBase64().toString()
-}
-
 pipeline {
     agent any
-
+    
     parameters {
-        choice(
-            choices: 'worker01\nworker02\nworker03',
-            description: 'Select the worker',
-            name: 'WORKER'
-        )
+        string(name: 'WORKER', defaultValue: 'worker01', description: 'Choose one of worker01, worker02, or worker03')
     }
-
+    
+    environment {
+        SSH_CREDENTIALS = 'jenkins-private-key-base64'
+        SSH_USER = 'root'
+        SSH_HOST = '192.168.1.210'
+        SSH_COMMAND = "rsync -a --delete /mnt/ssd/nfs/worker-base-template/ /mnt/ssd/nfs/${params.WORKER}"
+    }
+    
     stages {
-        stage('Run rsync on Worker') {
+        stage('SSH and Execute Rsync') {
             steps {
                 script {
-                    def worker = params.WORKER
-                    echo "Selected worker: $worker"
-
-                    // Define the target host and SSH credentials ID
-                    def user = "root"
-                    def targetHost = "192.168.1.210"
-                    def sshCredentials = "jenkins-private-key-base64"
-
-                    // Retrieve the SSH private key from the Jenkins credentials using withCredentials block
-                    def privateKey = null
-                    withCredentials([sshUserPrivateKey(credentialsId: "${sshCredentials}", keyFileVariable: 'SSH_PRIVATE_KEY')]) {
-                        privateKey = decodeBase64String(SSH_PRIVATE_KEY)
+                    withCredentials([sshUserPrivateKey(credentialsId: env.SSH_CREDENTIALS, keyFileVariable: 'SSH_KEY')]) {
+                        // Start the SSH agent and run the rsync command
+                        sshagent(['sshagent']) {
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} ${SSH_USER}@${SSH_HOST} '${SSH_COMMAND}'"
+                        }
                     }
-
-                    // Continue with the rest of the steps using the decoded privateKey
-                    writeFile file: 'private_key', text: privateKey
-                    sh "chmod 400 private_key"
-                    sh "ssh -o StrictHostKeyChecking=no -i private_key ${user}@${targetHost} rsync -a --delete /mnt/ssd/nfs/worker-base-template/ /mnt/ssd/nfs/${worker}"
                 }
             }
         }
