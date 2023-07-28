@@ -13,27 +13,14 @@ pipeline {
         stage('Deploy to Worker') {
             steps {
                 script {
+                    def workerIP = getWorkerIP(params.WORKER)
                     // Load the private key from the credentials using the 'withCredentials' step
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         // Connect to the SSH agent using the loaded private key
                         sshagent(credentials: ['jenkins-private-key']) {
                             // Execute the rsync command on the remote worker
                             sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.210 'rsync -a --delete /mnt/ssd/nfs/worker-base-template/ /mnt/ssd/nfs/${params.WORKER}'"
-                        }
-                    }
-                }
-            }
-            stage('Reboot Worker') {
-                steps {
-                    script {
-                        def workerIP = getWorkerIP(params.WORKER)
-                        // Load the private key from the credentials using the 'withCredentials' step
-                        withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
-                            // Connect to the SSH agent using the loaded private key
-                            sshagent(credentials: ['jenkins-private-key']) {
-                                // Reboot the worker
-                                sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@${workerIP} 'reboot'"
-                            }
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@${workerIP} 'reboot'"
                         }
                     }
                 }
