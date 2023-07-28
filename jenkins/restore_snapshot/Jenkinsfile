@@ -23,7 +23,7 @@ pipeline {
 
                     // Retrieve the SSH private key from the Jenkins credentials using withCredentials block
                     withCredentials([sshUserPrivateKey(credentialsId: "${sshCredentials}", keyFileVariable: 'SSH_PRIVATE_KEY')]) {
-                        sh "echo '\${SSH_PRIVATE_KEY}' | base64 -d > private_key"
+                        writeFile file: 'private_key', text: "${SSH_PRIVATE_KEY}".decodeBase64().toString()
                         sh "chmod 400 private_key"
                         sh "ssh -o StrictHostKeyChecking=no -i private_key ${user}@${targetHost} rsync -a --delete /mnt/ssd/nfs/worker-base-template/ /mnt/ssd/nfs/${worker}"
                     }
