@@ -28,8 +28,7 @@ pipeline {
                     withEnv(["SSH_PRIVATE_KEY=${privateKey}"]) {
                         sh "echo '\${SSH_PRIVATE_KEY}' > ssh_key"
                         sh "chmod 400 ssh_key"
-                        //sh "ssh -o StrictHostKeyChecking=no -i ssh_key \"rsync -a -e /mnt/ssd/nfs/worker-base-template/ root@${targetHost}:/mnt/ssd/nfs/${worker}\""
-                        sh 'ssh -o StrictHostKeyChecking=no -i ssh_key "ip a"'
+                        sh 'ssh -o StrictHostKeyChecking=no -i ssh_key "rsync -a -e /mnt/ssd/nfs/worker-base-template/ root@${targetHost}:/mnt/ssd/nfs/${worker}"'
                     }
                 }
             }
