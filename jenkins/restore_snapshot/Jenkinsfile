@@ -41,7 +41,7 @@ pipeline {
         }
         post {
             always {
-script {
+                script {
                     // Wait for the worker to be healthy
                     def workerIP = getWorkerIP(params.WORKER)
                     def timeoutSeconds = 300
