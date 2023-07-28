@@ -13,13 +13,17 @@ pipeline {
     stages {
         stage('SSH and Execute Rsync') {
             steps {
-                withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key-base64', keyFileVariable: 'SSH_KEY')]) {
-                    sh """
-                        ssh-agent bash -c '
-                            ssh-add $SSH_KEY
-                            ssh -o StrictHostKeyChecking=no root@${SSH_HOST} \"$SSH_COMMAND\"
-                        '
-                    """
+                script {
+                    // Get the SSH private key from Jenkins credentials
+                    def sshPrivateKey = credentials('jenkins-private-key-base64')
+                    if (sshPrivateKey == null) {
+                        error("Failed to retrieve SSH private key from Jenkins credentials")
+                    }
+
+                    // Start the SSH agent and run the rsync command
+                    sshagent(credentials: [sshPrivateKey]) {
+                        sh "ssh -o StrictHostKeyChecking=no root@${SSH_HOST} \"$SSH_COMMAND\""
+                    }
                 }
             }
         }
