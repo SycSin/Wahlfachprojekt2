@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     parameters {
-        string(name: 'WORKER', defaultValue: 'worker01', description: 'Choose one of worker01, worker02, or worker03')
+        choice(name: 'WORKER', choices: ['worker01', 'worker02', 'worker03'], description: 'Select a worker')
     }
     
     environment {
