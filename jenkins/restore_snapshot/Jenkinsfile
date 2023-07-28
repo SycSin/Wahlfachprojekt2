@@ -74,11 +74,11 @@ pipeline {
 def getWorkerIP(selectedWorker) {
     switch (selectedWorker) {
         case 'worker01':
-            return '192.168.1.111'
+            return '192.168.1.211'
         case 'worker02':
-            return '192.168.1.112'
+            return '192.168.1.212'
         case 'worker03':
-            return '192.168.1.113'
+            return '192.168.1.213'
         default:
             error "Invalid worker selected."
     }
