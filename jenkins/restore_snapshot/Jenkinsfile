@@ -1,27 +1,25 @@
-import hudson.util.Secret
-
 pipeline {
     agent any
 
     parameters {
-        choice(name: 'WORKER', choices: ['worker01', 'worker02', 'worker03'], description: 'Select a worker')
-    }
-
-    environment {
-        SSH_HOST = '192.168.1.210'
-        SSH_COMMAND = "rsync -a --delete /mnt/ssd/nfs/worker-base-template/ /mnt/ssd/nfs/${params.WORKER}"
+        choice(
+            choices: ['worker01', 'worker02', 'worker03'],
+            description: 'Select a worker',
+            name: 'WORKER'
+        )
     }
 
     stages {
-        stage('SSH and Execute Rsync') {
+        stage('Deploy to Worker') {
             steps {
                 script {
-                    // Decode the base64-encoded private key
-                    def decodedPrivateKey = Secret.fromString(credentials('jenkins-private-key-base64').privateKey).getPlainText()
-
-                    // Start the SSH agent and run the rsync command
-                    sshagent(credentials: [sshUserPrivateKey(key: decodedPrivateKey, user: 'root')]) {
-                        sh "ssh -o StrictHostKeyChecking=no root@${SSH_HOST} \"$SSH_COMMAND\""
+                    // Load the private key from the credentials using the 'withCredentials' step
+                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                        // Connect to the SSH agent using the loaded private key
+                        sshagent(credentials: ['jenkins-private-key']) {
+                            // Execute the rsync command on the remote worker
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.210 'rsync -a --delete /mnt/ssd/nfs/worker-base-template/ /mnt/ssd/nfs/${params.WORKER}'"
+                        }
                     }
                 }
             }
