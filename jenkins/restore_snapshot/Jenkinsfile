@@ -6,7 +6,6 @@ pipeline {
     }
     
     environment {
-        SSH_USER = 'root'
         SSH_HOST = '192.168.1.210'
         SSH_COMMAND = "rsync -a --delete /mnt/ssd/nfs/worker-base-template/ /mnt/ssd/nfs/${params.WORKER}"
     }
@@ -15,11 +14,18 @@ pipeline {
         stage('SSH and Execute Rsync') {
             steps {
                 script {
-                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key-base64', keyFileVariable: 'SSH_KEY')]) {
-                        // Start the SSH agent and run the rsync command
-                        sshagent(['sshagent']) {
-                            sh "ssh -o StrictHostKeyChecking=no -i $SSH_KEY ${SSH_USER}@${SSH_HOST} '$SSH_COMMAND'"
-                        }
+                    // Decode the base64-encoded private key
+                    def decodedPrivateKey = new String(credentials('jenkins-private-key-base64').toByteArray())
+                    
+                    // Create a temporary file to store the decoded private key
+                    def privateKeyFile = writeFile file: 'private_key.pem', text: decodedPrivateKey
+                    
+                    // Set proper permissions to the private key file
+                    sh 'chmod 600 private_key.pem'
+                    
+                    // Start the SSH agent and run the rsync command
+                    sshagent(['sshagent']) {
+                        sh "ssh -o StrictHostKeyChecking=no -i private_key.pem root@${SSH_HOST} '$SSH_COMMAND'"
                     }
                 }
             }
