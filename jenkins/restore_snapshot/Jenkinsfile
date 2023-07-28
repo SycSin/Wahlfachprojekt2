@@ -21,19 +21,15 @@ pipeline {
                     def targetHost = "192.168.1.210"
                     def sshCredentials = "jenkins-private-key-base64"
 
-                    // Retrieve the SSH private key from the Jenkins credentials
-                    def privateKey = credentials("${sshCredentials}")
-
-                    // Create a temporary file to store the private key
-                    def privateKeyFile = writeFile file: 'private_key', text: privateKey
-                    sh "chmod 400 private_key"
-
-                    // Add the private key to the SSH agent
-                    sh "eval \$(ssh-agent -s)"
-                    sh "ssh-add private_key"
-
-                    // Execute rsync command remotely using ssh-agent
-                    sh "ssh -o StrictHostKeyChecking=no ${user}@${targetHost} rsync -a --delete /mnt/ssd/nfs/worker-base-template/ /mnt/ssd/nfs/${worker}"
+                    // Retrieve the SSH private key from the Jenkins credentials using withCredentials block
+                    withCredentials([sshUserPrivateKey(credentialsId: "${sshCredentials}", keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                        // Execute rsync command using withEnv block to pass the private key as an environment variable
+                        withEnv(["SSH_PRIVATE_KEY=${SSH_PRIVATE_KEY}"]) {
+                            sh "echo '\${SSH_PRIVATE_KEY}' > private_key"
+                            sh "chmod 400 private_key"
+                            sh 'ssh -o StrictHostKeyChecking=no -i private_key "${user}@${targetHost}" rsync -a --delete /mnt/ssd/nfs/worker-base-template/ "/mnt/ssd/nfs/${worker}"'
+                        }
+                    }
                 }
             }
         }
