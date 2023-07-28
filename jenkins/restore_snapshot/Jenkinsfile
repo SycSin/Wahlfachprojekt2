@@ -23,21 +23,16 @@ pipeline {
                     def targetHost = "192.168.1.210"
                     def sshCredentials = "jenkins-private-key"
 
-                    // Retrieve the base64-encoded SSH private key
-                    def privateKeyBase64 = credentials("${sshCredentials}")
-
-                    // Convert the base64 string to byte[] and decode to get the original SSH private key
-                    def privateKeyBytes = privateKeyBase64.getBytes()
-                    def privateKey = privateKeyBytes.decodeBase64().toString()
-
-                    // Execute rsync command using withCredentials block
-                    withCredentials([sshUserPrivateKey(credentialsId: sshCredentials, keyFileVariable: 'SSH_PRIVATE_KEY')]) {
-                        // Use echo and pipe to pass the private key to ssh command
-                        sh "echo '\${SSH_PRIVATE_KEY}' | ssh -o StrictHostKeyChecking=no -l ${user} -i /dev/stdin ${targetHost} rsync -a --delete /mnt/ssd/nfs/worker-base-template/ /mnt/ssd/nfs/${worker}"
+                    // Retrieve the SSH private key using the 'withCredentials' block
+                    def privateKey = withCredentials([sshUserPrivateKey(credentialsId: sshCredentials, keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                        // Read the private key file and store it in a variable
+                        sh(returnStdout: true, script: 'cat $SSH_PRIVATE_KEY').trim()
                     }
+
+                    // Execute rsync command using the retrieved private key
+                    sh "echo '${privateKey}' | ssh -o StrictHostKeyChecking=no -l ${user} -i /dev/stdin ${targetHost} rsync -a --delete /mnt/ssd/nfs/worker-base-template/ /mnt/ssd/nfs/${worker}"
                 }
             }
         }
     }
 }
-
