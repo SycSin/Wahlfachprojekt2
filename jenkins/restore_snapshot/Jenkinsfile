@@ -22,7 +22,7 @@ pipeline {
                     def sshCredentials = "jenkins-private-key-base64"
 
                     // Execute rsync command using sshagent step
-                    sshagent(credentials: [sshUserPrivateKey(credentialsId: sshCredentials, keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                    sshagent(credentials: [ssh(keyFileVariable: 'SSH_PRIVATE_KEY', credentialsId: sshCredentials)]) {
                         sh "ssh -o StrictHostKeyChecking=no -l ${user} ${targetHost} rsync -a --delete /mnt/ssd/nfs/worker-base-template/ /mnt/ssd/nfs/${worker}"
                     }
                 }
