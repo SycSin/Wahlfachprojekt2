@@ -23,9 +23,8 @@ pipeline {
 
                     // Execute rsync command using the retrieved private key
                     withCredentials([sshUserPrivateKey(credentialsId: sshCredentials, keyFileVariable: 'SSH_PRIVATE_KEY')]) {
-                        // Pass the private key file path directly to the 'file' step
-                        def privateKey = file(sshUserPrivateKey)
-                        sh "echo '${privateKey}' | ssh -o StrictHostKeyChecking=no -l ${user} -i /dev/stdin ${targetHost} rsync -a --delete /mnt/ssd/nfs/worker-base-template/ /mnt/ssd/nfs/${worker}"
+                        // Use echo and pipe to pass the private key to ssh command
+                        sh "echo '\${SSH_PRIVATE_KEY}' | ssh -o StrictHostKeyChecking=no -l ${user} -i /dev/stdin ${targetHost} rsync -a --delete /mnt/ssd/nfs/worker-base-template/ /mnt/ssd/nfs/${worker}"
                     }
                 }
             }
