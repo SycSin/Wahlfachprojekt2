@@ -19,19 +19,11 @@ pipeline {
                     // Define the target host and SSH credentials ID
                     def user = "root"
                     def targetHost = "192.168.1.210"
-                    def sshCredentials = "jenkins-private-key-base64"
+                    def sshCredentials = "jenkins-private-key"
 
-                    withCredentials([sshUserPrivateKey(credentialsId: sshCredentials, keyFileVariable: 'SSH_PRIVATE_KEY')]) {
-                        // Write the private key to a temporary file
-                        def privateKeyFilePath = '/tmp/id_rsa'
-                        sh "echo '\${SSH_PRIVATE_KEY}' > ${privateKeyFilePath}"
-                        sh "chmod 600 ${privateKeyFilePath}"
-                    
-                        // Use the temporary private key file with the ssh command
-                        sh "ssh -o StrictHostKeyChecking=no -l ${user} -i ${privateKeyFilePath} ${targetHost} rsync -a --delete /mnt/ssd/nfs/worker-base-template/ /mnt/ssd/nfs/${worker}"
-                    
-                        // Clean up the temporary file after use
-                        sh "rm ${privateKeyFilePath}"
+                    // Execute rsync command using sshagent step
+                    sshagent(credentials: [sshUserPrivateKey(credentialsId: sshCredentials, keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                        sh "ssh -o StrictHostKeyChecking=no -l ${user} ${targetHost} rsync -a --delete /mnt/ssd/nfs/worker-base-template/ /mnt/ssd/nfs/${worker}"
                     }
                 }
             }
