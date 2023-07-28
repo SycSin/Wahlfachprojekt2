@@ -1,5 +1,3 @@
-import groovy.json.JsonSlurperClassic
-
 pipeline {
     agent any
 
@@ -23,14 +21,12 @@ pipeline {
                     def targetHost = "192.168.1.210"
                     def sshCredentials = "jenkins-private-key"
 
-                    // Retrieve the SSH private key using the 'withCredentials' block
-                    def privateKey = withCredentials([sshUserPrivateKey(credentialsId: sshCredentials, keyFileVariable: 'SSH_PRIVATE_KEY')]) {
-                        // Read the private key file and store it in a variable
-                        sh(returnStdout: true, script: 'cat $SSH_PRIVATE_KEY').trim()
-                    }
-
                     // Execute rsync command using the retrieved private key
-                    sh "echo '${privateKey}' | ssh -o StrictHostKeyChecking=no -l ${user} -i /dev/stdin ${targetHost} rsync -a --delete /mnt/ssd/nfs/worker-base-template/ /mnt/ssd/nfs/${worker}"
+                    withCredentials([sshUserPrivateKey(credentialsId: sshCredentials, keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                        // Pass the private key file path directly to the 'file' step
+                        def privateKey = file(sshUserPrivateKey)
+                        sh "echo '${privateKey}' | ssh -o StrictHostKeyChecking=no -l ${user} -i /dev/stdin ${targetHost} rsync -a --delete /mnt/ssd/nfs/worker-base-template/ /mnt/ssd/nfs/${worker}"
+                    }
                 }
             }
         }
