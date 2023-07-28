@@ -23,12 +23,9 @@ pipeline {
 
                     // Retrieve the SSH private key from the Jenkins credentials using withCredentials block
                     withCredentials([sshUserPrivateKey(credentialsId: "${sshCredentials}", keyFileVariable: 'SSH_PRIVATE_KEY')]) {
-                        // Execute rsync command using withEnv block to pass the private key as an environment variable
-                        withEnv(["SSH_PRIVATE_KEY=${SSH_PRIVATE_KEY}"]) {
-                            sh "echo '\${SSH_PRIVATE_KEY}' > private_key"
-                            sh "chmod 400 private_key"
-                            sh 'ssh -o StrictHostKeyChecking=no -i private_key "${user}@${targetHost}" rsync -a --delete /mnt/ssd/nfs/worker-base-template/ "/mnt/ssd/nfs/${worker}"'
-                        }
+                        sh "echo '\${SSH_PRIVATE_KEY}' > private_key"
+                        sh "chmod 400 private_key"
+                        sh 'ssh -o StrictHostKeyChecking=no -i private_key "${user}@${targetHost}" rsync -a --delete /mnt/ssd/nfs/worker-base-template/ "/mnt/ssd/nfs/${worker}"'
                     }
                 }
             }
