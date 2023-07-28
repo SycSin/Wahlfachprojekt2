@@ -1,3 +1,10 @@
+import groovy.json.JsonSlurper
+
+@NonCPS
+def decodeBase64String(encodedString) {
+    return encodedString.decodeBase64().toString()
+}
+
 pipeline {
     agent any
 
@@ -22,11 +29,15 @@ pipeline {
                     def sshCredentials = "jenkins-private-key-base64"
 
                     // Retrieve the SSH private key from the Jenkins credentials using withCredentials block
+                    def privateKey = null
                     withCredentials([sshUserPrivateKey(credentialsId: "${sshCredentials}", keyFileVariable: 'SSH_PRIVATE_KEY')]) {
-                        writeFile file: 'private_key', text: "${SSH_PRIVATE_KEY}".decodeBase64().toString()
-                        sh "chmod 400 private_key"
-                        sh "ssh -o StrictHostKeyChecking=no -i private_key ${user}@${targetHost} rsync -a --delete /mnt/ssd/nfs/worker-base-template/ /mnt/ssd/nfs/${worker}"
+                        privateKey = decodeBase64String(SSH_PRIVATE_KEY)
                     }
+
+                    // Continue with the rest of the steps using the decoded privateKey
+                    writeFile file: 'private_key', text: privateKey
+                    sh "chmod 400 private_key"
+                    sh "ssh -o StrictHostKeyChecking=no -i private_key ${user}@${targetHost} rsync -a --delete /mnt/ssd/nfs/worker-base-template/ /mnt/ssd/nfs/${worker}"
                 }
             }
         }
