@@ -23,6 +23,20 @@ pipeline {
                     }
                 }
             }
+            stage('Reboot Worker') {
+                steps {
+                    script {
+                        // Load the private key from the credentials using the 'withCredentials' step
+                        withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                            // Connect to the SSH agent using the loaded private key
+                            sshagent(credentials: ['jenkins-private-key']) {
+                                // Reboot the worker
+                                sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@${getWorkerIP(params.WORKER)} 'reboot'"
+                            }
+                        }
+                    }
+                }
+            }
             post {
                 always {
                     script {
