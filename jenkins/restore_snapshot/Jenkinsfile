@@ -1,3 +1,6 @@
+import jenkins.model.Jenkins
+import com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey
+
 pipeline {
     agent any
     
@@ -14,21 +17,24 @@ pipeline {
         stage('SSH and Execute Rsync') {
             steps {
                 script {
-                    // Decode the base64-encoded private key
-                    def decodedPrivateKey = new String(credentials('jenkins-private-key-base64').toByteArray())
+                    // Get the Jenkins instance to retrieve credentials
+                    def jenkins = Jenkins.getInstance()
                     
-                    // Create a temporary file to store the decoded private key
-                    def privateKeyFile = writeFile file: 'private_key.pem', text: decodedPrivateKey
-                    
-                    // Set proper permissions to the private key file
-                    sh 'chmod 600 private_key.pem'
+                    // Get the credentials by ID
+                    def credentials = jenkins.getDescriptor("com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey").newInstance()
+                    credentials.setPrivateKeySource(new BasicSSHUserPrivateKey.DirectEntryPrivateKeySource(decodedPrivateKey(), null))
                     
                     // Start the SSH agent and run the rsync command
                     sshagent(['sshagent']) {
-                        sh "ssh -o StrictHostKeyChecking=no -i private_key.pem root@${SSH_HOST} '$SSH_COMMAND'"
+                        sh "ssh -o StrictHostKeyChecking=no -i ${credentials.getPrivateKeys().get(0).getFileOnMaster().getAbsolutePath()} root@${SSH_HOST} '$SSH_COMMAND'"
                     }
                 }
             }
         }
     }
+}
+
+def decodedPrivateKey() {
+    // Base64 decode the private key
+    return new String(credentials('jenkins-private-key-base64').toByteArray(), 'UTF-8').trim()
 }
