@@ -21,11 +21,12 @@ pipeline {
                     def targetHost = "192.168.1.210"
                     def sshCredentials = "jenkins-private-key-base64"
 
-                    // Execute rsync command using withCredentials block
-                    withCredentials([
-                        sshUserPrivateKey(credentialsId: sshCredentials, keyFileVariable: 'SSH_PRIVATE_KEY')
-                    ]) {
-                        sh "echo '\${SSH_PRIVATE_KEY}' | base64 --decode > ssh_key"
+                    // Retrieve the SSH private key from the Jenkins credentials
+                    def privateKey = credentials("${sshCredentials}")
+
+                    // Execute rsync command using withEnv block to pass the private key as an environment variable
+                    withEnv(["SSH_PRIVATE_KEY=${privateKey}"]) {
+                        sh "echo '\${SSH_PRIVATE_KEY}' > ssh_key"
                         sh "chmod 400 ssh_key"
                         sh "rsync -a -e 'ssh -o StrictHostKeyChecking=no -i ssh_key' /mnt/ssd/nfs/worker-base-template/ root@${targetHost}:/mnt/ssd/nfs/${worker}"
                     }
