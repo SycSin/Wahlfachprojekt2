@@ -1,3 +1,5 @@
+import hudson.util.Secret
+
 pipeline {
     agent any
 
@@ -14,14 +16,11 @@ pipeline {
         stage('SSH and Execute Rsync') {
             steps {
                 script {
-                    // Get the SSH private key from Jenkins credentials
-                    def sshPrivateKey = credentials('jenkins-private-key-base64')
-                    if (sshPrivateKey == null) {
-                        error("Failed to retrieve SSH private key from Jenkins credentials")
-                    }
+                    // Decode the base64-encoded private key
+                    def decodedPrivateKey = Secret.fromString(credentials('jenkins-private-key-base64').privateKey).getPlainText()
 
                     // Start the SSH agent and run the rsync command
-                    sshagent(credentials: [sshPrivateKey]) {
+                    sshagent(credentials: [sshUserPrivateKey(key: decodedPrivateKey, user: 'root')]) {
                         sh "ssh -o StrictHostKeyChecking=no root@${SSH_HOST} \"$SSH_COMMAND\""
                     }
                 }
