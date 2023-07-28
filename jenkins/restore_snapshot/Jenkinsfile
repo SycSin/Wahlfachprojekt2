@@ -1,8 +1,3 @@
-import jenkins.model.Jenkins
-import com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey
-import com.cloudbees.jenkins.plugins.sshcredentials.SSHUserPrivateKey
-import com.cloudbees.plugins.credentials.CredentialsProvider
-
 pipeline {
     agent any
     
@@ -18,35 +13,12 @@ pipeline {
     stages {
         stage('SSH and Execute Rsync') {
             steps {
-                script {
-                    // Get the Jenkins instance
-                    def jenkins = Jenkins.getInstance()
-                    if (jenkins == null) {
-                        error('Jenkins instance not available')
-                    }
-                    
-                    // Get the SSHUserPrivateKey credentials by ID
-                    def creds = getSSHUserPrivateKey(jenkins, 'jenkins-private-key-base64')
-                    if (creds == null) {
-                        error("Failed to retrieve SSH credentials")
-                    }
-                    
-                    // Start the SSH agent and run the rsync command
+                withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key-base64', keyFileVariable: 'SSH_KEY')]) {
                     sshagent(['sshagent']) {
-                        sh "ssh -o StrictHostKeyChecking=no -i ${creds.getPrivateKey().getAbsolutePath()} root@${SSH_HOST} '$SSH_COMMAND'"
+                        sh "ssh -o StrictHostKeyChecking=no -i $SSH_KEY root@${SSH_HOST} '$SSH_COMMAND'"
                     }
                 }
             }
         }
     }
-}
-
-def getSSHUserPrivateKey(Jenkins jenkins, String credentialId) {
-    def creds = CredentialsProvider.lookupCredentials(
-        SSHUserPrivateKey.class,
-        jenkins,
-        null,
-        null
-    ).find { it.id == credentialId }
-    return creds?.privateKey
 }
