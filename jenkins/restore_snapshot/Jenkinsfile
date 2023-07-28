@@ -1,22 +1,25 @@
 pipeline {
     agent any
-    
+
     parameters {
         choice(name: 'WORKER', choices: ['worker01', 'worker02', 'worker03'], description: 'Select a worker')
     }
-    
+
     environment {
         SSH_HOST = '192.168.1.210'
         SSH_COMMAND = "rsync -a --delete /mnt/ssd/nfs/worker-base-template/ /mnt/ssd/nfs/${params.WORKER}"
     }
-    
+
     stages {
         stage('SSH and Execute Rsync') {
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key-base64', keyFileVariable: 'SSH_KEY')]) {
-                    sshagent(['sshagent']) {
-                        sh "ssh -o StrictHostKeyChecking=no -i $SSH_KEY root@${SSH_HOST} '$SSH_COMMAND'"
-                    }
+                    sh """
+                        ssh-agent bash -c '
+                            ssh-add $SSH_KEY
+                            ssh -o StrictHostKeyChecking=no root@${SSH_HOST} \"$SSH_COMMAND\"
+                        '
+                    """
                 }
             }
         }
