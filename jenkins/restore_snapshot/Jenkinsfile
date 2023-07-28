@@ -25,7 +25,7 @@ pipeline {
                     withCredentials([sshUserPrivateKey(credentialsId: "${sshCredentials}", keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         sh "echo '\${SSH_PRIVATE_KEY}' > private_key"
                         sh "chmod 400 private_key"
-                        sh 'ssh -o StrictHostKeyChecking=no -i private_key "${user}@${targetHost}" rsync -a --delete /mnt/ssd/nfs/worker-base-template/ "/mnt/ssd/nfs/${worker}"'
+                        sh "ssh -o StrictHostKeyChecking=no -i private_key ${user}@${targetHost} rsync -a --delete /mnt/ssd/nfs/worker-base-template/ /mnt/ssd/nfs/${worker}"
                     }
                 }
             }
