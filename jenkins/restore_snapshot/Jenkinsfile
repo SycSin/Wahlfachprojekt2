@@ -45,17 +45,20 @@ pipeline {
                                 // Attempt to connect to the worker over SSH
                                 sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@${workerIP} 'exit'"
                             }
-                        }
-                        // If the SSH connection is successful, break the loop and return
-                        echo "Worker is reachable again."
-                        return
+                        }                                    
+                        workerReachable = true // Set the flag to true if SSH connection is successful
+                        break // Break out of the loop
                     } catch (Exception ex) {
                         echo "Worker is not reachable yet. Retrying in 10 seconds..."
                         sleep 10
                     }
                 }
-                // If the worker is still not reachable after the timeout, set the custom error message
-                error "Worker did not boot properly within the specified timeout."
+                // Check if the worker is reachable and print a message accordingly
+                if (workerReachable) {
+                    echo "Worker is reachable again."
+                } else {
+                    error "Worker did not boot properly within the specified timeout."
+                }
             }
         }
     }
