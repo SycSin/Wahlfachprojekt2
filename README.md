@@ -236,3 +236,11 @@ ssh-keygen -b 4096
 # Generate a public/private keypair for the jenkins agent to connect to nfs01 (by adding the public key to the authorized_keys)
 # Download and install the SSH Agent Plugin on the jenkins to enable connecting to workers via SSH using the defined credentials
 ```
+
+### Installing Ansible
+```bash
+sudo su -
+apt update
+apt install -y ansible
+
+```
