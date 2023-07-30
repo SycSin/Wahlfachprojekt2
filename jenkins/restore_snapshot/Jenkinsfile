@@ -66,7 +66,7 @@ pipeline {
                                 sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@${workerIP} 'exit'"
                             }
                         }
-                        // If the SSH connection is successful, break the loop and return
+                        // If the SSH connection is successful, break the loop
                         echo "Worker is reachable again."
                         workerReachable = true // Set the flag to true if SSH connection is successful
                         break // Break out of the loop if the worker is reachable
