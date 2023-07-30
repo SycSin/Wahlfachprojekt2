@@ -1,6 +1,8 @@
 pipeline {
     agent any
-
+    environment {
+        SSH_PRIVATE_KEY = credentials('jenkins-private-key')
+    }
     parameters {
         choice(
             choices: ['worker01', 'worker02', 'worker03'],
@@ -14,8 +16,7 @@ pipeline {
             steps {
                 script {
                     def workerIP = getWorkerIP(params.WORKER)
-                    // Load the private key from the credentials using the 'withCredentials' step
-                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key')]) {
                         // Connect to the SSH agent using the loaded private key
                         sshagent(credentials: ['jenkins-private-key']) {
                             // Execute the rsync command on the remote worker
@@ -38,8 +39,7 @@ pipeline {
                 
                 while (System.currentTimeMillis() < endTime) {
                     try {
-                        // Load the private key from the credentials using the 'withCredentials' step
-                        withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                        withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key')]) {
                             // Connect to the SSH agent using the loaded private key
                             sshagent(credentials: ['jenkins-private-key']) {
                                 // Attempt to connect to the worker over SSH
