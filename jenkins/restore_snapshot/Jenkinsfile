@@ -1,9 +1,6 @@
 pipeline {
     agent any
-    environment {
-        // Define the SSH_PRIVATE_KEY variable from the 'jenkins-private-key' credential
-        SSH_PRIVATE_KEY = credentials('jenkins-private-key')
-    }
+
     parameters {
         choice(
             choices: ['worker01', 'worker02', 'worker03'],
@@ -17,12 +14,13 @@ pipeline {
             steps {
                 script {
                     def workerIP = getWorkerIP(params.WORKER)
-                    // Use single quotes in the 'sh' step to prevent interpolation of sensitive variables
-                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key')]) {
+                    // Load the private key from the credentials using the 'withCredentials' step
+                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                        // Connect to the SSH agent using the loaded private key
                         sshagent(credentials: ['jenkins-private-key']) {
                             // Execute the rsync command on the remote worker
-                            sh 'ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.210 "rsync -a --delete /mnt/ssd/nfs/worker-base-template/ /mnt/ssd/nfs/${params.WORKER}"'
-                            sh 'ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@${workerIP} "reboot"'
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.210 'rsync -a --delete /mnt/ssd/nfs/worker-base-template/ /mnt/ssd/nfs/${params.WORKER}'"
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@${workerIP} 'reboot'"
                         }
                     }
                 }
@@ -39,16 +37,19 @@ pipeline {
                 def endTime = startTime + timeoutSeconds * 1000
 
                 boolean workerReachable = false // Flag to track if the worker becomes reachable
-
+                
                 while (System.currentTimeMillis() < endTime) {
                     try {
-                        // Use single quotes in the 'sh' step to prevent interpolation of sensitive variables
-                        withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key')]) {
+                        // Load the private key from the credentials using the 'withCredentials' step
+                        withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                            // Connect to the SSH agent using the loaded private key
                             sshagent(credentials: ['jenkins-private-key']) {
                                 // Attempt to connect to the worker over SSH
                                 sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@${workerIP} 'exit'"
                             }
                         }
+                        // If the SSH connection is successful, break the loop and return
+                        echo "Worker is reachable again."
                         workerReachable = true // Set the flag to true if SSH connection is successful
                         break // Break out of the loop if the worker is reachable
                     } catch (Exception ex) {
