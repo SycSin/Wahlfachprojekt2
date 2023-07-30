@@ -50,7 +50,7 @@ pipeline {
                                 sleep 10
                             }
                             echo "Worker is reachable again."
-                            exit 0
+                            return 0
                         }
                         
                         // Fail the job if the worker is not reachable after the timeout
