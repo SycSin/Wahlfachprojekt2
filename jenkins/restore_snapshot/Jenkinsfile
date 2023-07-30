@@ -36,10 +36,16 @@ pipeline {
                         
                         while (System.currentTimeMillis() < endTime) {
                             try {
-                                // Attempt to connect to the worker over SSH
-                                sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@${workerIP} 'exit'"
-                                echo "Worker is reachable again."
-                                break
+                                // Load the private key from the credentials using the 'withCredentials' step
+                                withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                                    // Connect to the SSH agent using the loaded private key
+                                    sshagent(credentials: ['jenkins-private-key']) {
+                                        // Attempt to connect to the worker over SSH
+                                        sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@${workerIP} 'exit'"
+                                        echo "Worker is reachable again."
+                                        break
+                                    }
+                                }                                
                             } catch (Exception ex) {
                                 echo "Worker is not reachable yet. Retrying in 10 seconds..."
                                 sleep 10
