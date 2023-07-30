@@ -43,7 +43,6 @@ pipeline {
                                         // Attempt to connect to the worker over SSH
                                         sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@${workerIP} 'exit'"
                                         echo "Worker is reachable again."
-                                        break
                                     }
                                 }                                
                             } catch (Exception ex) {
