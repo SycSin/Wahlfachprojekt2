@@ -30,7 +30,7 @@ pipeline {
                     script {
                         // Wait for the worker to be healthy
                         def workerIP = getWorkerIP(params.WORKER)
-                        def timeoutSeconds = 600
+                        def timeoutSeconds = 900
                         def startTime = currentBuild.startTimeInMillis
                         def endTime = startTime + timeoutSeconds * 1000
                         
