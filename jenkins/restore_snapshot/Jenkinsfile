@@ -10,7 +10,7 @@ pipeline {
     }
 
     stages {
-        stage('Deploy to Worker') {
+        stage('Restore Filesystem') {
             steps {
                 script {
                     def workerIP = getWorkerIP(params.WORKER)
@@ -20,7 +20,25 @@ pipeline {
                         sshagent(credentials: ['jenkins-private-key']) {
                             // Execute the rsync command on the remote worker
                             sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.210 'rsync -a --delete /mnt/ssd/nfs/worker-base-template/ /mnt/ssd/nfs/${params.WORKER}'"
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@${workerIP} 'reboot'"
+                        }
+                    }
+                }
+            }
+        }
+        stage('Reboot') {
+            steps {
+                script {
+                    def workerIP = getWorkerIP(params.WORKER)
+                    // Load the private key from the credentials using the 'withCredentials' step
+                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                        // Connect to the SSH agent using the loaded private key
+                        sshagent(credentials: ['jenkins-private-key']) {
+                            try {
+                                sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@${workerIP} 'reboot'"
+                                echo "Reboot command sent successfully."
+                            } catch (Exception ex) {
+                                echo "Reboot command failed. This is expected if the worker is not reachable."
+                            }
                         }
                     }
                 }
@@ -37,7 +55,7 @@ pipeline {
                 def endTime = startTime + timeoutSeconds * 1000
 
                 boolean workerReachable = false // Flag to track if the worker becomes reachable
-                
+
                 while (System.currentTimeMillis() < endTime) {
                     try {
                         // Load the private key from the credentials using the 'withCredentials' step
