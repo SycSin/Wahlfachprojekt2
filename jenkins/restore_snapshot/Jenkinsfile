@@ -20,7 +20,7 @@ pipeline {
                         sshagent(credentials: ['jenkins-private-key']) {
                             // Execute the rsync command on the remote worker
                             sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.210 'rsync -a --delete /mnt/ssd/nfs/worker-base-template/ /mnt/ssd/nfs/${params.WORKER}'"
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.210 'sed -i \'s#^\(192\.168\.1\.210:/mnt/ssd/tftpboot\)\( .*\)\{0,1\}$#\1/{{ ansible_host }}\2#\' /mnt/ssd/nfs/${params.WORKER}/etc/fstab'"
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.210 'sed -i \\'s#^(192\\.168\\.1\\.210:/mnt/ssd/tftpboot)( .*)?$#\\1/{{ ansible_host }}\\2#' /mnt/ssd/nfs/${params.WORKER}/etc/fstab'"
                         }
                     }
                 }
