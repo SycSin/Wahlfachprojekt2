@@ -113,9 +113,9 @@ systemctl restart rpcbind
 systemctl enable nfs-kernel-server
 systemctl restart nfs-kernel-server
 
-echo "console=serial0,115200 console=tty root=/dev/nfs nfsroot=192.168.1.210:/mnt/ssd/nfs/worker01,vers=3 rw ip=dhcp rootwait elevator=deadline" > /mnt/ssd/tftpboot/192.168.1.211/cmdline.txt
-echo "console=serial0,115200 console=tty root=/dev/nfs nfsroot=192.168.1.210:/mnt/ssd/nfs/worker02,vers=3 rw ip=dhcp rootwait elevator=deadline" > /mnt/ssd/tftpboot/192.168.1.212/cmdline.txt
-echo "console=serial0,115200 console=tty root=/dev/nfs nfsroot=192.168.1.210:/mnt/ssd/nfs/worker03,vers=3 rw ip=dhcp rootwait elevator=deadline" > /mnt/ssd/tftpboot/192.168.1.213/cmdline.txt
+echo "console=serial0,115200 console=tty root=/dev/nfs nfsroot=192.168.1.210:/mnt/ssd/nfs/worker01,vers=4 rw ip=dhcp fsck.repair=yes rootwait cgroup_memory=1 cgroup_enable=memory" > /mnt/ssd/tftpboot/192.168.1.211/cmdline.txt
+echo "console=serial0,115200 console=tty root=/dev/nfs nfsroot=192.168.1.210:/mnt/ssd/nfs/worker02,vers=4 rw ip=dhcp fsck.repair=yes rootwait cgroup_memory=1 cgroup_enable=memory" > /mnt/ssd/tftpboot/192.168.1.212/cmdline.txt
+echo "console=serial0,115200 console=tty root=/dev/nfs nfsroot=192.168.1.210:/mnt/ssd/nfs/worker03,vers=4 rw ip=dhcp fsck.repair=yes rootwait cgroup_memory=1 cgroup_enable=memory" > /mnt/ssd/tftpboot/192.168.1.213/cmdline.txt
 
 # The delayed nfs-server start workaround is required since the mount-points are not present when starting the nfs-server after rebooting which causes a failed start of the nfs-server
 echo "[Unit]
@@ -145,7 +145,7 @@ chroot .
 rm /etc/ssh/ssh_host_*
 dpkg-reconfigure openssh-server
 echo "proc            /proc           proc    defaults          0       0
-192.168.1.210:/mnt/ssd/tftpboot/192.168.1.211/ /boot nfs defaults,vers=3,proto=tcp 0 0" > /etc/fstab
+192.168.1.210:/mnt/ssd/tftpboot/192.168.1.211 /boot nfs defaults,vers=3,proto=tcp 0 0" > /etc/fstab
 echo "worker01" > /etc/hostname
 sed -i 's/nfs01/worker01/g' /etc/hosts
 rm /etc/systemd/network/*
@@ -166,7 +166,7 @@ chroot .
 rm /etc/ssh/ssh_host_*
 dpkg-reconfigure openssh-server
 echo "proc            /proc           proc    defaults          0       0
-192.168.1.210:/mnt/ssd/tftpboot/192.168.1.212/ /boot nfs defaults,vers=3,proto=tcp 0 0" > /etc/fstab
+192.168.1.210:/mnt/ssd/tftpboot/192.168.1.212 /boot nfs defaults,vers=3,proto=tcp 0 0" > /etc/fstab
 echo "worker02" > /etc/hostname
 sed -i 's/nfs01/worker02/g' /etc/hosts
 rm /etc/systemd/network/*
@@ -188,7 +188,7 @@ chroot .
 rm /etc/ssh/ssh_host_*
 dpkg-reconfigure openssh-server
 echo "proc            /proc           proc    defaults          0       0
-192.168.1.210:/mnt/ssd/tftpboot/192.168.1.213/ /boot nfs defaults,vers=3,proto=tcp 0 0" > /etc/fstab
+192.168.1.210:/mnt/ssd/tftpboot/192.168.1.213 /boot nfs defaults,vers=3,proto=tcp 0 0" > /etc/fstab
 echo "worker03" > /etc/hostname
 sed -i 's/nfs01/worker03/g' /etc/hosts
 rm /etc/systemd/network/*
