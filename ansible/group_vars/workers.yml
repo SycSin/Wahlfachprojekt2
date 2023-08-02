@@ -1,0 +1,10 @@
+base_packages:
+  - curl
+  - ntp
+
+timezone: "UTC"
+
+k3s:
+  url: "https://get.k3s.io"
+  mode: "644"
+  #snapshotter: "fuse-overlayfs"
