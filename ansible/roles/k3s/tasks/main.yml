@@ -1,0 +1,25 @@
+---
+- name: Gather systemd facts for k3s service
+  systemd:
+    name: k3s
+  register: k3s_service_facts
+
+
+- name: Install k3s
+  when: k3s_service_facts.status.ActiveState == "inactive"
+  block:
+    - name: Replace iptables-nft with iptables-legacy
+      shell: "iptables -F && update-alternatives --set iptables /usr/sbin/iptables-legacy"
+      args:
+        executable: /bin/bash
+
+    - name: Execute the k3s installation script
+      shell: "curl -sfL {{ k3s.url }} | sh -s - --write-kubeconfig-mode {{ k3s.mode }} --snapshotter={{ k3s.snapshotter }}"
+      args:
+        executable: /bin/bash
+      register: k3s_installation_result
+    
+    - name: Print output of installation script
+      debug:
+        var: k3s_installation_result
+      when: k3s_installation_result.changed
