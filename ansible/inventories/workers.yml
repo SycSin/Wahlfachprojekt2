@@ -1,9 +1,11 @@
-workers:
-  hosts:
-    worker01:
-      ansible_host: 192.168.1.211
-    worker02:
-      ansible_host: 192.168.1.212
-    worker03:
-      ansible_host: 192.168.1.213
+all:
+  children:
+    workers:
+      hosts:
+        worker01:
+          ansible_host: 192.168.1.211
+        worker02:
+          ansible_host: 192.168.1.212
+        worker03:
+          ansible_host: 192.168.1.213
 
