@@ -3,9 +3,26 @@
   hostname:
     name: "{{ inventory_hostname }}"
 
-- name: Add IP to '/etc/fstab'
-  replace:
-    path: /etc/fstab
-    regexp: '^(192\.168\.1\.210:/mnt/ssd/tftpboot)( .*)?$'
-    replace: '\1/{{ ansible_host }}\2'
+- name: Replace 'worker' inside of /etc/hosts
+  lineinfile:
+    path: /etc/hosts
+    regexp: '^(127\.0\.1\.1\s+).*worker$'
+    line: '\1{{ ansible_hostname }}'
+    backrefs: yes
+
+- name: Set timezone
+  timezone:
+    name: "{{ timezone }}"
+
+- name: Install packages
+  apt:
+    name: "{{ base_packages }}"
+
+- name: Replace iptables-nft with iptables-legacy
+  shell: "iptables -F && update-alternatives --set iptables /usr/sbin/iptables-legacy"
+  args:
+    executable: /bin/bash
+
+- name: Check if iptables-legacy is used
+  shell: "iptables --version | grep -q 'legacy'"
 
