@@ -5,7 +5,7 @@ pipeline {
         choice(
             choices: ['node01', 'node02', 'node03'],
             description: 'Select a node',
-            name: 'WORKER'
+            name: 'NODE'
         )
     }
 
@@ -13,14 +13,14 @@ pipeline {
         stage('Restore Filesystem') {
             steps {
                 script {
-                    def nodeIP = getWorkerIP(params.WORKER)
+                    def nodeIP = getNodeIP(params.NODE)
                     // Load the private key from the credentials using the 'withCredentials' step
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         // Connect to the SSH agent using the loaded private key
                         sshagent(credentials: ['jenkins-private-key']) {
                             // Execute the rsync command on the remote node
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.210 'rsync -a --delete /mnt/ssd/nfs/node-base-template/ /mnt/ssd/nfs/${params.WORKER}'"
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.210 'sed -i \'s#^192\\.168\\.1\\.210:/mnt/ssd/tftpboot#192.168.1.210:/mnt/ssd/tftpboot/${nodeIP}#\' /mnt/ssd/nfs/${params.WORKER}/etc/fstab'"
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.210 'rsync -a --delete /mnt/ssd/nfs/node-base-template/ /mnt/ssd/nfs/${params.NODE}'"
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.210 'sed -i \'s#^192\\.168\\.1\\.210:/mnt/ssd/tftpboot#192.168.1.210:/mnt/ssd/tftpboot/${nodeIP}#\' /mnt/ssd/nfs/${params.NODE}/etc/fstab'"
                             
                         }
                     }
@@ -30,7 +30,7 @@ pipeline {
         stage('Reboot') {
             steps {
                 script {
-                    def nodeIP = getWorkerIP(params.WORKER)
+                    def nodeIP = getNodeIP(params.NODE)
                     // Load the private key from the credentials using the 'withCredentials' step
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         // Connect to the SSH agent using the loaded private key
@@ -51,7 +51,7 @@ pipeline {
         always {
             script {
                 // Wait for the node to be healthy
-                def nodeIP = getWorkerIP(params.WORKER)
+                def nodeIP = getNodeIP(params.NODE)
                 def timeoutSeconds = 900
                 def startTime = currentBuild.startTimeInMillis
                 def endTime = startTime + timeoutSeconds * 1000
@@ -69,27 +69,27 @@ pipeline {
                             }
                         }
                         // If the SSH connection is successful, break the loop
-                        echo "Worker is reachable again."
+                        echo "Node is reachable again."
                         nodeReachable = true // Set the flag to true if SSH connection is successful
                         break // Break out of the loop if the node is reachable
                     } catch (Exception ex) {
-                        echo "Worker is not reachable yet. Retrying in 10 seconds..."
+                        echo "Node is not reachable yet. Retrying in 10 seconds..."
                         sleep 10
                     }
                 }
                 // Check if the node is reachable and print a message accordingly
                 if (nodeReachable) {
-                    echo "Worker is reachable again."
+                    echo "Node is reachable again."
                 } else {
-                    error "Worker did not boot properly within the specified timeout."
+                    error "Node did not boot properly within the specified timeout."
                 }
             }
         }
     }
 }
 
-def getWorkerIP(selectedWorker) {
-    switch (selectedWorker) {
+def getNodeIP(selectedNode) {
+    switch (selectedNode) {
         case 'node01':
             return '192.168.1.211'
         case 'node02':
