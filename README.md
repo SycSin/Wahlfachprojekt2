@@ -10,7 +10,7 @@
   https://rob-ferguson.me/how-to-pxe-boot-your-rpi 
 * Flash the EEPROM on the pi with the new boot order
 
-### Flashing the EEPROM (on worker01, worker02, worker03)
+### Flashing the EEPROM (on node01, node02, node03)
 ```bash
 sudo su -
 cp /lib/firmware/raspberrypi/bootloader/stable/pieeprom-2022-03-10.bin pieeprom.bin
@@ -41,7 +41,7 @@ vcgencmd bootloader_config
 sudo su -
 apt-get update
 
-mkdir -p /mnt/ssd/nfs/worker{01,02,03}
+mkdir -p /mnt/ssd/nfs/node{01,02,03}
 mkdir -p /mnt/ssd/tftpboot/192.168.1.{211,212,213}
 apt-get install dnsmasq tcpdump nfs-kernel-server
 
@@ -100,9 +100,9 @@ resolv-file=/etc/resolv.dnsmasq.conf" > /etc/dnsmasq.conf
 systemctl enable dnsmasq.service
 systemctl restart dnsmasq.service
 
-echo "/mnt/ssd/nfs/worker01 *(rw,sync,no_subtree_check,no_root_squash)
-/mnt/ssd/nfs/worker02 *(rw,sync,no_subtree_check,no_root_squash)
-/mnt/ssd/nfs/worker03 *(rw,sync,no_subtree_check,no_root_squash)
+echo "/mnt/ssd/nfs/node01 *(rw,sync,no_subtree_check,no_root_squash)
+/mnt/ssd/nfs/node02 *(rw,sync,no_subtree_check,no_root_squash)
+/mnt/ssd/nfs/node03 *(rw,sync,no_subtree_check,no_root_squash)
 /mnt/ssd/tftpboot/192.168.1.211 192.168.1.211(rw,sync,no_subtree_check,no_root_squash)
 /mnt/ssd/tftpboot/192.168.1.212 192.168.1.212(rw,sync,no_subtree_check,no_root_squash)
 /mnt/ssd/tftpboot/192.168.1.213 192.168.1.213(rw,sync,no_subtree_check,no_root_squash)
@@ -113,16 +113,16 @@ systemctl restart rpcbind
 systemctl enable nfs-kernel-server
 systemctl restart nfs-kernel-server
 
-echo "console=serial0,115200 console=tty root=/dev/nfs nfsroot=192.168.1.210:/mnt/ssd/nfs/worker01,vers=4 rw ip=dhcp fsck.repair=yes rootwait cgroup_memory=1 cgroup_enable=memory" > /mnt/ssd/tftpboot/192.168.1.211/cmdline.txt
-echo "console=serial0,115200 console=tty root=/dev/nfs nfsroot=192.168.1.210:/mnt/ssd/nfs/worker02,vers=4 rw ip=dhcp fsck.repair=yes rootwait cgroup_memory=1 cgroup_enable=memory" > /mnt/ssd/tftpboot/192.168.1.212/cmdline.txt
-echo "console=serial0,115200 console=tty root=/dev/nfs nfsroot=192.168.1.210:/mnt/ssd/nfs/worker03,vers=4 rw ip=dhcp fsck.repair=yes rootwait cgroup_memory=1 cgroup_enable=memory" > /mnt/ssd/tftpboot/192.168.1.213/cmdline.txt
+echo "console=serial0,115200 console=tty root=/dev/nfs nfsroot=192.168.1.210:/mnt/ssd/nfs/node01,vers=4 rw ip=dhcp fsck.repair=yes rootwait cgroup_memory=1 cgroup_enable=memory" > /mnt/ssd/tftpboot/192.168.1.211/cmdline.txt
+echo "console=serial0,115200 console=tty root=/dev/nfs nfsroot=192.168.1.210:/mnt/ssd/nfs/node02,vers=4 rw ip=dhcp fsck.repair=yes rootwait cgroup_memory=1 cgroup_enable=memory" > /mnt/ssd/tftpboot/192.168.1.212/cmdline.txt
+echo "console=serial0,115200 console=tty root=/dev/nfs nfsroot=192.168.1.210:/mnt/ssd/nfs/node03,vers=4 rw ip=dhcp fsck.repair=yes rootwait cgroup_memory=1 cgroup_enable=memory" > /mnt/ssd/tftpboot/192.168.1.213/cmdline.txt
 
 # The delayed nfs-server start workaround is required since the mount-points are not present when starting the nfs-server after rebooting which causes a failed start of the nfs-server
 echo "[Unit]
 Description=Delayed NFS Server Start
 Wants=network-online.target
 After=network-online.target local-fs.target
-ConditionPathExists=/mnt/ssd/nfs/worker01
+ConditionPathExists=/mnt/ssd/nfs/node01
 
 [Service]
 Type=oneshot
@@ -135,9 +135,9 @@ systemctl-daemon reload
 systemctl enable nfs-delayed.service
 
 
-# worker01 (on the nfs01 server)
-rsync -xa --exclude /mnt/ssd / /mnt/ssd/nfs/worker01/
-cd /mnt/ssd/nfs/worker01
+# node01 (on the nfs01 server)
+rsync -xa --exclude /mnt/ssd / /mnt/ssd/nfs/node01/
+cd /mnt/ssd/nfs/node01
 mount --bind /dev dev
 mount --bind /sys sys
 mount --bind /proc proc
@@ -146,8 +146,8 @@ rm /etc/ssh/ssh_host_*
 dpkg-reconfigure openssh-server
 echo "proc            /proc           proc    defaults          0       0
 192.168.1.210:/mnt/ssd/tftpboot/192.168.1.211 /boot nfs defaults,vers=3,proto=tcp 0 0" > /etc/fstab
-echo "worker01" > /etc/hostname
-sed -i 's/nfs01/worker01/g' /etc/hosts
+echo "node01" > /etc/hostname
+sed -i 's/nfs01/node01/g' /etc/hosts
 rm /etc/systemd/network/*
 systemctl disable nfs-server.service
 systemctl disable dnsmasq.service
@@ -156,9 +156,9 @@ umount dev
 umount sys
 umount proc
 
-# worker02 (on the nfs01 server)
-rsync -xa --exclude /mnt/ssd / /mnt/ssd/nfs/worker02/
-cd /mnt/ssd/nfs/worker01
+# node02 (on the nfs01 server)
+rsync -xa --exclude /mnt/ssd / /mnt/ssd/nfs/node02/
+cd /mnt/ssd/nfs/node01
 mount --bind /dev dev
 mount --bind /sys sys
 mount --bind /proc proc
@@ -167,8 +167,8 @@ rm /etc/ssh/ssh_host_*
 dpkg-reconfigure openssh-server
 echo "proc            /proc           proc    defaults          0       0
 192.168.1.210:/mnt/ssd/tftpboot/192.168.1.212 /boot nfs defaults,vers=3,proto=tcp 0 0" > /etc/fstab
-echo "worker02" > /etc/hostname
-sed -i 's/nfs01/worker02/g' /etc/hosts
+echo "node02" > /etc/hostname
+sed -i 's/nfs01/node02/g' /etc/hosts
 rm /etc/systemd/network/*
 systemctl disable nfs-server.service
 systemctl disable dnsmasq.service
@@ -178,9 +178,9 @@ umount sys
 umount proc
 
 
-# worker03 (on the nfs01 server)
-rsync -xa --exclude /mnt/ssd / /mnt/ssd/nfs/worker03/
-cd /mnt/ssd/nfs/worker03
+# node03 (on the nfs01 server)
+rsync -xa --exclude /mnt/ssd / /mnt/ssd/nfs/node03/
+cd /mnt/ssd/nfs/node03
 mount --bind /dev dev
 mount --bind /sys sys
 mount --bind /proc proc
@@ -189,8 +189,8 @@ rm /etc/ssh/ssh_host_*
 dpkg-reconfigure openssh-server
 echo "proc            /proc           proc    defaults          0       0
 192.168.1.210:/mnt/ssd/tftpboot/192.168.1.213 /boot nfs defaults,vers=3,proto=tcp 0 0" > /etc/fstab
-echo "worker03" > /etc/hostname
-sed -i 's/nfs01/worker03/g' /etc/hosts
+echo "node03" > /etc/hostname
+sed -i 's/nfs01/node03/g' /etc/hosts
 rm /etc/systemd/network/*
 systemctl disable nfs-server.service
 systemctl disable dnsmasq.service
@@ -234,7 +234,7 @@ ssh-keygen -b 4096
 
 # Create a certificate/private-key for the jenkins instance to enable HTTPS traffic
 # Generate a public/private keypair for the jenkins agent to connect to nfs01 (by adding the public key to the authorized_keys)
-# Download and install the SSH Agent Plugin on the jenkins to enable connecting to workers via SSH using the defined credentials
+# Download and install the SSH Agent Plugin on the jenkins to enable connecting to nodes via SSH using the defined credentials
 ```
 
 ### Installing Ansible

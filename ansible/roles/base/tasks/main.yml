@@ -3,10 +3,10 @@
   hostname:
     name: "{{ inventory_hostname }}"
 
-- name: Replace 'worker' inside of /etc/hosts
+- name: Replace 'node' inside of /etc/hosts
   lineinfile:
     path: /etc/hosts
-    regexp: '^(127\.0\.1\.1\s+).*worker$'
+    regexp: '^(127\.0\.1\.1\s+).*node$'
     line: '\1{{ ansible_hostname }}'
     backrefs: yes
 

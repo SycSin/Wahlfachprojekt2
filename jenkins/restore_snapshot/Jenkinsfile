@@ -3,8 +3,8 @@ pipeline {
 
     parameters {
         choice(
-            choices: ['worker01', 'worker02', 'worker03'],
-            description: 'Select a worker',
+            choices: ['node01', 'node02', 'node03'],
+            description: 'Select a node',
             name: 'WORKER'
         )
     }
@@ -13,14 +13,14 @@ pipeline {
         stage('Restore Filesystem') {
             steps {
                 script {
-                    def workerIP = getWorkerIP(params.WORKER)
+                    def nodeIP = getWorkerIP(params.WORKER)
                     // Load the private key from the credentials using the 'withCredentials' step
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         // Connect to the SSH agent using the loaded private key
                         sshagent(credentials: ['jenkins-private-key']) {
-                            // Execute the rsync command on the remote worker
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.210 'rsync -a --delete /mnt/ssd/nfs/worker-base-template/ /mnt/ssd/nfs/${params.WORKER}'"
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.210 'sed -i \'s#^192\\.168\\.1\\.210:/mnt/ssd/tftpboot#192.168.1.210:/mnt/ssd/tftpboot/${workerIP}#\' /mnt/ssd/nfs/${params.WORKER}/etc/fstab'"
+                            // Execute the rsync command on the remote node
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.210 'rsync -a --delete /mnt/ssd/nfs/node-base-template/ /mnt/ssd/nfs/${params.WORKER}'"
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.210 'sed -i \'s#^192\\.168\\.1\\.210:/mnt/ssd/tftpboot#192.168.1.210:/mnt/ssd/tftpboot/${nodeIP}#\' /mnt/ssd/nfs/${params.WORKER}/etc/fstab'"
                             
                         }
                     }
@@ -30,16 +30,16 @@ pipeline {
         stage('Reboot') {
             steps {
                 script {
-                    def workerIP = getWorkerIP(params.WORKER)
+                    def nodeIP = getWorkerIP(params.WORKER)
                     // Load the private key from the credentials using the 'withCredentials' step
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         // Connect to the SSH agent using the loaded private key
                         sshagent(credentials: ['jenkins-private-key']) {
                             try {
-                                sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@${workerIP} 'reboot'"
+                                sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@${nodeIP} 'reboot'"
                                 echo "Reboot command sent successfully."
                             } catch (Exception ex) {
-                                echo "Reboot command failed. This is expected if the worker is not reachable."
+                                echo "Reboot command failed. This is expected if the node is not reachable."
                             }
                         }
                     }
@@ -50,13 +50,13 @@ pipeline {
     post {
         always {
             script {
-                // Wait for the worker to be healthy
-                def workerIP = getWorkerIP(params.WORKER)
+                // Wait for the node to be healthy
+                def nodeIP = getWorkerIP(params.WORKER)
                 def timeoutSeconds = 900
                 def startTime = currentBuild.startTimeInMillis
                 def endTime = startTime + timeoutSeconds * 1000
 
-                boolean workerReachable = false // Flag to track if the worker becomes reachable
+                boolean nodeReachable = false // Flag to track if the node becomes reachable
 
                 while (System.currentTimeMillis() < endTime) {
                     try {
@@ -64,21 +64,21 @@ pipeline {
                         withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                             // Connect to the SSH agent using the loaded private key
                             sshagent(credentials: ['jenkins-private-key']) {
-                                // Attempt to connect to the worker over SSH
-                                sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@${workerIP} 'exit'"
+                                // Attempt to connect to the node over SSH
+                                sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@${nodeIP} 'exit'"
                             }
                         }
                         // If the SSH connection is successful, break the loop
                         echo "Worker is reachable again."
-                        workerReachable = true // Set the flag to true if SSH connection is successful
-                        break // Break out of the loop if the worker is reachable
+                        nodeReachable = true // Set the flag to true if SSH connection is successful
+                        break // Break out of the loop if the node is reachable
                     } catch (Exception ex) {
                         echo "Worker is not reachable yet. Retrying in 10 seconds..."
                         sleep 10
                     }
                 }
-                // Check if the worker is reachable and print a message accordingly
-                if (workerReachable) {
+                // Check if the node is reachable and print a message accordingly
+                if (nodeReachable) {
                     echo "Worker is reachable again."
                 } else {
                     error "Worker did not boot properly within the specified timeout."
@@ -90,13 +90,13 @@ pipeline {
 
 def getWorkerIP(selectedWorker) {
     switch (selectedWorker) {
-        case 'worker01':
+        case 'node01':
             return '192.168.1.211'
-        case 'worker02':
+        case 'node02':
             return '192.168.1.212'
-        case 'worker03':
+        case 'node03':
             return '192.168.1.213'
         default:
-            error "Invalid worker selected."
+            error "Invalid node selected."
     }
 }
