@@ -1,0 +1,69 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('node01') {
+            steps {
+                script {
+                    def nodeIP = 192.168.1.211 
+                    // Load the private key from the credentials using the 'withCredentials' step
+                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                        // Connect to the SSH agent using the loaded private key
+                        sshagent(credentials: ['jenkins-private-key']) {
+                            // Execute the shutdown command on the remote node
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@${nodeIP} 'shutdown'"
+                        }
+                    }
+                }
+            }
+        }
+    stages {
+        stage('node02') {
+            steps {
+                script {
+                    def nodeIP = 192.168.1.212 
+                    // Load the private key from the credentials using the 'withCredentials' step
+                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                        // Connect to the SSH agent using the loaded private key
+                        sshagent(credentials: ['jenkins-private-key']) {
+                            // Execute the shutdown command on the remote node
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@${nodeIP} 'shutdown'"
+                        }
+                    }
+                }
+            }
+        }
+    stages {
+        stage('node03') {
+            steps {
+                script {
+                    def nodeIP = 192.168.1.213 
+                    // Load the private key from the credentials using the 'withCredentials' step
+                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                        // Connect to the SSH agent using the loaded private key
+                        sshagent(credentials: ['jenkins-private-key']) {
+                            // Execute the shutdown command on the remote node
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@${nodeIP} 'shutdown'"
+                        }
+                    }
+                }
+            }
+        }
+    stages {
+        stage('nfs01') {
+            steps {
+                script {
+                    def nodeIP = 192.168.1.210 
+                    // Load the private key from the credentials using the 'withCredentials' step
+                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                        // Connect to the SSH agent using the loaded private key
+                        sshagent(credentials: ['jenkins-private-key']) {
+                            // Execute the shutdown command on the remote node
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@${nodeIP} 'shutdown'"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
