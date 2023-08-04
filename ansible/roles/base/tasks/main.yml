@@ -3,11 +3,11 @@
   hostname:
     name: "{{ inventory_hostname }}"
 
-- name: Replace 'node' inside of /etc/hosts
+- name: Add '{{ inventory_hostname }}' to /etc/hosts
   lineinfile:
     path: /etc/hosts
-    regexp: '^(127\.0\.1\.1\s+).*node$'
-    line: '\1{{ ansible_hostname }}'
+    regexp: '^(127\.0\.0\.1\s+)(.*\blocalhost)$'
+    line: '127.0.0.1\t\2 {{ inventory_hostname }}'
     backrefs: yes
 
 - name: Set timezone

@@ -1,12 +1,16 @@
 ---
-- name: Gather systemd facts for k3s service
-  systemd:
-    name: k3s
-  register: k3s_service_facts
+- name: Check if the k3s configuration file exists
+  stat:
+    path: /etc/rancher/k3s/k3s.yaml
+  register: k3s_config
 
+- name: Print debug message if no configuration was found
+  debug:
+    msg: "No k3s configuration found."
+  when: not k3s_config.stat.exists
 
 - name: Install k3s
-  when: k3s_service_facts.status.ActiveState == "inactive"
+  when: not k3s_config.stat.exists 
   block:
     - name: Replace iptables-nft with iptables-legacy
       shell: "iptables -F && update-alternatives --set iptables /usr/sbin/iptables-legacy"
@@ -17,12 +21,24 @@
       shell: "iptables --version | grep -q 'legacy'"
 
     - name: Execute the k3s installation script
-      shell: "curl -sfL {{ k3s.url }} | sh -s - --write-kubeconfig-mode {{ k3s.mode }} --snapshotter={{ k3s.snapshotter }}"
+      shell: "curl -sfL {{ k3s.url }} | sh -s - --write-kubeconfig-mode {{ k3s.mode }} --node-name {{ ansible_hostname }} --snapshotter={{ k3s.snapshotter }}"
       args:
         executable: /bin/bash
+      ignore_errors: true #the k3s service start sometimes fails on PXE filesystems due to the database being locked because of the network which causes a timeout
       register: k3s_installation_result
     
     - name: Print output of installation script
       debug:
         var: k3s_installation_result
       when: k3s_installation_result.changed
+
+    - name: Wait for k3s to be ready
+      wait_for:
+        timeout: "300"
+        host: "127.0.0.1"
+        port: "6443"
+        state: "started"
+        delay: "5"
+        timeout_msg: "Kubernetes API server did not become healthy after 5 minutes."
+
+
