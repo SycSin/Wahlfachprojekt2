@@ -10,6 +10,13 @@ pipeline {
     }
 
     stages {
+        stage('Checkout') {
+	    steps {
+                // Use the checkout step to clone the Git repository
+                // and set the working directory to the root of the repository
+                checkout scm
+            }
+        }
         stage('Restore Filesystem') {
             steps {
                 script {
@@ -93,8 +100,7 @@ pipeline {
                         // Connect to the SSH agent using the loaded private key
                         sshagent(credentials: ['jenkins-private-key']) {
             		sh '''
-            		    pwd
-            		    cd Wahlfachprojekt2/ansible
+            		    cd ansible
                             ansible-playbook -i inventory playbooks/restore.yml -l ${params.NODE} --diff
             		'''
                         }
