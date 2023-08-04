@@ -94,8 +94,8 @@ pipeline {
                         sshagent(credentials: ['jenkins-private-key']) {
             		sh '''
             		    pwd
-            		    cd ansible
-                                ansible-playbook -i inventory playbooks/restore.yml -l ${params.NODE} --diff
+            		    cd Wahlfachprojekt2/ansible
+                            ansible-playbook -i inventory playbooks/restore.yml -l ${params.NODE} --diff
             		'''
                         }
                     }
