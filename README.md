@@ -6,8 +6,6 @@
 
 ### Enable network-boot on the k8s nodes
 * Prepare an SD card/USB-Stick with Raspberry OS
-* Here is a guide how to set the TFTP_IP in the bootconf.txt
-  https://rob-ferguson.me/how-to-pxe-boot-your-rpi 
 * Flash the EEPROM on the pi with the new boot order
 
 ### Flashing the EEPROM (on node01, node02, node03)
