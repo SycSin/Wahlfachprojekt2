@@ -5,7 +5,7 @@ pipeline {
         stage('node01') {
             steps {
                 script {
-                    def nodeIP = 192.168.1.211 
+                    def nodeIP = "192.168.1.211"
                     // Load the private key from the credentials using the 'withCredentials' step
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         // Connect to the SSH agent using the loaded private key
@@ -21,7 +21,7 @@ pipeline {
         stage('node02') {
             steps {
                 script {
-                    def nodeIP = 192.168.1.212 
+                    def nodeIP = "192.168.1.212"
                     // Load the private key from the credentials using the 'withCredentials' step
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         // Connect to the SSH agent using the loaded private key
@@ -37,7 +37,7 @@ pipeline {
         stage('node03') {
             steps {
                 script {
-                    def nodeIP = 192.168.1.213 
+                    def nodeIP = "192.168.1.213"
                     // Load the private key from the credentials using the 'withCredentials' step
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         // Connect to the SSH agent using the loaded private key
@@ -53,7 +53,7 @@ pipeline {
         stage('nfs01') {
             steps {
                 script {
-                    def nodeIP = 192.168.1.210 
+                    def nodeIP = "192.168.1.210"
                     // Load the private key from the credentials using the 'withCredentials' step
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         // Connect to the SSH agent using the loaded private key
