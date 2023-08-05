@@ -17,7 +17,6 @@ pipeline {
                 }
             }
         }
-    stages {
         stage('node02') {
             steps {
                 script {
@@ -33,7 +32,6 @@ pipeline {
                 }
             }
         }
-    stages {
         stage('node03') {
             steps {
                 script {
@@ -49,7 +47,6 @@ pipeline {
                 }
             }
         }
-    stages {
         stage('nfs01') {
             steps {
                 script {
