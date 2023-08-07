@@ -252,4 +252,6 @@ apt -y install python3-pip python3-venv
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
+cd ansible
+# verify the installation with the following command: ansible-playbook -i inventories/nodes.yml provision.yml --diff --check
 ```
