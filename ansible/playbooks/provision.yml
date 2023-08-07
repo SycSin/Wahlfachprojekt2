@@ -5,4 +5,4 @@
     ansible_python_interpreter: /usr/bin/python3
   roles:
     - base
-    - k3s
+    - microk8s
