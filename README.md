@@ -248,6 +248,7 @@ ssh-keygen -b 4096
 ```bash
 sudo su -
 apt update
-apt install -y ansible
-
+apt -y install python3-pip
+cd ansible
+pip install -r requirements.txt
 ```
