@@ -244,11 +244,12 @@ ssh-keygen -b 4096
 # Download and install the SSH Agent Plugin on the jenkins to enable connecting to nodes via SSH using the defined credentials
 ```
 
-### Installing Ansible
+### Installing Ansible (and dependencies)
 ```bash
 sudo su -
 apt update
-apt -y install python3-pip
-cd ansible
+apt -y install python3-pip python3-venv
+python3 -m venv venv
+source venv/bin/activate
 pip install -r requirements.txt
 ```
