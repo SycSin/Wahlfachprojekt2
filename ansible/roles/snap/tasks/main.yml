@@ -1,0 +1,18 @@
+---
+# Required for MicroK8s
+- name: Install snapd
+  apt:
+    name: "snapd"
+  register: snapd_installation
+  when: not ansible_check_mode
+
+- name: Reboot the machine
+  reboot:
+    reboot_timeout: 900
+  when: snapd_installation.changed and not ansible_check_mode
+
+- name: Install 'core' snap package
+  snap:
+    name: "core"
+    state: present
+  when: snapd_installation.changed and not ansible_check_mode
