@@ -206,10 +206,19 @@ usermod -a -G docker denis
 mkdir /opt/jenkins_docker
 cd /opt/jenkins_docker
 
+echo "FROM jenkins/jenkins:lts
+USER root
+RUN apt-get update && apt-get install -y ansible
+USER jenkins
+" > Dockerfile
+
 echo "version: '3'
 services:
   jenkins:
-    image: jenkins/jenkins:lts
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: jenkins-with-ansible
     restart: unless-stopped
     privileged: true
     user: root
@@ -218,7 +227,7 @@ services:
      - 50000:50000
     container_name: jenkins
     volumes:
-      - ./jenkins_configuration:/var/jenkins_home
+      - ./jenkins_home:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
 " > docker-compose.yml
 
