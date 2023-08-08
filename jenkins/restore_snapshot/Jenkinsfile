@@ -100,25 +100,20 @@ pipeline {
 	                withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
 	                    // Connect to the SSH agent using the loaded private key
 	                    sshagent(credentials: ['jenkins-private-key']) {
-	                        // Set the SSH_PRIVATE_KEY environment variable for the shell script
-	                        def envVars = [
-	                            "SSH_PRIVATE_KEY=${SSH_PRIVATE_KEY}"
-	                        ]
-	                        
 	                        // Execute the ansible-playbook command with environment variables
-	                        sh script: '''
+	                        sh '''
+	                            export SSH_PRIVATE_KEY="${SSH_PRIVATE_KEY}"
 	                            ansible-playbook -i inventory playbooks/restore.yml -l ${params.NODE} --diff
-	                        ''', 
-	                        returnStatus: true, 
-	                        env: envVars
+	                        '''
 	                    }
 	                }
-	             }
-		  }
-	       }
+	            }
+	        }
+	    }
 	}
     }
 }
+
 
 def getNodeIP(selectedNode) {
     switch (selectedNode) {
