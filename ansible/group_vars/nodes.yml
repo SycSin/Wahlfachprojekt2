@@ -1,6 +1,5 @@
 base_packages:
   - curl
   - ntp
-  - python3-pip
 
 timezone: "UTC"
