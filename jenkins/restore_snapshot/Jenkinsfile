@@ -113,9 +113,11 @@ pipeline {
 	                        env: envVars
 	                    }
 	                }
-	            }
-	        }
-	 }
+	             }
+		  }
+	       }
+	   }
+	}
     }
 }
 
