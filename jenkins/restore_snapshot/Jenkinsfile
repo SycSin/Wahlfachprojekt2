@@ -101,6 +101,7 @@ pipeline {
 	                    // Connect to the SSH agent using the loaded private key
 	                    sshagent(credentials: ['jenkins-private-key']) {
 	                        sh '''
+				    ansible --version
 	                            SSH_PRIVATE_KEY="${SSH_PRIVATE_KEY}" ansible-playbook -i inventory playbooks/restore.yml -l ${params.NODE} --diff
 	                        ''',
 	                        returnStatus: true
