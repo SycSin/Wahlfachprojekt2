@@ -1,0 +1,50 @@
+---
+- name: Enable the Dashboard
+  command: "/snap/bin/microk8s enable dashboard"
+
+- name: Enable Ingress Controller
+  command: "/snap/bin/microk8s enable ingress"
+
+- name: Enable CoreDNS
+  command: "/snap/bin/microk8s enable dns"
+
+#TODO: Add handler here
+- name: Restart MicroK8s
+  command: "/snap/bin/microk8s stop && /snap/bin/microk8s start"
+
+- name: Install Kubernetes pip module
+  pip:
+    name: kubernetes
+
+- name: Create ArgoCD namespace
+  k8s:
+    name: argocd
+    api_version: v1
+    kind: Namespace
+    state: present
+  register: argocd_namespace
+
+- name: Install ArgoCD
+  when: argocd_namespace.changed
+  block:
+    - name: Download ArgoCD manifest
+      get_url:
+        url: "https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml"
+        dest: "/tmp/argocd-installation.yaml"
+        mode: "0664"
+    
+    - name: Apply the ArgoCD manifest
+      k8s:
+        src: "/tmp/argocd-installation.yaml"
+        state: present
+        namespace: argocd
+
+    - name: Remove ArgoCD manifest
+      file:
+        path: "/tmp/argocd-installation.yaml"
+        state: absent
+
+    #TODO: Verify that ArgoCD is running
+
+- name: Verify MicroK8s is running
+  command: 'microk8s status | grep "microk8s is running"'

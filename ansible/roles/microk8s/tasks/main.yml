@@ -56,5 +56,5 @@
         state: present
         create: yes
 
-    - name: Enable the MicroK8s Dashboard
-      command: "/snap/bin/microk8s enable dashboard"
+    - name: Verify MicroK8s is running
+      command: 'microk8s status | grep "microk8s is running"'

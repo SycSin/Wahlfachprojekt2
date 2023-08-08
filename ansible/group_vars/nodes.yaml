@@ -1,10 +1,6 @@
 base_packages:
   - curl
   - ntp
+  - python3-pip
 
 timezone: "UTC"
-
-k3s:
-  url: "https://get.k3s.io"
-  mode: "777"
-  snapshotter: "native" #needs to be native since overlayfs snapshotter does not work with PXE filesystems
