@@ -102,6 +102,8 @@ pipeline {
 	                    sshagent(credentials: ['jenkins-private-key']) {
 	                        sh '''
 	                            export SSH_PRIVATE_KEY="${SSH_PRIVATE_KEY}"
+				    pwd
+				    ls -lah
 	                            ansible-playbook -i inventory playbooks/restore.yml -l ${params.NODE} --diff
 	                        '''
 	                    }
