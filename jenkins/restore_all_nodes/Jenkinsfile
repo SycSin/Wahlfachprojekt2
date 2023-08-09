@@ -1,0 +1,33 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('node01') {
+            steps {
+                script {
+                    def restorePipeline = build job: 'restore', parameters: [
+                        string(name: 'node', value: 'node01'),
+                    ]
+                }
+            }
+        }
+        stage('node02') {
+            steps {
+                script {
+                    def restorePipeline = build job: 'restore', parameters: [
+                        string(name: 'node', value: 'node02'),
+                    ]
+                }
+            }
+        }
+        stage('node03') {
+            steps {
+                script {
+                    def restorePipeline = build job: 'restore', parameters: [
+                        string(name: 'node', value: 'node03'),
+                    ]
+                }
+            }
+        }
+    }
+}
