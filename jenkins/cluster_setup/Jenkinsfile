@@ -54,13 +54,11 @@ pipeline {
                 def title = "Pipeline Status: ${currentBuild.result}"
                 def message
                 
-                def pushoverCredentials = credentials('pushover')
-                
-                withCredentials([usernamePassword(credentialsId: pushoverCredentials.id, usernameVariable: 'PUSHOVER_USER_KEY', passwordVariable: 'PUSHOVER_API_TOKEN')]) {
+                withCredentials([usernamePassword(credentialsId: 'pushover', usernameVariable: 'PUSHOVER_USER_KEY', passwordVariable: 'PUSHOVER_API_TOKEN')]) {
                     if (currentBuild.resultIsBetterOrEqualTo('SUCCESS')) {
-                        message = "Jenkins Pipeline Succeeded: ${currentBuild.fullDisplayName}"
+                        message = "Cluster successfully installed: ${currentBuild.fullDisplayName}"
                     } else {
-                        message = "Jenkins Pipeline Failed: ${currentBuild.fullDisplayName}"
+                        message = "Cluster installation failed: ${currentBuild.fullDisplayName}"
                     }
                     
                     // Pushover API URL
