@@ -11,12 +11,11 @@ pipeline {
 
     stages {
         stage('Destroy & Restore Cluster') {
-	    when {
-		expression { params.DESTROY == 'yes' }
-	    }
             steps {
                 script {
-                    def restorePipeline = build job: 'restore_all_nodes'
+                    if (params.DESTROY == 'yes') {
+                    	def restorePipeline = build job: 'restore_all_nodes'
+		    }
                 }
 	    }
         }
