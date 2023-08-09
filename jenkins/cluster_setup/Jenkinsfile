@@ -1,0 +1,58 @@
+pipeline {
+    agent any
+
+    parameters {
+        choice(
+            choices: ['no', 'yes'],
+            description: 'Destroy the cluster?',
+            name: 'DESTORY'
+        )
+    }
+
+    stages {
+        stage('Destroy & Restore Cluster') {
+	    when {
+		${params.DESTROY} == 'yes' {
+                    steps {
+                        script {
+                            def restorePipeline = build job: 'restore_all_nodes'
+                        }
+                    }
+	        }
+	    }
+        }
+        //stage('Reboot') {
+        //    steps {
+        //        script {
+        //            def nodeIP = getNodeIP(params.NODE)
+        //            // Load the private key from the credentials using the 'withCredentials' step
+        //            withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+        //                // Connect to the SSH agent using the loaded private key
+        //                sshagent(credentials: ['jenkins-private-key']) {
+        //                    try {
+        //                        sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@${nodeIP} 'reboot'"
+        //                        echo "Reboot command sent successfully."
+        //                    } catch (Exception ex) {
+        //                        echo "Reboot command failed. This is expected if the node is not reachable."
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
+    }
+}
+
+
+def getNodeIP(selectedNode) {
+    switch (selectedNode) {
+        case 'node01':
+            return '192.168.1.211'
+        case 'node02':
+            return '192.168.1.212'
+        case 'node03':
+            return '192.168.1.213'
+        default:
+            error "Invalid node selected."
+    }
+}
