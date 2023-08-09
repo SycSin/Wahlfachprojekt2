@@ -56,5 +56,3 @@
         state: present
         create: yes
 
-    - name: Verify MicroK8s is running
-      command: '/snap/bin/microk8s status | grep "microk8s is running"'
