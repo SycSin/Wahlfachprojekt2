@@ -51,20 +51,23 @@ pipeline {
     post {
         always {
             script {
-                def pushoverCredentials = credentials('pushover')
-                def userKey = pushoverCredentials.username
-                def apiToken = pushoverCredentials.password
                 def title = "Pipeline Status: ${currentBuild.result}"
+                def message
                 
-                // Pushover API URL
-                def pushoverUrl = "https://api.pushover.net/1/messages.json"
+                def pushoverCredentials = credentials('pushover')
                 
-                if (currentBuild.resultIsBetterOrEqualTo('SUCCESS')) {
-                    def message = "Jenkins Pipeline Succeeded: ${currentBuild.fullDisplayName}"
-                    sh "curl -s -F 'token=${apiToken}' -F 'user=${userKey}' -F 'message=${message}' -F 'title=${title}' ${pushoverUrl}"
-                } else {
-                    def message = "Jenkins Pipeline Failed: ${currentBuild.fullDisplayName}"
-                    sh "curl -s -F 'token=${apiToken}' -F 'user=${userKey}' -F 'message=${message}' -F 'title=${title}' ${pushoverUrl}"
+                withCredentials([string(credentialsId: pushoverCredentials.id, variable: 'PUSHOVER_USER_KEY'),
+                                 string(credentialsId: pushoverCredentials.id, variable: 'PUSHOVER_API_TOKEN')]) {
+                    if (currentBuild.resultIsBetterOrEqualTo('SUCCESS')) {
+                        message = "Jenkins Pipeline Succeeded: ${currentBuild.fullDisplayName}"
+                    } else {
+                        message = "Jenkins Pipeline Failed: ${currentBuild.fullDisplayName}"
+                    }
+                    
+                    // Pushover API URL
+                    def pushoverUrl = "https://api.pushover.net/1/messages.json"
+                    
+                    sh "curl -s -F 'token=$PUSHOVER_API_TOKEN' -F 'user=$PUSHOVER_USER_KEY' -F 'message=$message' -F 'title=$title' $pushoverUrl"
                 }
             }
         }
