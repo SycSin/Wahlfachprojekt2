@@ -1,0 +1,21 @@
+# IntelliJ IDEA
+.idea/
+
+# Compiled Output
+out/
+target/
+
+# Gradle
+.gradle/
+build/
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# Miscellaneous
+*.iml
+*.ipr
+*.iws
+*.log
