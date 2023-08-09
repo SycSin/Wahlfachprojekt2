@@ -28,7 +28,7 @@ pipeline {
                         // Connect to the SSH agent using the loaded private key
 			sshagent(credentials: ['jenkins-private-key']) {
 			    def addNodeStdout = sh(
-			        script: "ssh -o StrictHostKeyChecking=no -i \$SSH_PRIVATE_KEY root@192.168.1.211 'microk8s add-node'",
+			        script: "ssh -o StrictHostKeyChecking=no -i \$SSH_PRIVATE_KEY root@192.168.1.211 '/snap/bin/microk8s add-node'",
 			        returnStdout: true
 			    ).trim()
 			    echo "The stdout is: ${addNodeStdout}"
