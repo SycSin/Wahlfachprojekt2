@@ -1,5 +1,6 @@
 # IntelliJ IDEA
 .idea/
+lib
 
 # Compiled Output
 out/
