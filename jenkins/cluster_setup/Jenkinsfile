@@ -47,5 +47,26 @@ pipeline {
             }
         }
     }
+    post {
+        always {
+            script {
+                def userKey = credentials('pushover').username
+                def apiToken = credentials('pushover').password
+                def title = "Pipeline Status: ${currentBuild.result}"
+                
+                // Pushover API URL
+                def pushoverUrl = "https://api.pushover.net/1/messages.json"
+                
+                if (currentBuild.resultIsBetterOrEqualTo('SUCCESS')) {
+                    def message = "Jenkins Pipeline Succeeded: ${currentBuild.fullDisplayName}"
+                    sh "curl -s -F 'token=${apiToken}' -F 'user=${userKey}' -F 'message=${message}' -F 'title=${title}' ${pushoverUrl}"
+                } else {
+                    def message = "Jenkins Pipeline Failed: ${currentBuild.fullDisplayName}"
+                    sh "curl -s -F 'token=${apiToken}' -F 'user=${userKey}' -F 'message=${message}' -F 'title=${title}' ${pushoverUrl}"
+                }
+            }
+        }
+    }
+}
 }
 
