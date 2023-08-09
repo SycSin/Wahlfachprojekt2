@@ -26,11 +26,13 @@ pipeline {
                     // Load the private key from the credentials using the 'withCredentials' step
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         // Connect to the SSH agent using the loaded private key
-                        sshagent(credentials: ['jenkins-private-key']) {
-		            def addNodeStdout = sh(script: 'ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@getNodeIP(node01) "microk8s add-node" ', returnStdout: true).trim()
-                            //sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@getNodeIP(node02) '/bin/bash $addNodeStdout'"
-	                    echo "The stdout is: ${addNode}"
-                        }
+			sshagent(credentials: ['jenkins-private-key']) {
+			    def addNodeStdout = sh(
+			        script: "ssh -o StrictHostKeyChecking=no -i \$SSH_PRIVATE_KEY root@$192.168.1.211 'microk8s add-node'",
+			        returnStdout: true
+			    ).trim()
+			    echo "The stdout is: ${addNodeStdout}"
+			}
                     }
                 }
             }
@@ -38,16 +40,3 @@ pipeline {
     }
 }
 
-
-def getNodeIP(node) {
-    switch (node) {
-        case 'node01':
-            return '192.168.1.211'
-        case 'node02':
-            return '192.168.1.212'
-        case 'node03':
-            return '192.168.1.213'
-        default:
-            error "Invalid node selected."
-    }
-}
