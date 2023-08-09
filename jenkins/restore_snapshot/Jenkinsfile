@@ -100,7 +100,7 @@ pipeline {
 	                withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
 	                    // Connect to the SSH agent using the loaded private key
 	                    sshagent(credentials: ['jenkins-private-key']) {
-            	            	sh "ansible-playbook -i inventories/nodes.yml playbooks/restore.yml -l ${params.NODE} --diff"
+            	            	sh "ansible-playbook -i inventories/nodes.yml provision.yml -l ${params.NODE} --diff"
 	                    }
 	                }
 	            }
