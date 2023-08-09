@@ -35,7 +35,7 @@ pipeline {
 			    echo "Register node02"
             	            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.212 '/snap/bin/${addNodeCommand}'"
 			    echo "Retrieving new token"
-			    def addNodeCommand = sh(
+			    addNodeCommand = sh(
 			        script: "ssh -o StrictHostKeyChecking=no -i \$SSH_PRIVATE_KEY root@192.168.1.211 '/snap/bin/microk8s add-node | grep \"microk8s join 192.168.1.211\" | head -1'",
 			        returnStdout: true
 			    ).trim()
