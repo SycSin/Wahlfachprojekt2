@@ -58,7 +58,7 @@ pipeline {
             	script {
             	    // Wait for the node to be healthy
             	    def nodeIP = getNodeIP(params.NODE)
-            	    def timeoutSeconds = 900
+            	    def timeoutSeconds = 1200
             	    def startTime = currentBuild.startTimeInMillis
             	    def endTime = startTime + timeoutSeconds * 1000
 
