@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('Destroy & Restore Cluster') {
 	    when {
-		expression { ${params.DESTROY} == 'yes' }
+		expression { params.DESTROY == 'yes' }
 	    }
             steps {
                 script {
