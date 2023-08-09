@@ -33,9 +33,9 @@ pipeline {
 			        returnStdout: true
 			    ).trim()
 			    echo "Register node02"
-            	            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.212 '${addNodeCommand}'"
+            	            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.212 '/snap/bin/${addNodeCommand}'"
 			    echo "Register node03"
-            	            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.213 '${addNodeCommand}'"
+            	            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.213 '/snap/bin/${addNodeCommand}'"
 			}
                     }
                 }
