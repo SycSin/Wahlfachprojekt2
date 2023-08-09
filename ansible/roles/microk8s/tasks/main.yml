@@ -56,3 +56,10 @@
         state: present
         create: yes
 
+    - name: Create an alias for helm
+      lineinfile:
+        path: "/root/.bashrc"
+        line: 'alias helm="microk8s helm"'
+        state: present
+        create: yes
+
