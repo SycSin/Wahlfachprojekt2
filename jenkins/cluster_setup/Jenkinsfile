@@ -47,11 +47,13 @@ pipeline {
             }
         }
     }
+
     post {
         always {
             script {
-                def userKey = credentials('pushover').username
-                def apiToken = credentials('pushover').password
+                def pushoverCredentials = credentials('pushover')
+                def userKey = pushoverCredentials.username
+                def apiToken = pushoverCredentials.password
                 def title = "Pipeline Status: ${currentBuild.result}"
                 
                 // Pushover API URL
