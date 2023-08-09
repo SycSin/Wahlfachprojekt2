@@ -81,6 +81,8 @@ pipeline {
                                 echo "Enabling Plugin: ${plugin}"
                                 sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s enable ${plugin}'"
                             }
+                            echo "Restarting MicroK8s"
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s stop && /snap/bin/microk8s start'"
                         }
                     }
                 }
