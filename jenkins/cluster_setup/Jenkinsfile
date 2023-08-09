@@ -56,8 +56,7 @@ pipeline {
                 
                 def pushoverCredentials = credentials('pushover')
                 
-                withCredentials([string(credentialsId: pushoverCredentials.id, variable: 'PUSHOVER_USER_KEY'),
-                                 string(credentialsId: pushoverCredentials.id, variable: 'PUSHOVER_API_TOKEN')]) {
+                withCredentials([usernamePassword(credentialsId: pushoverCredentials.id, usernameVariable: 'PUSHOVER_USER_KEY', passwordVariable: 'PUSHOVER_API_TOKEN')]) {
                     if (currentBuild.resultIsBetterOrEqualTo('SUCCESS')) {
                         message = "Jenkins Pipeline Succeeded: ${currentBuild.fullDisplayName}"
                     } else {
