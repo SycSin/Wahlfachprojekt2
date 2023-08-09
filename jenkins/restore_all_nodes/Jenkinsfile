@@ -8,7 +8,7 @@ pipeline {
                     steps {
                         script {
                             def restorePipeline = build job: 'restore', parameters: [
-                                string(name: 'node', value: 'node01'),
+                                string(name: 'NODE', value: 'node01'),
                             ]
                         }
                     }
@@ -17,7 +17,7 @@ pipeline {
                     steps {
                         script {
                             def restorePipeline = build job: 'restore', parameters: [
-                                string(name: 'node', value: 'node02'),
+                                string(name: 'NODE', value: 'node02'),
                             ]
                         }
                     }
@@ -26,7 +26,7 @@ pipeline {
                     steps {
                         script {
                             def restorePipeline = build job: 'restore', parameters: [
-                                string(name: 'node', value: 'node03'),
+                                string(name: 'NODE', value: 'node03'),
                             ]
                         }
                     }
