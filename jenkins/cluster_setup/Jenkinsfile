@@ -21,29 +21,51 @@ pipeline {
 	        }
         }
         stage('Register Nodes') {
-            when {
-                expression { params.DESTROY == 'yes' }
-            }
+            //when {
+            //    expression { params.DESTROY == 'yes' }
+            //}
             steps {
                 script {
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         sshagent(credentials: ['jenkins-private-key']) {
-                            echo "Retrieve add node command to execute on node02 and node03"
-                            def addNodeCommand = sh(
-                                    script: "ssh -o StrictHostKeyChecking=no -i \$SSH_PRIVATE_KEY root@192.168.1.211 '/snap/bin/microk8s add-node | grep \"microk8s join 192.168.1.211\" | head -1'",
-                                    returnStdout: true
-                            ).trim()
-                            echo "Register node02"
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.212 '/snap/bin/${addNodeCommand}'"
-                            echo "Retrieving new token"
-                            addNodeCommand = sh(
-                                    script: "ssh -o StrictHostKeyChecking=no -i \$SSH_PRIVATE_KEY root@192.168.1.211 '/snap/bin/microk8s add-node | grep \"microk8s join 192.168.1.211\" | head -1'",
-                                    returnStdout: true
-                            ).trim()
-                            echo "Register node03"
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.213 '/snap/bin/${addNodeCommand}'"
-                            echo "Verify that high-availability is enabled"
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s status | grep \"high-availability: yes\"'"
+                            //echo "Retrieve add node command to execute on node02 and node03"
+                            //def addNodeCommand = sh(
+                            //        script: "ssh -o StrictHostKeyChecking=no -i \$SSH_PRIVATE_KEY root@192.168.1.211 '/snap/bin/microk8s add-node | grep \"microk8s join 192.168.1.211\" | head -1'",
+                            //        returnStdout: true
+                            //).trim()
+                            //echo "Register node02"
+                            //sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.212 '/snap/bin/${addNodeCommand}'"
+                            //echo "Retrieving new token"
+                            //addNodeCommand = sh(
+                            //        script: "ssh -o StrictHostKeyChecking=no -i \$SSH_PRIVATE_KEY root@192.168.1.211 '/snap/bin/microk8s add-node | grep \"microk8s join 192.168.1.211\" | head -1'",
+                            //        returnStdout: true
+                            //).trim()
+                            //echo "Register node03"
+                            //sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.213 '/snap/bin/${addNodeCommand}'"
+                            echo "Verify that High Availability is enabled"
+                            def commandOutput
+                            def success = false
+                            def timeout = 5 * 60  // 5 minutes in seconds
+                            def startTime = currentBuild.startTimeInMillis / 1000  // Convert to seconds
+
+                            while (!success) {
+                                if (currentBuild.startTimeInMillis / 1000 - startTime > timeout) {
+                                    echo "High Availability is not enabled."
+                                }
+
+                                commandOutput = sh(
+                                        script: "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s status | grep \"high-availability: yes\"'",
+                                        returnStdout: true
+                                ).trim()
+
+                                if (commandOutput.contains("high-availability: yes")) {
+                                    success = true
+                                } else {
+                                    echo "Retrying in 10 seconds.."
+                                    sleep(10)
+                                }
+                            }
+                            echo "High Availability is enabled."
                         }
                     }
                 }
@@ -72,7 +94,7 @@ pipeline {
                             echo "Creating namespace 'argocd'"
                             sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl create namespace argocd'"
                             echo "Installing ArgoCD manifest"
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml'"
+                            //TODO: sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml'"
                         }
                     }
                 }
