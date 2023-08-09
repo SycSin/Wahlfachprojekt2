@@ -20,31 +20,27 @@ pipeline {
                 }
 	    }
         }
-        //stage('Reboot') {
-        //    steps {
-        //        script {
-        //            def nodeIP = getNodeIP(params.NODE)
-        //            // Load the private key from the credentials using the 'withCredentials' step
-        //            withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
-        //                // Connect to the SSH agent using the loaded private key
-        //                sshagent(credentials: ['jenkins-private-key']) {
-        //                    try {
-        //                        sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@${nodeIP} 'reboot'"
-        //                        echo "Reboot command sent successfully."
-        //                    } catch (Exception ex) {
-        //                        echo "Reboot command failed. This is expected if the node is not reachable."
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
+        stage('Register Nodes') {
+            steps {
+                script {
+                    // Load the private key from the credentials using the 'withCredentials' step
+                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                        // Connect to the SSH agent using the loaded private key
+                        sshagent(credentials: ['jenkins-private-key']) {
+		            def addNodeStdout = sh(script: 'ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@getNodeIP(node01) "microk8s add-node" ', returnStdout: true).trim()
+                            //sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@getNodeIP(node02) '/bin/bash $addNodeStdout'"
+	                    echo "The stdout is: ${addNode}"
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
 
-def getNodeIP(selectedNode) {
-    switch (selectedNode) {
+def getNodeIP(node) {
+    switch (node) {
         case 'node01':
             return '192.168.1.211'
         case 'node02':
