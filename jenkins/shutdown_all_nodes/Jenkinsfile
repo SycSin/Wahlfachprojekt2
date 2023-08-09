@@ -63,4 +63,26 @@ pipeline {
             }
         }
     }
+    post {
+        always {
+            script {
+                def title = "Pipeline Status: ${currentBuild.result}"
+                def message
+                
+                withCredentials([usernamePassword(credentialsId: 'pushover', usernameVariable: 'PUSHOVER_USER_KEY', passwordVariable: 'PUSHOVER_API_TOKEN')]) {
+                    if (currentBuild.resultIsBetterOrEqualTo('SUCCESS')) {
+                        message = "All nodes successfully shutdown: ${currentBuild.fullDisplayName}"
+                    } else {
+                        message = "Shutting down failed: ${currentBuild.fullDisplayName}"
+                    }
+                    
+                    // Pushover API URL
+                    def pushoverUrl = "https://api.pushover.net/1/messages.json"
+                    
+                    sh "curl -s -F 'token=$PUSHOVER_API_TOKEN' -F 'user=$PUSHOVER_USER_KEY' -F 'message=$message' -F 'title=$title' $pushoverUrl"
+                }
+            }
+        }
+    }
 }
+
