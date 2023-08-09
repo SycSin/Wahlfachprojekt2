@@ -44,7 +44,7 @@ pipeline {
             	            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.213 '/snap/bin/${addNodeCommand}'"
 			*/
 			    echo "Verify that high-availability is enabled"
-            	            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s status | grep \'high-availability: yes\''"
+            	            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s status | grep \"high-availability: yes\"'"
 			}
                     }
                 }
