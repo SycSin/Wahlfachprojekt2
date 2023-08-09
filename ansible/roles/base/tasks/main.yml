@@ -3,12 +3,10 @@
   hostname:
     name: "{{ inventory_hostname }}"
 
-- name: Add '{{ inventory_hostname }}' to /etc/hosts
-  lineinfile:
-    path: /etc/hosts
-    regexp: '^(127\.0\.0\.1\s+)(.*\blocalhost)$'
-    line: '127.0.0.1\t\2 {{ inventory_hostname }}'
-    backrefs: yes
+- name: Add "{{ inventory_hostname }}" to /etc/hosts
+  template:
+    src: "hosts.j2"
+    dest: "/etc/hosts" 
 
 - name: Set timezone
   timezone:
