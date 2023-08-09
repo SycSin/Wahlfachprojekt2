@@ -21,24 +21,27 @@ pipeline {
 	        }
         }
         stage('Register Nodes') {
+            when {
+                expression { params.DESTROY == 'yes' }
+            }
             steps {
                 script {
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         sshagent(credentials: ['jenkins-private-key']) {
-        //                    echo "Retrieve add node command to execute on node02 and node03"
-        //                    def addNodeCommand = sh(
-        //                            script: "ssh -o StrictHostKeyChecking=no -i \$SSH_PRIVATE_KEY root@192.168.1.211 '/snap/bin/microk8s add-node | grep \"microk8s join 192.168.1.211\" | head -1'",
-        //                            returnStdout: true
-        //                    ).trim()
-        //                    echo "Register node02"
-        //                    sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.212 '/snap/bin/${addNodeCommand}'"
-        //                    echo "Retrieving new token"
-        //                    addNodeCommand = sh(
-        //                            script: "ssh -o StrictHostKeyChecking=no -i \$SSH_PRIVATE_KEY root@192.168.1.211 '/snap/bin/microk8s add-node | grep \"microk8s join 192.168.1.211\" | head -1'",
-        //                            returnStdout: true
-        //                    ).trim()
-        //                    echo "Register node03"
-        //                    sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.213 '/snap/bin/${addNodeCommand}'"
+                            echo "Retrieve add node command to execute on node02 and node03"
+                            def addNodeCommand = sh(
+                                    script: "ssh -o StrictHostKeyChecking=no -i \$SSH_PRIVATE_KEY root@192.168.1.211 '/snap/bin/microk8s add-node | grep \"microk8s join 192.168.1.211\" | head -1'",
+                                    returnStdout: true
+                            ).trim()
+                            echo "Register node02"
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.212 '/snap/bin/${addNodeCommand}'"
+                            echo "Retrieving new token"
+                            addNodeCommand = sh(
+                                    script: "ssh -o StrictHostKeyChecking=no -i \$SSH_PRIVATE_KEY root@192.168.1.211 '/snap/bin/microk8s add-node | grep \"microk8s join 192.168.1.211\" | head -1'",
+                                    returnStdout: true
+                            ).trim()
+                            echo "Register node03"
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.213 '/snap/bin/${addNodeCommand}'"
                             echo "Verify that high-availability is enabled"
                             sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s status | grep \"high-availability: yes\"'"
                         }
