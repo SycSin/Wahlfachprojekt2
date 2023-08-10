@@ -240,9 +240,48 @@ docker exec -t jenkins cat /var/jenkins_home/secrets/initialAdminPassword
 # Generate a public/private keypair and paste the private key to the credentials tab, and paste the public key to the SSH-Keys for the GitHub account to access this repository
 ssh-keygen -b 4096
 
-# Create a certificate/private-key for the jenkins instance to enable HTTPS traffic
 # Generate a public/private keypair for the jenkins agent to connect to nfs01 (by adding the public key to the authorized_keys)
 # Download and install the SSH Agent Plugin on the jenkins to enable connecting to nodes via SSH using the defined credentials
+```
+
+### Setup Nginx on nfs01
+```bash
+sudo su -
+apt update
+apt install -y nginx
+mkdir -p /etc/nginx/ssl
+# Generate a self-signed certificate
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/ssl/jenkins.key -out /etc/nginx/ssl/jenkins.crt
+# Create a vHost for Jenkins
+echo "server {
+    listen 80;
+    server_name jenkins.example.com;
+
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+
+server {
+    listen 443 ssl;
+    server_name jenkins.example.com;
+
+    ssl_certificate /etc/nginx/ssl/jenkins.crt;
+    ssl_certificate_key /etc/nginx/ssl/jenkins.key;
+
+    location / {
+        proxy_pass http://localhost:8080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+" > /etc/nginx/sites-available/jenkins.conf
+ln -s /etc/nginx/sites-available/jenkins.conf /etc/nginx/sites-enabled/
+rm /etc/nginx/sites-enabled/default
+nginx -t
+systemctl restart nginx
 ```
 
 ### Installing Ansible (and dependencies)
