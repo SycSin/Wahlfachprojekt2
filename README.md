@@ -132,9 +132,10 @@ WantedBy=multi-user.target" > /etc/systemd/system/nfs-delayed.service
 systemctl-daemon reload
 systemctl enable nfs-delayed.service
 
+rsync -xa --exclude /mnt/ssd / /mnt/ssd/nfs/node-base-template
 
 # node01 (on the nfs01 server)
-rsync -xa --exclude /mnt/ssd / /mnt/ssd/nfs/node01/
+rsync -xa --exclude /mnt/ssd/nfs/node-base-template / /mnt/ssd/nfs/node01/
 cd /mnt/ssd/nfs/node01
 mount --bind /dev dev
 mount --bind /sys sys
@@ -155,7 +156,7 @@ umount sys
 umount proc
 
 # node02 (on the nfs01 server)
-rsync -xa --exclude /mnt/ssd / /mnt/ssd/nfs/node02/
+rsync -xa --exclude /mnt/ssd/nfs/node-base-template / /mnt/ssd/nfs/node02/
 cd /mnt/ssd/nfs/node01
 mount --bind /dev dev
 mount --bind /sys sys
@@ -177,7 +178,7 @@ umount proc
 
 
 # node03 (on the nfs01 server)
-rsync -xa --exclude /mnt/ssd / /mnt/ssd/nfs/node03/
+rsync -xa --exclude /mnt/ssd/nfs/node-base-template / /mnt/ssd/nfs/node03/
 cd /mnt/ssd/nfs/node03
 mount --bind /dev dev
 mount --bind /sys sys
