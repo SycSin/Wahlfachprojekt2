@@ -255,7 +255,7 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/ssl/jenki
 # Create a vHost for Jenkins
 echo "server {
     listen 80;
-    server_name jenkins.example.com;
+    server_name jenkins;
 
     location / {
         return 301 https://$host$request_uri;
@@ -264,7 +264,7 @@ echo "server {
 
 server {
     listen 443 ssl;
-    server_name jenkins.example.com;
+    server_name jenkins;
 
     ssl_certificate /etc/nginx/ssl/jenkins.crt;
     ssl_certificate_key /etc/nginx/ssl/jenkins.key;
@@ -276,8 +276,7 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
     }
-}
-" > /etc/nginx/sites-available/jenkins.conf
+}" > /etc/nginx/sites-available/jenkins.conf
 ln -s /etc/nginx/sites-available/jenkins.conf /etc/nginx/sites-enabled/
 rm /etc/nginx/sites-enabled/default
 nginx -t
