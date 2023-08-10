@@ -43,7 +43,7 @@ pipeline {
                         // Connect to the SSH agent using the loaded private key
                         sshagent(credentials: ['jenkins-private-key']) {
                             try {
-                                sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@${nodeIP} 'reboot -f'"
+                                sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@${nodeIP} 'reboot'"
                                 echo "Reboot command sent successfully."
                             } catch (Exception e) {
                                 echo "Reboot command failed. This is expected if the node is not reachable."
