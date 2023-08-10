@@ -71,15 +71,15 @@ pipeline {
                 }
             }
         }
-        stage('Enable MicroK8s Plugins') {
+        stage('Enable MicroK8s Addons') {
             steps {
                 script {
-                    def plugins = ['dashboard', 'dns', 'registry', 'cert-manager', 'rbac']
+                    def addons = ['dashboard', 'dns', 'registry', 'cert-manager', 'rbac']
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         sshagent(credentials: ['jenkins-private-key']) {
-                            for (def plugin in plugins) {
-                                echo "Enabling Plugin: ${plugin}"
-                                sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s enable ${plugin}'"
+                            for (def addon in addons) {
+                                echo "Enabling Addon: ${addon}"
+                                sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s enable ${addon}'"
                             }
                             echo "Restarting MicroK8s"
                             sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s stop && /snap/bin/microk8s start'"
