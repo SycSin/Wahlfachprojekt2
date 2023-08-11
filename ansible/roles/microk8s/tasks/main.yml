@@ -27,7 +27,6 @@
       snap:
         name: microk8s
         classic: yes
-        channel: "1.26/stable"
         state: present
     
     - name: Stop MicroK8s

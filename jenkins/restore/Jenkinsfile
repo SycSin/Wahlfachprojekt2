@@ -33,10 +33,10 @@ pipeline {
                                 echo "No MicroK8s Installation found."
                             }
                             // Execute the rsync command on the remote node
-                            //sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.210 'rsync -a --delete /mnt/ssd/nfs/${params.NODE}-base-template/ /mnt/ssd/nfs/${params.NODE}'"
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.210 'rsync -a --delete /mnt/ssd/nfs/${params.NODE}-base-template/ /mnt/ssd/nfs/${params.NODE}'"
                             // TODO: Remove temporary pre-provisioned template
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.210 'rsync -a --delete /mnt/ssd/nfs/node-base-template/ /mnt/ssd/nfs/${params.NODE}'"
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.210 'sed -i \'s#^192\\.168\\.1\\.210:/mnt/ssd/tftpboot#192.168.1.210:/mnt/ssd/tftpboot/${nodeIP}#\' /mnt/ssd/nfs/${params.NODE}/etc/fstab'"
+                            //sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.210 'rsync -a --delete /mnt/ssd/nfs/node-base-template/ /mnt/ssd/nfs/${params.NODE}'"
+                            //sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.210 'sed -i \'s#^192\\.168\\.1\\.210:/mnt/ssd/tftpboot#192.168.1.210:/mnt/ssd/tftpboot/${nodeIP}#\' /mnt/ssd/nfs/${params.NODE}/etc/fstab'"
                         }
                     }
                 }
