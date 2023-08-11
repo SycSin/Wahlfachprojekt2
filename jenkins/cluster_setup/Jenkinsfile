@@ -74,6 +74,7 @@ pipeline {
                 }
             }
         }
+        /*
         stage('Activate NFS-CSI Driver') {
             steps {
                 script {
@@ -149,6 +150,7 @@ pipeline {
                 }
             }
         }
+        */
     }
 
     post {
