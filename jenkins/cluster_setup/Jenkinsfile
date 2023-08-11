@@ -96,7 +96,7 @@ pipeline {
                             echo "Displaying the CSI-Drivers"
                             sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl get csidrivers'"
                             echo "Copying the manifests to the node"
-                            sh "scp -i ${SSH_PRIVATE_KEY} manifests/*  root@192.168.1.211:/tmp/"
+                            sh "scp -i ${SSH_PRIVATE_KEY} manifests/*-nfs.yml root@192.168.1.211:/tmp/"
                             echo "Creating the NFS StorageClass"
                             sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl apply -f /tmp/sc-nfs.yml'"
                             echo "Creating the PVC"
