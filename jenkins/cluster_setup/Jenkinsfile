@@ -74,7 +74,6 @@ pipeline {
                 }
             }
         }
-        /*
         stage('Activate NFS-CSI Driver') {
             steps {
                 script {
@@ -119,6 +118,7 @@ pipeline {
                 }
             }
         }
+        /*
         stage('Enable MicroK8s Addons') {
             steps {
                 script {
