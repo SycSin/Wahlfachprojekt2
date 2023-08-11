@@ -77,7 +77,7 @@ pipeline {
         stage('Enable MicroK8s Addons') {
             steps {
                 script {
-                    def addons = ['dashboard', 'dns', 'registry', 'cert-manager', 'rbac', 'community']
+                    def addons = ['dashboard', 'dns', 'registry', 'cert-manager', 'rbac', 'community', 'observability']
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         sshagent(credentials: ['jenkins-private-key']) {
                             for (def addon in addons) {
