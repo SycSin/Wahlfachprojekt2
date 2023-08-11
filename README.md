@@ -41,6 +41,9 @@ apt-get update
 
 mkdir -p /mnt/ssd/nfs/node{01,02,03}
 mkdir -p /mnt/ssd/tftpboot/192.168.1.{211,212,213}
+mkdir -p /mnt/ssd/nfs/microk8s
+chown nobody:nogroup /mnt/ssd/nfs/microk8s
+chmod 0777 /mnt/ssd/nfs/microk8s
 apt-get install dnsmasq tcpdump nfs-kernel-server
 
 # format the disk /dev/sda to have the following partition table:
