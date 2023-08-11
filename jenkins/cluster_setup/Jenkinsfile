@@ -92,7 +92,7 @@ pipeline {
                             catch (Exception e) {
                             }
                             echo "Waiting for CSI controller to come up"
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl wait pod --selector app.kubernetes.io/name=csi-driver-nfs --for condition=ready --timeout=1200s --namespace kube-system'"
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl wait pod --selector app.kubernetes.io/name=csi-driver-nfs --for condition=ready --timeout=1800s --namespace kube-system'"
                             echo "Displaying the CSI-Drivers"
                             sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl get csidrivers'"
                             echo "Copying the manifests to the node"
