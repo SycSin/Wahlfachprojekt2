@@ -98,14 +98,15 @@ resolv-file=/etc/resolv.dnsmasq.conf" > /etc/dnsmasq.conf
 systemctl enable dnsmasq.service
 systemctl restart dnsmasq.service
 
-echo "/mnt/ssd/nfs/node01 *(rw,sync,no_subtree_check,no_root_squash)
-/mnt/ssd/nfs/node02 *(rw,sync,no_subtree_check,no_root_squash)
-/mnt/ssd/nfs/node03 *(rw,sync,no_subtree_check,no_root_squash)
-/mnt/ssd/tftpboot/192.168.1.211 192.168.1.211(rw,sync,no_subtree_check,no_root_squash)
-/mnt/ssd/tftpboot/192.168.1.212 192.168.1.212(rw,sync,no_subtree_check,no_root_squash)
-/mnt/ssd/tftpboot/192.168.1.213 192.168.1.213(rw,sync,no_subtree_check,no_root_squash)
-/home/denis 192.168.1.0/24(rw,sync,no_subtree_check)" > /etc/exports
+echo "/mnt/ssd/nfs/node01 *(rw,sync,no_subtree_check,no_root_squash,fsid=4)
+/mnt/ssd/nfs/node02 *(rw,sync,no_subtree_check,no_root_squash,fsid=4)
+/mnt/ssd/nfs/node03 *(rw,sync,no_subtree_check,no_root_squash,fsid=4)
+/mnt/ssd/tftpboot/192.168.1.211 192.168.1.211(rw,sync,no_subtree_check,no_root_squash,fsid=4)
+/mnt/ssd/tftpboot/192.168.1.212 192.168.1.212(rw,sync,no_subtree_check,no_root_squash,fsid=4)
+/mnt/ssd/tftpboot/192.168.1.213 192.168.1.213(rw,sync,no_subtree_check,no_root_squash,fsid=4)
+/mnt/ssd/nfs/microk8s 192.168.1.0/24(rw,sync,no_subtree_check,fsid=4)" > /etc/exports
 
+exportfs -ra
 systemctl enable rpcbind
 systemctl restart rpcbind
 systemctl enable nfs-kernel-server
@@ -144,7 +145,7 @@ chroot .
 rm /etc/ssh/ssh_host_*
 dpkg-reconfigure openssh-server
 echo "proc            /proc           proc    defaults          0       0
-192.168.1.210:/mnt/ssd/tftpboot/192.168.1.211 /boot nfs defaults,vers=3,proto=tcp 0 0" > /etc/fstab
+192.168.1.210:/mnt/ssd/tftpboot/192.168.1.211 /boot nfs defaults,vers=4,proto=tcp 0 0" > /etc/fstab
 echo "node01" > /etc/hostname
 sed -i 's/nfs01/node01/g' /etc/hosts
 rm /etc/systemd/network/*
@@ -165,7 +166,7 @@ chroot .
 rm /etc/ssh/ssh_host_*
 dpkg-reconfigure openssh-server
 echo "proc            /proc           proc    defaults          0       0
-192.168.1.210:/mnt/ssd/tftpboot/192.168.1.212 /boot nfs defaults,vers=3,proto=tcp 0 0" > /etc/fstab
+192.168.1.210:/mnt/ssd/tftpboot/192.168.1.212 /boot nfs defaults,vers=4,proto=tcp 0 0" > /etc/fstab
 echo "node02" > /etc/hostname
 sed -i 's/nfs01/node02/g' /etc/hosts
 rm /etc/systemd/network/*
@@ -187,7 +188,7 @@ chroot .
 rm /etc/ssh/ssh_host_*
 dpkg-reconfigure openssh-server
 echo "proc            /proc           proc    defaults          0       0
-192.168.1.210:/mnt/ssd/tftpboot/192.168.1.213 /boot nfs defaults,vers=3,proto=tcp 0 0" > /etc/fstab
+192.168.1.210:/mnt/ssd/tftpboot/192.168.1.213 /boot nfs defaults,vers=4,proto=tcp 0 0" > /etc/fstab
 echo "node03" > /etc/hostname
 sed -i 's/nfs01/node03/g' /etc/hosts
 rm /etc/systemd/network/*
