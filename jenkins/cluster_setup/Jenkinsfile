@@ -111,7 +111,7 @@ pipeline {
                                 mountOptions:
                                   - hard
                                   - nfsvers=3
-                                EOF
+                                EOF'
                             """
                             echo "Applying the manifest"
                             sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl apply -f /tmp/csi-nfs-sc.yml'"
