@@ -109,7 +109,6 @@ echo "/mnt/ssd/nfs/node01 *(rw,sync,no_subtree_check,no_root_squash)
 /mnt/ssd/tftpboot/192.168.1.213 192.168.1.213(rw,sync,no_subtree_check,no_root_squash)
 /mnt/ssd/nfs/microk8s 192.168.1.0/24(rw,sync,no_subtree_check)" > /etc/exports
 
-exportfs -ra
 systemctl enable rpcbind
 systemctl restart rpcbind
 systemctl enable nfs-kernel-server

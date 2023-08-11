@@ -107,7 +107,7 @@ pipeline {
                                 volumeBindingMode: Immediate
                                 mountOptions:
                                   - hard
-                                  - nfsvers=4
+                                  - nfsvers=3
                                 EOF
                             """
                             echo "Applying the manifest"
