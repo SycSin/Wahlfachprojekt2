@@ -108,7 +108,6 @@ pipeline {
                 }
             }
         }
-        /*
         stage('Enable MicroK8s Addons') {
             steps {
                 script {
@@ -126,6 +125,7 @@ pipeline {
                 }
             }
         }
+        /*
         stage('Installing ArgoCD') {
             steps {
                 script {
