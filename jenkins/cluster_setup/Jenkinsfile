@@ -98,21 +98,21 @@ pipeline {
                             echo "Creating NFS StorageClass"
                             sh """
                             ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 'cat << EOF > /tmp/csi-nfs-sc.yml
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: nfs-csi
-provisioner: nfs.csi.k8s.io
-parameters:
-  server: 192.168.1.210
-  share: /mnt/ssd/nfs/microk8s
-reclaimPolicy: Delete
-volumeBindingMode: Immediate
-mountOptions:
-  - hard
-  - nfsvers=3
-EOF
-'
+                                apiVersion: storage.k8s.io/v1
+                                kind: StorageClass
+                                metadata:
+                                  name: nfs-csi
+                                provisioner: nfs.csi.k8s.io
+                                parameters:
+                                  server: 192.168.1.210
+                                  share: /mnt/ssd/nfs/microk8s
+                                reclaimPolicy: Delete
+                                volumeBindingMode: Immediate
+                                mountOptions:
+                                  - hard
+                                  - nfsvers=3
+                                EOF
+                                '
                             """
                             echo "Applying the manifest"
                             sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl apply -f /tmp/csi-nfs-sc.yml'"
