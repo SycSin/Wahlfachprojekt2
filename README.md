@@ -113,6 +113,8 @@ systemctl enable rpcbind
 systemctl restart rpcbind
 systemctl enable nfs-kernel-server
 systemctl restart nfs-kernel-server
+systemctl enable rpc-statd
+systemctl restart rpc-statd
 
 echo "console=serial0,115200 console=tty root=/dev/nfs nfsroot=192.168.1.210:/mnt/ssd/nfs/node01,vers=4 rw ip=dhcp fsck.repair=yes rootwait cgroup_memory=1 cgroup_enable=memory" > /mnt/ssd/tftpboot/192.168.1.211/cmdline.txt
 echo "console=serial0,115200 console=tty root=/dev/nfs nfsroot=192.168.1.210:/mnt/ssd/nfs/node02,vers=4 rw ip=dhcp fsck.repair=yes rootwait cgroup_memory=1 cgroup_enable=memory" > /mnt/ssd/tftpboot/192.168.1.212/cmdline.txt
