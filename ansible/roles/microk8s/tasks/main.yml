@@ -62,4 +62,3 @@
         line: 'alias helm="microk8s helm"'
         state: present
         create: yes
-

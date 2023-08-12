@@ -16,3 +16,8 @@
   apt:
     name: "{{ base_packages }}"
 
+- name: Start and enable rpc-statd systemd unit
+  service:
+    name: "rpc-statd"
+    state: started
+    enabled: true
