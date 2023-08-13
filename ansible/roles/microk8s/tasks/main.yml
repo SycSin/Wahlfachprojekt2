@@ -11,7 +11,7 @@
 
 - name: Print debug message if MicroK8s is not installed
   debug:
-    msg: "No MicroK8s pacakge found."
+    msg: "No MicroK8s package found."
   when: microk8s_snap_list.failed
 
 - name: Install MicroK8s
