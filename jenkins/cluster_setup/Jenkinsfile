@@ -114,7 +114,7 @@ pipeline {
                 }
             }
         }
-        stage ('Enable Netdata Monitoring')
+        stage ('Enable Netdata Monitoring') {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'netdata', usernameVariable: 'PARENT_CLAIMING_TOKEN', passwordVariable: 'CHILD_CLAIMING_TOKEN')]) {
@@ -125,6 +125,7 @@ pipeline {
                     }
                 }
             }
+        }
         /*
         stage('Enable MicroK8s Addons') {
             steps {
