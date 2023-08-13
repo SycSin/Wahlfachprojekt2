@@ -51,8 +51,8 @@
       lineinfile:
         path: "/var/snap/microk8s/current/args/kubelet"
         backrefs: yes
-        regexp: "^(.*feature-gates=DevicePlugins=true"
-        line: 'feature-gates=LocalStorageCapacityIsolation=false'
+        regexp: "--feature-gates=DevicePlugins=true"
+        line: '--feature-gates=LocalStorageCapacityIsolation=false'
 
     - name: Start the MicroK8s service
       command: "/snap/bin/microk8s start"
