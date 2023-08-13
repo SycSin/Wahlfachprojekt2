@@ -96,7 +96,7 @@ pipeline {
                             catch (Exception e) {
                             }
                             echo "Waiting for CSI controller to come up"
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl wait pod --selector app.kubernetes.io/name=csi-driver-nfs --for condition=ready --timeout=1800s --namespace kube-system'"
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl wait pod --selector app.kubernetes.io/name=csi-driver-nfs --for condition=ready --timeout=2700s --namespace kube-system'"
                             echo "Displaying the CSI-Drivers"
                             sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl get csidrivers'"
                             echo "Copying the manifests to the node"
@@ -114,6 +114,15 @@ pipeline {
                 }
             }
         }
+        stage ('Enable Netdata Monitoring')
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'netdata', usernameVariable: 'PARENT_CLAIMING_TOKEN', passwordVariable: 'CHILD_CLAIMING_TOKEN')]) {
+                    echo "Adding netdata Helm Repository"
+                    sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s helm repo add netdata https://netdata.github.io/helmchart/'"
+                    echo "Deploying netdata Helm Chart"
+                    sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s helm install netdata netdata/netdata --set image.tag=latest --set parent.claiming.enabled=\"true\" --set parent.claiming.token=$PARENT_CLAIMING_TOKEN --set parent.claiming.rooms=1c24b7d3-e2c5-429a-9bf7-bbbf84a4d444 --set child.claiming.enabled=\"true\" --set child.claiming.token=$CHILD_CLAIMING_TOKEN --set child.claiming.rooms=1c24b7d3-e2c5-429a-9bf7-bbbf84a4d444'"
+                }
+            }
         /*
         stage('Enable MicroK8s Addons') {
             steps {
