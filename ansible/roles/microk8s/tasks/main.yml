@@ -44,7 +44,7 @@
         path: "/var/snap/microk8s/current/args/containerd-template.toml"
         regexp: '^    snapshotter = "\$\{SNAPSHOTTER\}"'
         #line: '    snapshotter = "native"'
-        line: '    snapshotter = "stargz"'
+        line: '    snapshotter = "fuse-overlay"'
         backup: yes
 
 ##    # https://github.com/canonical/microk8s/issues/1587#issuecomment-697207459
