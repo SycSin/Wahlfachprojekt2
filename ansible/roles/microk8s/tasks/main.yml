@@ -43,16 +43,17 @@
       lineinfile:
         path: "/var/snap/microk8s/current/args/containerd-template.toml"
         regexp: '^    snapshotter = "\$\{SNAPSHOTTER\}"'
-        line: '    snapshotter = "native"'
+        #line: '    snapshotter = "native"'
+        line: '    snapshotter = "overlayfs"'
         backup: yes
 
-    # https://github.com/canonical/microk8s/issues/1587#issuecomment-697207459
-    - name: Disable LocalStorageCapacityIsolation
-      lineinfile:
-        path: "/var/snap/microk8s/current/args/kubelet"
-        backrefs: yes
-        regexp: "--feature-gates=DevicePlugins=true"
-        line: '--feature-gates=LocalStorageCapacityIsolation=false'
+##    # https://github.com/canonical/microk8s/issues/1587#issuecomment-697207459
+#    - name: Disable LocalStorageCapacityIsolation
+#      lineinfile:
+#        path: "/var/snap/microk8s/current/args/kubelet"
+#        backrefs: yes
+#        regexp: "--feature-gates=DevicePlugins=true"
+#        line: '--feature-gates=LocalStorageCapacityIsolation=false'
 
     - name: Start the MicroK8s service
       command: "/snap/bin/microk8s start"
