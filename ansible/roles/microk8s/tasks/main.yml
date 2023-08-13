@@ -15,7 +15,7 @@
   when: microk8s_snap_list.failed
 
 - name: Install MicroK8s
-  when: microk8s_snap_list.failed
+  #when: microk8s_snap_list.failed
   block:
     - name: Load the snapd daemon
       systemd:
@@ -45,6 +45,14 @@
         regexp: '^    snapshotter = "\$\{SNAPSHOTTER\}"'
         line: '    snapshotter = "native"'
         backup: yes
+
+    # https://github.com/canonical/microk8s/issues/1587#issuecomment-697207459
+    - name: Disable LocalStorageCapacityIsolation
+      lineinfile:
+        path: "/var/snap/microk8s/current/args/kubelet"
+        backrefs: yes
+        regexp: "^(.*feature-gates.*)$"
+        line: '\1,LocalStorageCapacityIsolation=false'
 
     - name: Start the MicroK8s service
       command: "/snap/bin/microk8s start"
