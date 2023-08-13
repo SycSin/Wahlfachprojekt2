@@ -15,7 +15,7 @@
   when: microk8s_snap_list.failed
 
 - name: Install MicroK8s
-  #when: microk8s_snap_list.failed
+  when: microk8s_snap_list.failed
   block:
     - name: Load the snapd daemon
       systemd:
@@ -51,8 +51,8 @@
       lineinfile:
         path: "/var/snap/microk8s/current/args/kubelet"
         backrefs: yes
-        regexp: "^(.*feature-gates.*)$"
-        line: '\1,LocalStorageCapacityIsolation=false'
+        regexp: "^(.*feature-gates=DevicePlugins=true"
+        line: 'feature-gates=LocalStorageCapacityIsolation=false'
 
     - name: Start the MicroK8s service
       command: "/snap/bin/microk8s start"
