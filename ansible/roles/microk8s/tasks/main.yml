@@ -54,6 +54,12 @@
 #        regexp: "--feature-gates=DevicePlugins=true"
 #        line: '--feature-gates=LocalStorageCapacityIsolation=false'
 
+    - name: Install linux-modules-extra-raspi on Ubuntu
+      apt:
+        name: "linux-modules-extra-raspi"
+        state: present
+      when: ansible_facts['distribution'] == "Ubuntu"
+
     - name: Start the MicroK8s service
       command: "/snap/bin/microk8s start"
 
