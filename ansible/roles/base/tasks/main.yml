@@ -16,12 +16,21 @@
   apt:
     name: "{{ base_packages }}"
 
-- name: Start rpc-statd service
-  service:
-    name: "rpc-statd"
-    state: started
+# https://microk8s.io/docs/troubleshooting
+- name: Set journald-logging to volatile
+  block:
+    - name: Configure journald for volatile logging
+      template:
+        src: "journald.conf.j2"
+        dest: "/etc/systemd/journald.conf"
+      notify: Restart systemd-journald
 
-- name: Enable rpc-statd service at boot
-  service:
-    name: "rpc-statd"
-    enabled: yes
+   # - name: Remove persistent journal logs
+   #   command: "journalctl --rotate"
+   #   ignore_errors: yes
+   #   changed_when: false
+
+   # - name: Clear journal logs
+   #   command: "journalctl --vacuum-time=1s"
+   #   ignore_errors: yes
+   #   changed_when: false
