@@ -34,14 +34,18 @@ pipeline {
                                     returnStdout: true
                             ).trim()
                             echo "Register node02"
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.212 '/snap/bin/${addNodeCommand}'"
+                            // TODO: Remove worker flag to enable high availability
+                            //sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.212 '/snap/bin/${addNodeCommand}'"
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.213 '/snap/bin/${addNodeCommand} --worker'"
                             echo "Retrieving new token"
                             addNodeCommand = sh(
                                     script: "ssh -o StrictHostKeyChecking=no -i \$SSH_PRIVATE_KEY root@192.168.1.211 '/snap/bin/microk8s add-node | grep \"microk8s join 192.168.1.211\" | head -1'",
                                     returnStdout: true
                             ).trim()
                             echo "Register node03"
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.213 '/snap/bin/${addNodeCommand}'"
+                            // TODO: Remove worker flag to enable high availability
+                            //sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.213 '/snap/bin/${addNodeCommand}'"
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.213 '/snap/bin/${addNodeCommand} --worker'"
                             echo "Verify that High Availability is enabled"
                             /* TODO: Add working check
                             def timeout = 300
