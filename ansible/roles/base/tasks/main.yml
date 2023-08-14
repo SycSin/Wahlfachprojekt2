@@ -25,12 +25,12 @@
         dest: "/etc/systemd/journald.conf"
       notify: Restart systemd-journald
 
-   # - name: Remove persistent journal logs
-   #   command: "journalctl --rotate"
-   #   ignore_errors: yes
-   #   changed_when: false
+    - name: Remove persistent journal logs
+      command: "journalctl --rotate"
+      ignore_errors: yes
+      changed_when: false
 
-   # - name: Clear journal logs
-   #   command: "journalctl --vacuum-time=1s"
-   #   ignore_errors: yes
-   #   changed_when: false
+    - name: Clear journal logs
+      command: "journalctl --vacuum-time=1s"
+      ignore_errors: yes
+      changed_when: false
