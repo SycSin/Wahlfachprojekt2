@@ -209,8 +209,8 @@ umount proc
 sudo su -
 apt install -y docker.io docker-compose
 usermod -a -G docker denis
-mkdir /opt/jenkins_docker
-cd /opt/jenkins_docker
+mkdir -p /mnt/ssd/nfs/docker/jenkins_docker
+cd /mnt/ssd/nfs/docker/jenkins_docker
 
 echo "FROM jenkins/jenkins:lts
 USER root
