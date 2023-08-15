@@ -4,12 +4,10 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                sshagent(['jenkins-private-key']) {
-                    checkout([$class           : 'GitSCM',
-                              branches         : [[name: '*/main']],
-                              userRemoteConfigs: [[url: 'git@github.com:SycSin/MyRecipes.git']]
-                    ])
-                }
+                checkout([$class: 'GitSCM',
+                          branches: [[name: '*/main']],
+                          userRemoteConfigs: [[url: 'https://github.com/SycSin/MyRecipes.git']]
+                ])
             }
         }
         stage('Backend') {
