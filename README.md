@@ -214,7 +214,7 @@ cd /mnt/ssd/nfs/docker/jenkins_docker
 
 echo "FROM jenkins/jenkins:lts
 USER root
-RUN apt-get update && apt-get install -y ansible
+RUN apt-get update && apt-get install -y ansible docker.io
 USER jenkins
 " > Dockerfile
 
@@ -224,7 +224,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: jenkins-with-ansible
+    image: jenkins
     restart: unless-stopped
     privileged: true
     user: root
@@ -235,6 +235,17 @@ services:
     volumes:
       - ./jenkins_home:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
+      
+  registry:
+    image: registry:latest
+    container_name: docker-registry
+    ports:
+      - "5000:5000"
+    volumes:
+      - registry-data:/var/lib/registry
+
+volumes:
+  registry-data:
 " > docker-compose.yml
 
 docker-compose up -d
