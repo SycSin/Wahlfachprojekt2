@@ -46,14 +46,14 @@ pipeline {
                 }
             }
         }
-        stage('Tag Images as Latest') {
+        stage('Tag Images') {
             steps {
                 script {
                     def backendImage = docker.image("localhost:5000/myrecipes-backend:${env.BUILD_NUMBER}")
                     def frontendImage = docker.image("localhost:5000/myrecipes-frontend:${env.BUILD_NUMBER}")
 
-                    backendImage.tag("localhost:5000/myrecipes-backend:latest")
-                    frontendImage.tag("localhost:5000/myrecipes-frontend:latest")
+                    backendImage.tag("latest")
+                    frontendImage.tag("latest")
                 }
             }
         }
