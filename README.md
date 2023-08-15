@@ -248,7 +248,7 @@ volumes:
   registry-data:
 " > docker-compose.yml
 
-docker-compose up -d
+docker-compose up --build -d
 
 # Go to http://192.168.1.210:8080 on the browser and paste the intialAdminPassword (the password can be retrieved using the following command), afterwards finish the setup
 docker exec -t jenkins cat /var/jenkins_home/secrets/initialAdminPassword
