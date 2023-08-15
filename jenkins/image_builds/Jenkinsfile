@@ -10,18 +10,16 @@ pipeline {
                 ])
             }
         }
-        stage('Backend') {
+        stage('Building Backend') {
             steps {
                 dir('backend') {
                     script {
                         def backendImage = docker.build("localhost:5000/myrecipes-backend:${env.BUILD_NUMBER}")
-                        docker.withRegistry("http://localhost:5000") {
-                            backendImage.push()
-                        }                    }
+                    }
                 }
             }
         }
-        stage('Frontend') {
+        stage('Building Frontend') {
             steps {
                 dir('frontend') {
                     script {
@@ -29,6 +27,24 @@ pipeline {
                         docker.withRegistry("http://localhost:5000") {
                             frontendImage.push()
                         }
+                    }
+                }
+            }
+        }
+        stage('Pushing Backend') {
+            steps {
+                script {
+                    docker.withRegistry("http://localhost:5000") {
+                        backendImage.push()
+                    }
+                }
+            }
+        }
+        stage('Pushing Frontend') {
+            steps {
+                script {
+                    docker.withRegistry("http://localhost:5000") {
+                        frontendImage.push()
                     }
                 }
             }
