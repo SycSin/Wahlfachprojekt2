@@ -247,6 +247,7 @@ ssh-keygen -b 4096
 
 # Generate a public/private keypair for the jenkins agent to connect to nfs01 (by adding the public key to the authorized_keys)
 # Download and install the SSH Agent Plugin on the jenkins to enable connecting to nodes via SSH using the defined credentials
+# Download and install the Docker, Docker Pipelines & Docker Build Plugins on the jenkins to enable docker operations within pipelines 
 ```
 
 ### Setup Nginx on nfs01
