@@ -5,15 +5,14 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 script {
-                    withCredentials([sshUserPrivateKey(credentialsId: '55ffd487-fafa-42de-b545-1bc709745ecf')]) {
-                        sshagent(credentials: ['55ffd487-fafa-42de-b545-1bc709745ecf']) {
-                            checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: 'git@github.com:SycSin/MyRecipes.git']]])
-                        }
-                    }
+                    checkout([$class: 'GitSCM',
+                              branches: [[name: '*/main']],
+                              userRemoteConfigs: [[url: 'git@github.com:SycSin/MyRecipes.git']],
+                              credentialsId: 'jenkins-private-key'
+                    ])
                 }
             }
         }
-
         stage('Backend') {
             steps {
                 dir('backend') {
@@ -26,7 +25,6 @@ pipeline {
                 }
             }
         }
-
         stage('Frontend') {
             steps {
                 dir('frontend') {
