@@ -54,6 +54,8 @@ pipeline {
 
                     backendImage.tag("latest")
                     frontendImage.tag("latest")
+                    backendImage.push()
+                    frontendImage.push()
                 }
             }
         }
