@@ -16,7 +16,7 @@ pipeline {
                     script {
                         def backendImage = docker.build("registry:5000/myrecipes-backend:${env.BUILD_NUMBER}")
                         sh "curl -v http://registry:5000/v2/_catalog"
-                        docker.withRegistry('http://registry:5000', '') {
+                        docker.withRegistry('registry:5000', '') {
                             backendImage.push()
                         }
                     }
@@ -28,7 +28,7 @@ pipeline {
                 dir('frontend') {
                     script {
                         def frontendImage = docker.build("registry:5000/myrecipes-frontend:${env.BUILD_NUMBER}")
-                        docker.withRegistry('http://registry:5000', '') {
+                        docker.withRegistry('registry:5000', '') {
                             frontendImage.push()
                         }
                     }
