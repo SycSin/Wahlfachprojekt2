@@ -16,7 +16,7 @@ pipeline {
                     script {
                         def backendImage = docker.build("myrecipes-backend:${env.BUILD_NUMBER}")
                         sh "curl -v http://registry:5000/v2/_catalog"
-                        sh "docker push registry:5000/myrecipes-backend:${env.BUILD_NUMBER}"
+                        sh "docker push http://registry:5000/myrecipes-backend:${env.BUILD_NUMBER}"
                         sh "curl -v http://registry:5000/v2/_catalog"
                         //docker.withRegistry('http://registry:5000') {
                         //    backendImage.push()
