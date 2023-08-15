@@ -54,6 +54,9 @@ pipeline {
 
                     backendImage.tag("latest")
                     frontendImage.tag("latest")
+
+                    backendImage = docker.image("localhost:5000/myrecipes-backend:latest")
+                    frontendImage = docker.image("localhost:5000/myrecipes-frontend:latest")
                     backendImage.push()
                     frontendImage.push()
                 }
