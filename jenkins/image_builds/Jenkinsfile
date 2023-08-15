@@ -5,8 +5,8 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 script {
-                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
-                        sshagent(credentials: ['jenkins-private-key']) {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'git')]) {
+                        sshagent(credentials: ['git']) {
                             checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: 'git@github.com:SycSin/MyRecipes.git']]])
                         }
                     }
