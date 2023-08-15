@@ -13,21 +13,14 @@ pipeline {
         stage('Building Backend') {
             steps {
                 dir('backend') {
-                    script {
-                        def backendImage = docker.build("localhost:5000/myrecipes-backend:${env.BUILD_NUMBER}")
-                    }
+                    backendImage = docker.build("localhost:5000/myrecipes-backend:${env.BUILD_NUMBER}")
                 }
             }
         }
         stage('Building Frontend') {
             steps {
                 dir('frontend') {
-                    script {
-                        def frontendImage = docker.build("localhost:5000/myrecipes-frontend:${env.BUILD_NUMBER}")
-                        docker.withRegistry("http://localhost:5000") {
-                            frontendImage.push()
-                        }
-                    }
+                    frontendImage = docker.build("localhost:5000/myrecipes-frontend:${env.BUILD_NUMBER}")
                 }
             }
         }
