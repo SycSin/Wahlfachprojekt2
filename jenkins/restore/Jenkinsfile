@@ -32,10 +32,10 @@ pipeline {
                             } catch (Exception e) {
                                 echo "No MicroK8s Installation found."
                             }
-                            // Execute the rsync command on the remote node
+                            // Execute the rsync command from our nfs server to the node the remote node
                             sh """\
                                 ssh -o StrictHostKeyChecking=no -i '${SSH_PRIVATE_KEY}' root@192.168.1.210 \
-                                rsync -a --delete -e "ssh -o StrictHostKeyChecking=no -i '${SSH_PRIVATE_KEY}'" \
+                                rsync -a --delete -e "ssh -o StrictHostKeyChecking=no -i '/mnt/ssd/nfs/docker/jenkins_docker/ssh_keys/jenkins'" \
                                 /mnt/ssd/nfs/jammy-node-base-template/ root@${nodeIP}:/ \
                             """
                             //sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.210 'rsync -a --delete /mnt/ssd/nfs/node-base-template/ /mnt/ssd/nfs/${params.NODE}'"
