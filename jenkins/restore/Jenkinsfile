@@ -25,12 +25,11 @@ pipeline {
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         // Connect to the SSH agent using the loaded private key
                         sshagent(credentials: ['jenkins-private-key']) {
-                            echo "Stopping MicroK8s.."
+                            echo "Purging snapd"
                             try {
-                                sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@${nodeIP} '/snap/bin/microk8s stop'"
-                                echo "MicroK8s stopped."
+                                sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@${nodeIP} 'apt purge snapd -y'"
                             } catch (Exception e) {
-                                echo "No MicroK8s Installation found."
+                                echo "No snapd installation found."
                             }
                             // Execute the rsync command from our nfs server to the node the remote node
                             sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.210 'rsync -a --delete --exclude='/dev' --exclude='/proc' --exclude='/sys' /mnt/ssd/nfs/jammy-base-template/ root@${nodeIP}:/'"
