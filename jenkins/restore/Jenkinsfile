@@ -18,7 +18,7 @@ pipeline {
         stage('Destroy Cluster') {
             steps {
                 script {
-                    def nodeIP = getNodeIP(params.NODE)
+                    nodeIP = getNodeIP(params.NODE)
                     // Load the private key from the credentials using the 'withCredentials' step
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         // Connect to the SSH agent using the loaded private key
@@ -29,10 +29,6 @@ pipeline {
                             } catch (Exception e) {
                                 echo "No MicroK8s installation found."
                             }
-                            // Execute the rsync command from our nfs server to the node the remote node
-                            //sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.210 'rsync -a --delete --exclude='/dev' --exclude='/proc' --exclude='/sys' --exclude='/run' /mnt/ssd/nfs/jammy-base-template/ root@${nodeIP}:/'"
-                            //sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.210 'rsync -a --delete /mnt/ssd/nfs/node-base-template/ /mnt/ssd/nfs/${params.NODE}'"
-                            //sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.210 'sed -i \'s#^192\\.168\\.1\\.210:/mnt/ssd/tftpboot#192.168.1.210:/mnt/ssd/tftpboot/${nodeIP}#\' /mnt/ssd/nfs/${params.NODE}/etc/fstab'"
                         }
                     }
                 }
@@ -41,7 +37,6 @@ pipeline {
         stage('Reboot') {
             steps {
                 script {
-                    def nodeIP = getNodeIP(params.NODE)
                     // Load the private key from the credentials using the 'withCredentials' step
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         // Connect to the SSH agent using the loaded private key
@@ -61,12 +56,11 @@ pipeline {
 	        steps {
             	script {
             	    // Wait for the node to be healthy
-            	    def nodeIP = getNodeIP(params.NODE)
             	    def timeoutSeconds = 1200
             	    def startTime = currentBuild.startTimeInMillis
             	    def endTime = startTime + timeoutSeconds * 1000
 
-            	    boolean nodeReachable = false // Flag to track if the node becomes reachable
+            	    boolean nodeReachable = false
 
             	    while (System.currentTimeMillis() < endTime) {
             	        try {
@@ -121,7 +115,11 @@ pipeline {
 
                     while (System.currentTimeMillis() < endTime) {
                         try {
-                            microk8sStatus = sh(returnStdout: true, script: "/snap/bin/microk8s status").trim()
+                            withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                                sshagent(credentials: ['jenkins-private-key']) {
+                                    microk8sStatus = sh(returnStdout: true, script: "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@${nodeIP} '/snap/bin/microk8s status'").trim()
+                                }
+                            }
                             if (microk8sStatus.contains("microK8s is running")) {
                                 echo "MicroK8s is running."
                                 break
