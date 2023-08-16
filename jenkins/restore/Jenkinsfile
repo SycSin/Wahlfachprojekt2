@@ -83,8 +83,8 @@ pipeline {
             	            nodeReachable = true // Set the flag to true if SSH connection is successful
             	            break // Break out of the loop if the node is reachable
                         } catch (Exception e) {
-            	            echo "Node is not reachable yet. Retrying in 10 seconds..."
-            	            sleep 10
+            	            echo "Node is not reachable yet. Retrying in 5 seconds..."
+            	            sleep 5
             	        }
             	    }
             	    // Check if the node is reachable and print a message accordingly
