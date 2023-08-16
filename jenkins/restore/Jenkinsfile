@@ -111,6 +111,35 @@ pipeline {
 	            }
 	        }
 	    }
+        stage('Wait for MicroK8s') {
+            steps {
+                script {
+                    def timeoutSeconds = 300
+                    def startTime = currentBuild.startTimeInMillis
+                    def endTime = startTime + timeoutSeconds * 1000
+                    def microk8sStatus = ""
+
+                    while (System.currentTimeMillis() < endTime) {
+                        try {
+                            microk8sStatus = sh(returnStdout: true, script: "microk8s status").trim()
+                            if (microk8sStatus.contains("microK8s is running")) {
+                                echo "MicroK8s is running."
+                                break
+                            } else {
+                                echo "MicroK8s is not yet running. Retrying in 5 seconds..."
+                                sleep 5
+                            }
+                        } catch (Exception e) {
+                            echo "Error checking MicroK8s status. Retrying in 5 seconds..."
+                            sleep 5
+                        }
+                    }
+                    if (!microk8sStatus.contains("microK8s is running")) {
+                        error "MicroK8s did not start within the specified timeout."
+                    }
+                }
+            }
+        }
     }
 }
 
