@@ -85,10 +85,6 @@ pipeline {
                         sshagent(credentials: ['jenkins-private-key']) {
                             echo "Enabling helm3 addon"
                             sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s enable helm3'"
-                            //echo "Starting rpc-statd on all nodes" //TODO: Check why this service is not started automatically
-                            //sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 'systemctl start rpc-statd'"
-                            //sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.212 'systemctl start rpc-statd'"
-                            //sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.213 'systemctl start rpc-statd'"
                             echo "Adding csi-driver-nfs helm repository"
                             sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s helm3 repo add csi-driver-nfs https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts'"
                             echo "Updating helm repository cache"
@@ -134,7 +130,6 @@ pipeline {
                 }
             }
         }
-        /*
         stage('Enable MicroK8s Addons') {
             steps {
                 script {
@@ -159,7 +154,11 @@ pipeline {
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         sshagent(credentials: ['jenkins-private-key']) {
                             echo "Creating namespace 'argocd'"
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl create namespace argocd'"
+                            try {
+                                sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl create namespace argocd'"
+                            }
+                            catch (Exception e) {
+                            }
                             echo "Installing ArgoCD manifest"
                             sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml'"
                         }
@@ -167,7 +166,6 @@ pipeline {
                 }
             }
         }
-        */
     }
 
     post {
