@@ -85,10 +85,10 @@ pipeline {
                         sshagent(credentials: ['jenkins-private-key']) {
                             echo "Enabling helm3 addon"
                             sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s enable helm3'"
-                            echo "Starting rpc-statd on all nodes" //TODO: Check why this service is not started automatically
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 'systemctl start rpc-statd'"
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.212 'systemctl start rpc-statd'"
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.213 'systemctl start rpc-statd'"
+                            //echo "Starting rpc-statd on all nodes" //TODO: Check why this service is not started automatically
+                            //sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 'systemctl start rpc-statd'"
+                            //sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.212 'systemctl start rpc-statd'"
+                            //sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.213 'systemctl start rpc-statd'"
                             echo "Adding csi-driver-nfs helm repository"
                             sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s helm3 repo add csi-driver-nfs https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts'"
                             echo "Updating helm repository cache"
