@@ -57,7 +57,7 @@ pipeline {
             	script {
             	    // Wait for the node to be healthy
             	    def timeoutSeconds = 600
-            	    def startTime = currentStage.startTimeInMillis
+            	    def startTime = currentBuild.startTimeInMillis
             	    def endTime = startTime + timeoutSeconds * 1000
 
             	    boolean nodeReachable = false
@@ -108,8 +108,9 @@ pipeline {
         stage('Wait for MicroK8s') {
             steps {
                 script {
-                    def timeoutSeconds = 300
-                    def startTime = currentStage.startTimeInMillis
+                    def timeoutSeconds = 900
+		    //TODO: Add timeout for stage instead of the whole build
+                    def startTime = currentBuild.startTimeInMillis
                     def endTime = startTime + timeoutSeconds * 1000
                     def microk8sStatus = ""
 
