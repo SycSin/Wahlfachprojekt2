@@ -121,7 +121,7 @@ pipeline {
 
                     while (System.currentTimeMillis() < endTime) {
                         try {
-                            microk8sStatus = sh(returnStdout: true, script: "microk8s status").trim()
+                            microk8sStatus = sh(returnStdout: true, script: "/snap/bin/microk8s status").trim()
                             if (microk8sStatus.contains("microK8s is running")) {
                                 echo "MicroK8s is running."
                                 break
