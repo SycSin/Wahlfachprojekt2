@@ -108,7 +108,7 @@ pipeline {
         stage('Wait for MicroK8s') {
             steps {
                 script {
-                    def timeoutSeconds = 900
+                    def timeoutSeconds = 1200
 		    //TODO: Add timeout for stage instead of the whole build
                     def startTime = currentBuild.startTimeInMillis
                     def endTime = startTime + timeoutSeconds * 1000
@@ -119,6 +119,7 @@ pipeline {
                             withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                                 sshagent(credentials: ['jenkins-private-key']) {
                                     microk8sStatus = sh(returnStdout: true, script: "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@${nodeIP} '/snap/bin/microk8s status'").trim()
+				    echo $microk8sStatus
                                 }
                             }
                             if (microk8sStatus.contains("microK8s is running")) {
