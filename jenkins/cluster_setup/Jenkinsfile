@@ -104,7 +104,11 @@ pipeline {
                             echo "Creating the NFS StorageClass"
                             sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl apply -f /tmp/sc-nfs.yml'"
                             echo "Creating the Registry Namespace"
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl create namespace container-registry'"
+                            try {
+                                sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl create namespace container-registry'"
+                            }
+                            catch (Exception e) {
+                            }
                             echo "Creating the Registry PVC"
                             sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl apply -f /tmp/pvc-nfs.yml'"
                             echo "Removing the manifest files"
