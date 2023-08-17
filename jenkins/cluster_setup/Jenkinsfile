@@ -109,7 +109,7 @@ pipeline {
                             catch (Exception e) {
                             }
                             echo "Creating the Registry PVC"
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl apply -f /tmp/pvc-nfs.yml'"
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl apply -f /tmp/registry-pvc-nfs.yml'"
                             echo "Removing the manifest files"
                             sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 'rm /tmp/*-nfs.yml'"
                         }
