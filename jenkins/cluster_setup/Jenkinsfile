@@ -143,8 +143,9 @@ pipeline {
                                 echo "Enabling addon: ${addon}"
                                 sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s enable ${addon}'"
                             }
-                            echo "Restarting MicroK8s"
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s stop && /snap/bin/microk8s start'"
+                            //TODO: Check if this is really required?
+                            //echo "Restarting MicroK8s"
+                            //sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s stop && /snap/bin/microk8s start'"
                         }
                     }
                 }
@@ -172,7 +173,7 @@ pipeline {
                             def readinessProbeCommand =
                             """
                                 #!/bin/bash
-                                namespaces=\$(/snap/bin/microk8s kubectl get namespaces -o=jsonpath="{range .items[*]}{.metadata.name}{ }{end}")
+                                namespaces=\$(ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl get namespaces -o=jsonpath=\"{range .items[*]}{.metadata.name}{ }{end}\"')
                                 for ns in \$namespaces; do
                                     echo "Waiting for pods to be ready in namespace: \$ns"
                                     /snap/bin/microk8s kubectl wait --for=condition=ready pod --all -n \$ns
