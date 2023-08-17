@@ -115,6 +115,7 @@ pipeline {
                 }
             }
         }
+        /*
         stage ('Enable Netdata Monitoring') {
             steps {
                 script {
@@ -131,6 +132,7 @@ pipeline {
                 }
             }
         }
+         */
         stage('Enable MicroK8s Addons') {
             steps {
                 script {
@@ -162,24 +164,22 @@ pipeline {
                 }
             }
         }
-        stage('Wait for all pods') {
+        stage('Readiness probe') {
             steps {
                 script {
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         sshagent(credentials: ['jenkins-private-key']) {
-                            def waitCommand =
+                            def readinessProbeCommand =
                             """
                                 #!/bin/bash
-                                namespaces=\$(/snap/bin/microk8s kubectl get namespaces -o=jsonpath='{range .items[*]}{.metadata.name}{" "}{end}')
+                                namespaces=\$(/snap/bin/microk8s kubectl get namespaces -o=jsonpath="{range .items[*]}{.metadata.name}{ }{end}")
                                 for ns in \$namespaces; do
                                     echo "Waiting for pods to be ready in namespace: \$ns"
-                                    kubectl wait --for=condition=ready pod --all -n \$ns
+                                    /snap/bin/microk8s kubectl wait --for=condition=ready pod --all -n \$ns
                                 done
                             """
-
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '${waitCommand}'"
-
-                            echo "All pods are running."
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 \"${readinessProbeCommand}\""
+                            echo "All pods are ready."
                         }
                     }
                 }
