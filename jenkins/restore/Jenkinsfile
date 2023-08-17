@@ -24,11 +24,7 @@ pipeline {
                         // Connect to the SSH agent using the loaded private key
                         sshagent(credentials: ['jenkins-private-key']) {
                             echo "Removing MicroK8s"
-                            try {
-                                sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@${nodeIP} 'snap remove microk8s'"
-                            } catch (Exception e) {
-                                echo "No MicroK8s installation found."
-                            }
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@${nodeIP} 'snap remove microk8s || true'"
                         }
                     }
                 }

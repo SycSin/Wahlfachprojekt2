@@ -95,11 +95,7 @@ pipeline {
                             echo "Updating helm repository cache"
                             sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s helm3 repo update'"
                             echo "Installing helm chart"
-                            try {
-                                sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s helm3 install csi-driver-nfs csi-driver-nfs/csi-driver-nfs --namespace kube-system --set kubeletDir=/var/snap/microk8s/common/var/lib/kubelet'"
-                            }
-                            catch (Exception e) {
-                            }
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s helm3 upgrade --install csi-driver-nfs csi-driver-nfs/csi-driver-nfs --namespace kube-system --set kubeletDir=/var/snap/microk8s/common/var/lib/kubelet'"
                             echo "Waiting for CSI controller to come up"
                             sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl wait pod --selector app.kubernetes.io/name=csi-driver-nfs --for condition=ready --timeout=2700s --namespace kube-system'"
                             echo "Displaying the CSI-Drivers"
@@ -109,11 +105,7 @@ pipeline {
                             echo "Creating the NFS StorageClass"
                             sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl apply -f /tmp/sc-nfs.yml'"
                             echo "Creating the Registry Namespace"
-                            try {
-                                sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl create namespace container-registry'"
-                            }
-                            catch (Exception e) {
-                            }
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl create namespace container-registry || true'"
                             echo "Creating the Registry PVC"
                             sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl apply -f /tmp/registry-pvc-nfs.yml'"
                             echo "Removing the manifest files"
@@ -162,11 +154,7 @@ pipeline {
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         sshagent(credentials: ['jenkins-private-key']) {
                             echo "Creating namespace 'argocd'"
-                            try {
-                                sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl create namespace argocd'"
-                            }
-                            catch (Exception e) {
-                            }
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl create namespace argocd || true'"
                             echo "Installing ArgoCD manifest"
                             sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml'"
                         }
