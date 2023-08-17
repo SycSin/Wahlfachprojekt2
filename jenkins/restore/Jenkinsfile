@@ -134,7 +134,7 @@ pipeline {
                             sleep 5
                         }
                     }
-                    if (!microk8sStatus.contains("microK8s is running")) {
+                    if (!microk8sStatus.contains("microk8s is running")) {
                         error "MicroK8s did not start within the specified timeout."
                     }
                 }
