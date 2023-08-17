@@ -122,7 +122,7 @@ pipeline {
                                 }
                             }
                             echo microk8sStatus
-                            if (microk8sStatus.contains("microK8s is running")) {
+                            if (microk8sStatus.contains("microk8s is running")) {
                                 echo "MicroK8s is running."
                                 break
                             } else {
