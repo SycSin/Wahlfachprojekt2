@@ -1,11 +1,11 @@
 # Wahlfachprojekt 2
 
-..insert description here..
+This project aims to provide a platform for the "MyRecipes" project which was developed during the 2nd and 3rd term within the "Web Technologies" and "Software Engineering" lectures.
 
-## PXE Booting
+## Kubernetes Cluster for MyRecipes
 
-### Enable network-boot on the k8s nodes
-* Prepare the SD cards with Ubuntu Server 22.04 (64-Bit)
+### Prerequisits 
+* Prepare the SD cards with Ubuntu Server 22.04 (64-Bit) for the nodes
 
 ### Setting up the nfs01 server
 ```bash
