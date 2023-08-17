@@ -172,7 +172,7 @@ pipeline {
                         sshagent(credentials: ['jenkins-private-key']) {
                             def namespaces = sh(
                                     returnStdout: true,
-                                    script: "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 'snap/bin/microk8s kubectl get namespaces -o=jsonpath=\"{range .items[*]}{.metadata.name}{\"\\n\"}{end}\"'"
+                                    script: "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl get namespaces -o=jsonpath=\"{range .items[*]}{.metadata.name}{\"\\n\"}{end}\"'"
                             ).trim()
                             sh """
                                 #!/bin/bash
