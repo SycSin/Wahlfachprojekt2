@@ -108,7 +108,7 @@ pipeline {
         stage('Wait for MicroK8s') {
             steps {
                 script {
-                    def timeoutSeconds = 900
+                    def timeoutSeconds = 1200
 		            //TODO: Add timeout for stage instead of the whole build
                     def startTime = currentBuild.startTimeInMillis
                     def endTime = startTime + timeoutSeconds * 1000
