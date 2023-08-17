@@ -59,7 +59,7 @@ pipeline {
                                 try {
                                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                                         sshagent(credentials: ['jenkins-private-key']) {
-                                            haStatus = sh(returnStdout: true, script: "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@${nodeIP} '/snap/bin/microk8s status'").trim()
+                                            haStatus = sh(returnStdout: true, script: "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s status'").trim()
                                         }
                                     }
                                     echo haStatus
