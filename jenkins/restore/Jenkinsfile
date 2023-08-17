@@ -109,7 +109,6 @@ pipeline {
             steps {
                 script {
                     def timeoutSeconds = 1200
-		            //TODO: Add timeout for stage instead of the whole build
                     def startTime = currentBuild.startTimeInMillis
                     def endTime = startTime + timeoutSeconds * 1000
                     def microk8sStatus = ""
