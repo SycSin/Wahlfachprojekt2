@@ -20,6 +20,7 @@ pipeline {
                     echo "Removing all persistent volumes"
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         sshagent(credentials: ['jenkins-private-key']) {
+                            echo "Removing all persistent volumes"
                             sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.210 'rm -r /mnt/ssd/nfs/microk8s/* || true'"
                         }
                     }
@@ -136,7 +137,7 @@ pipeline {
         stage('Enable MicroK8s Addons') {
             steps {
                 script {
-                    def addons = ['dns', 'registry', 'cert-manager', 'ingress', 'metallb', 'rbac', 'community', 'observability']
+                    def addons = ['ingress', 'metallb:10.64.140.43-10.64.140.49', 'dns', 'registry', 'cert-manager', 'rbac', 'community', 'observability']
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         sshagent(credentials: ['jenkins-private-key']) {
                             for (def addon in addons) {
