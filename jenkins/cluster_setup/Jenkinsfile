@@ -24,7 +24,7 @@ pipeline {
                         }
                     }
                 }
-	        }
+            }
         }
         stage('Register Nodes') {
             when {
@@ -143,9 +143,6 @@ pipeline {
                                 echo "Enabling addon: ${addon}"
                                 sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s enable ${addon}'"
                             }
-                            //TODO: Check if this is really required?
-                            //echo "Restarting MicroK8s"
-                            //sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s stop && /snap/bin/microk8s start'"
                         }
                     }
                 }
@@ -177,15 +174,18 @@ pipeline {
 
                             echo namespaces
 
-                            sh """
-                                #!/bin/bash
-                                readarray -t namespacesArray <<< "$namespaces"
-                                for ns in "\\${namespacesArray[@]}"; do
-                                    echo "Waiting for pods to be ready in namespace: $ns"
-                                    ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 \"/snap/bin/microk8s kubectl wait --for=condition=ready pod --all -n $ns\"
-                                done
-                            """
-                            echo "All pods are ready."
+                            // Define a list of skippable namespaces
+                            def skippableNamespaces = ['kube-public', 'kube-node-lease', 'default']
+
+                            for (String ns : namespaces.split('\n')) {
+                                if (skippableNamespaces.contains(ns)) {
+                                    echo "Skipping namespace: $ns"
+                                    continue
+                                }
+
+                                echo "Waiting for pods to be ready in namespace: $ns"
+                                sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 \"/snap/bin/microk8s kubectl wait --for=condition=ready pod --all -n $ns\""
+                            }
                         }
                     }
                 }
@@ -198,7 +198,6 @@ pipeline {
             script {
                 def title = "Pipeline Status: ${currentBuild.result}"
                 def message
-                
                 withCredentials([usernamePassword(credentialsId: 'pushover', usernameVariable: 'PUSHOVER_USER_KEY', passwordVariable: 'PUSHOVER_API_TOKEN')]) {
                     if (currentBuild.resultIsBetterOrEqualTo('SUCCESS')) {
                         message = "Cluster successfully installed: ${currentBuild.fullDisplayName}"
