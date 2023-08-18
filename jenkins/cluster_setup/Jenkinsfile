@@ -185,7 +185,7 @@ pipeline {
                                 }
 
                                 echo "Waiting for pods to be ready in namespace: $ns"
-                                sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 \"/snap/bin/microk8s kubectl wait --for=condition=ready pod --all -n $ns\""
+                                sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 \"/snap/bin/microk8s kubectl wait --for=condition=ready --timeout=2700s pod --all -n $ns\""
                             }
                         }
                     }
