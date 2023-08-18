@@ -136,7 +136,7 @@ pipeline {
         stage('Enable MicroK8s Addons') {
             steps {
                 script {
-                    def addons = ['dns', 'registry', 'cert-manager', 'rbac', 'community', 'observability']
+                    def addons = ['dns', 'registry', 'cert-manager', 'ingress', 'metallb', 'rbac', 'community', 'observability']
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         sshagent(credentials: ['jenkins-private-key']) {
                             for (def addon in addons) {
@@ -179,7 +179,8 @@ pipeline {
 
                             sh """
                                 #!/bin/bash
-                                for ns in $namespaces; do
+                                readarray -t namespacesArray <<< "$namespaces"
+                                for ns in "\\${namespacesArray[@]}"; do
                                     echo "Waiting for pods to be ready in namespace: $ns"
                                     ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 \"/snap/bin/microk8s kubectl wait --for=condition=ready pod --all -n $ns\"
                                 done
