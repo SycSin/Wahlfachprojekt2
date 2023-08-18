@@ -137,7 +137,7 @@ pipeline {
         stage('Enable MicroK8s Addons') {
             steps {
                 script {
-                    def addons = ['ingress', 'metallb:10.64.140.43-10.64.140.49', 'dns', 'registry', 'cert-manager', 'rbac', 'community', 'observability']
+                    def addons = ['ingress', 'metallb:192.168.1.211-192.168.1.213', 'dns', 'registry', 'cert-manager', 'rbac', 'community', 'observability']
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         sshagent(credentials: ['jenkins-private-key']) {
                             for (def addon in addons) {
