@@ -84,33 +84,37 @@ pipeline {
                 }
             }
         }
+        stage('Retrieve MicroK8s Config') {
+            steps {
+                script {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                        sshagent(credentials: ['jenkins-private-key']) {
+                            echo "Retrieving MicroK8s Config file"
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s config' > ~/.kube/config"
+                }
+            }
+        }
         stage('Activate NFS-CSI Driver') {
             steps {
                 script {
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         sshagent(credentials: ['jenkins-private-key']) {
-                            echo "Enabling helm3 addon"
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s enable helm3'"
                             echo "Adding csi-driver-nfs helm repository"
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s helm3 repo add csi-driver-nfs https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts'"
+                            sh "helm repo add csi-driver-nfs https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts"
                             echo "Updating helm repository cache"
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s helm3 repo update'"
+                            sh "helm repo update"
                             echo "Installing helm chart"
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s helm3 upgrade --install csi-driver-nfs csi-driver-nfs/csi-driver-nfs --namespace kube-system --set kubeletDir=/var/snap/microk8s/common/var/lib/kubelet'"
+                            sh "helm upgrade --install csi-driver-nfs csi-driver-nfs/csi-driver-nfs --namespace kube-system" //TODO: Check the following flag: --set kubeletDir=/var/snap/microk8s/common/var/lib/kubelet'"
                             echo "Waiting for CSI controller to come up"
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl wait pod --selector app.kubernetes.io/name=csi-driver-nfs --for condition=ready --timeout=2700s --namespace kube-system'"
+                            sh "kubectl wait pod --selector app.kubernetes.io/name=csi-driver-nfs --for condition=ready --timeout=2700s --namespace kube-system"
                             echo "Displaying the CSI-Drivers"
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl get csidrivers'"
-                            echo "Copying the manifests to the node"
-                            sh "scp -i ${SSH_PRIVATE_KEY} manifests/*-nfs.yml root@192.168.1.211:/tmp/"
+                            sh "kubectl get csidrivers"
                             echo "Creating the NFS StorageClass"
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl apply -f /tmp/sc-nfs.yml'"
+                            sh "helm upgrade --install nfs-storage-class helm/nfs-storage-class"
                             echo "Creating the Registry Namespace"
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl create namespace container-registry || true'"
+                            sh "kubectl create namespace container-registry || true"
                             echo "Creating the Registry PVC"
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl apply -f /tmp/registry-pvc-nfs.yml'"
-                            echo "Removing the manifest files"
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 'rm /tmp/*-nfs.yml'"
+                            sh "helm upgrade --install registry helm/registry"
                         }
                     }
                 }
@@ -124,9 +128,9 @@ pipeline {
                         sshagent(credentials: ['jenkins-private-key']) {
                             withCredentials([usernamePassword(credentialsId: 'netdata', usernameVariable: 'PARENT_CLAIMING_TOKEN', passwordVariable: 'CHILD_CLAIMING_TOKEN')]) {
                                 echo "Adding netdata Helm Repository"
-                                sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s helm repo add netdata https://netdata.github.io/helmchart/'"
+                                sh "helm repo add netdata https://netdata.github.io/helmchart/"
                                 echo "Deploying netdata Helm Chart"
-                                sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s helm upgrade --install netdata netdata/netdata --set image.tag=latest --set parent.claiming.enabled=\"true\" --set parent.claiming.token=$PARENT_CLAIMING_TOKEN --set parent.claiming.rooms=1c24b7d3-e2c5-429a-9bf7-bbbf84a4d444 --set child.claiming.enabled=\"true\" --set child.claiming.token=$CHILD_CLAIMING_TOKEN --set child.claiming.rooms=1c24b7d3-e2c5-429a-9bf7-bbbf84a4d444'"
+                                sh "helm upgrade --install netdata netdata/netdata --set image.tag=latest --set parent.claiming.enabled=\"true\" --set parent.claiming.token=$PARENT_CLAIMING_TOKEN --set parent.claiming.rooms=1c24b7d3-e2c5-429a-9bf7-bbbf84a4d444 --set child.claiming.enabled=\"true\" --set child.claiming.token=$CHILD_CLAIMING_TOKEN --set child.claiming.rooms=1c24b7d3-e2c5-429a-9bf7-bbbf84a4d444"
                             }
                         }
                     }
@@ -155,9 +159,9 @@ pipeline {
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         sshagent(credentials: ['jenkins-private-key']) {
                             echo "Creating namespace 'argocd'"
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl create namespace argocd || true'"
+                            sh "kubectl create namespace argocd || true"
                             echo "Installing ArgoCD manifest"
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml'"
+                            sh "kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml"
                         }
                     }
                 }
@@ -170,7 +174,7 @@ pipeline {
                         sshagent(credentials: ['jenkins-private-key']) {
                             def namespaces = sh(
                                     returnStdout: true,
-                                    script: "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s kubectl get namespaces --no-headers -o custom-columns=\":metadata.name\"'"
+                                    script: "kubectl get namespaces --no-headers -o custom-columns=\":metadata.name\""
                             ).trim()
 
                             echo namespaces
@@ -185,7 +189,7 @@ pipeline {
                                 }
 
                                 echo "Waiting for pods to be ready in namespace: $ns"
-                                sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 \"/snap/bin/microk8s kubectl wait --for=condition=ready --timeout=2700s pod --all -n $ns\""
+                                sh "kubectl wait --for=condition=ready --timeout=2700s pod --all -n $ns"
                             }
                         }
                     }
