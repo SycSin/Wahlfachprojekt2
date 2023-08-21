@@ -1,2 +1,2 @@
-storageSize: "20Gi"
+storageSize: "40Gi"
 storageClassName: "nfs-csi"
