@@ -14,7 +14,7 @@ pipeline {
             steps {
                 dir('backend') {
                     script {
-                        backendImage = docker.build("localhost:5000/myrecipes-backend:${env.BUILD_NUMBER}")
+                        backendImage = docker.build("registry.myrecipes.at/myrecipes-backend:${env.BUILD_NUMBER}")
                     }
                 }
             }
@@ -23,7 +23,7 @@ pipeline {
             steps {
                 dir('frontend') {
                     script {
-                        frontendImage = docker.build("localhost:5000/myrecipes-frontend:${env.BUILD_NUMBER}")
+                        frontendImage = docker.build("registry.myrecipes.at/myrecipes-frontend:${env.BUILD_NUMBER}")
                     }
                 }
             }
@@ -31,7 +31,7 @@ pipeline {
         stage('Push Backend') {
             steps {
                 script {
-                    docker.withRegistry("http://localhost:5000") {
+                    docker.withRegistry("https://registry.myrecipes.at") {
                         backendImage.push()
                     }
                 }
@@ -40,7 +40,7 @@ pipeline {
         stage('Push Frontend') {
             steps {
                 script {
-                    docker.withRegistry("http://localhost:5000") {
+                    docker.withRegistry("https://registry.myrecipes.at") {
                         frontendImage.push()
                     }
                 }
@@ -49,14 +49,14 @@ pipeline {
         stage('Tag Images') {
             steps {
                 script {
-                    def backendImage = docker.image("localhost:5000/myrecipes-backend:${env.BUILD_NUMBER}")
-                    def frontendImage = docker.image("localhost:5000/myrecipes-frontend:${env.BUILD_NUMBER}")
+                    def backendImage = docker.image("registry.myrecipes.at/myrecipes-backend:${env.BUILD_NUMBER}")
+                    def frontendImage = docker.image("registry.myrecipes.at/myrecipes-frontend:${env.BUILD_NUMBER}")
 
                     backendImage.tag("latest")
                     frontendImage.tag("latest")
 
-                    backendImage = docker.image("localhost:5000/myrecipes-backend:latest")
-                    frontendImage = docker.image("localhost:5000/myrecipes-frontend:latest")
+                    backendImage = docker.image("registry.myrecipes.at/myrecipes-backend:latest")
+                    frontendImage = docker.image("registry.myrecipes.at/myrecipes-frontend:latest")
                     backendImage.push()
                     frontendImage.push()
                 }
