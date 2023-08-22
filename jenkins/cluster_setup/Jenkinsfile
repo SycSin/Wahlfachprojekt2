@@ -145,7 +145,7 @@ pipeline {
         stage('Enable MicroK8s Addons') {
             steps {
                 script {
-                    def addons = ['ingress', 'metallb:192.168.1.211-192.168.1.219', 'dns', 'registry', 'cert-manager', 'rbac', 'community', 'observability']
+                    def addons = ['ingress', 'metallb:192.168.1.211-192.168.1.219', 'dns', 'cert-manager', 'rbac', 'community', 'observability']
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         sshagent(credentials: ['jenkins-private-key']) {
                             for (def addon in addons) {
@@ -181,7 +181,7 @@ pipeline {
                     echo "Deploying Observability Helm Chart"
                     sh "helm upgrade --install observability helm/observability -n observability --create-namespace"
                     echo "Deploying Registry Helm Chart"
-                    sh "helm upgrade --install registry helm/registry -n container-registry --create-namespace"
+                    sh "helm upgrade --install registry helm/registry -n container-registry --create-namespace --dependency-update"
                 }
             }
         }

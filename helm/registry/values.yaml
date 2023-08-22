@@ -5,6 +5,6 @@ pvc:
 ingress:
   host: "registry"
   domain: "myrecipes.at"
-  path: "/(.*)"
-  serviceName: "registry"
+  path: "/"
+  serviceName: "registry-docker-registry"
   servicePort: "5000"
