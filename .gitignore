@@ -2,6 +2,10 @@
 .idea/
 lib
 
+# Helm
+charts/
+*.lock
+
 # Compiled Output
 out/
 target/
