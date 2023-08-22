@@ -1,0 +1,22 @@
+# ingress.yml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: argocd-ingress
+  labels:
+    app: argocd-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/use-forwarded-headers: "true"
+spec:
+  rules:
+    - host: "argocd.myrecipes.at"
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/(.*)"
+            backend:
+              service:
+                name: argocd-server
+                port:
+                  number: 80
