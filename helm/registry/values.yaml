@@ -1,2 +1,10 @@
-storageSize: "40Gi"
-storageClassName: "nfs-csi"
+pvc:
+  storageSize: "40Gi"
+  storageClassName: "nfs-csi"
+
+ingress:
+  host: "registry"
+  domain: "myrecipes.at"
+  path: "/(.*)"
+  serviceName: "registry"
+  servicePort: "5000"

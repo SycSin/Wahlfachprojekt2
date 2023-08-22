@@ -1,0 +1,6 @@
+ingress:
+  host: "argocd"
+  domain: "myrecipes.at"
+  path: "/(.*)"
+  serviceName: "argocd-server"
+  servicePort: "8080"

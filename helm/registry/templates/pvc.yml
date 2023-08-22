@@ -3,8 +3,8 @@ kind: PersistentVolumeClaim
 metadata:
   name: registry-claim
 spec:
-  storageClassName: "{{ .Values.storageClassName }}"
+  storageClassName: "{{ .Values.pvc.storageClassName }}"
   accessModes: [ReadWriteOnce]
   resources:
     requests:
-      storage: "{{ .Values.storageSize }}"
+      storage: "{{ .Values.pvc.storageSize }}"

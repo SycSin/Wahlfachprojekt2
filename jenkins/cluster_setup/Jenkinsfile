@@ -176,8 +176,12 @@ pipeline {
                 script {
                     echo "Deploying metallb-ingress Helm Chart"
                     sh "helm upgrade --install metallb-ingress helm/metallb-ingress -n metallb-system --create-namespace"
-                    echo "Deploying Ingresses"
-                    sh "helm upgrade --install ingress helm/ingress -n ingress --create-namespace"
+                    echo "Deploying ArgoCD Helm Chart"
+                    sh "helm upgrade --install argocd helm/argocd -n argocd --create-namespace"
+                    echo "Deploying Observability Helm Chart"
+                    sh "helm upgrade --install observability helm/observability -n observability --create-namespace"
+                    echo "Deploying Registry Helm Chart"
+                    sh "helm upgrade --install registry helm/registry -n container-registry --create-namespace"
                 }
             }
         }
