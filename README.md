@@ -132,22 +132,11 @@ services:
     user: root
     ports:
      - 127.0.0.1:8080:8080
-     - 50000:50000
+     - 127.0.0.1:50000:50000
     container_name: jenkins
     volumes:
       - ./jenkins_home:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
-      
-  registry:
-    image: registry:latest
-    container_name: docker-registry
-    ports:
-      - "5000:5000"
-    volumes:
-      - registry-data:/var/lib/registry
-
-volumes:
-  registry-data:
 " > docker-compose.yml
 
 docker-compose up --build -d
