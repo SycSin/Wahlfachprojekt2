@@ -67,6 +67,20 @@ WantedBy=multi-user.target" > /etc/systemd/system/nfs-delayed.service
 
 systemctl-daemon reload
 systemctl enable nfs-delayed.service
+
+echo "127.0.0.1 localhost nfs01
+::1 ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+ff02::3 ip6-allhosts
+
+192.168.1.210 nfs01
+192.168.1.211 node01
+192.168.1.212 node02
+192.168.1.213 node03
+192.168.1.214 registry.myrecipes.at" > /etc/hosts
 ````
 
 ### node01, node02, node03
