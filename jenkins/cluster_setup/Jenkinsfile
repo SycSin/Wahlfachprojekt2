@@ -117,10 +117,8 @@ pipeline {
                             sh "kubectl get csidrivers"
                             echo "Creating the NFS StorageClass"
                             sh "helm upgrade --install nfs-storage-class helm/nfs-storage-class"
-                            echo "Creating the Registry Namespace"
-                            sh "kubectl create namespace container-registry || true"
                             echo "Creating the Registry PVC"
-                            sh "helm upgrade --install registry helm/registry --namespace container-registry"
+                            sh "helm upgrade --install registry helm/registry --namespace container-registry --create-namespace"
                         }
                     }
                 }
