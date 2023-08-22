@@ -101,6 +101,11 @@ usermod -a -G docker denis
 mkdir -p /mnt/ssd/nfs/docker/jenkins_docker
 cd /mnt/ssd/nfs/docker/jenkins_docker
 
+echo "{
+  "insecure-registries" : ["registry.myrecipes.at"]
+}" > /etc/docker/daemon.json
+systemctl restart docker
+
 echo "FROM jenkins/jenkins:lts
 USER root
 #Installing ansible & docker packages
