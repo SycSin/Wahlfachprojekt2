@@ -4,9 +4,8 @@ kind: Ingress
 metadata:
   name: registry-ingress
   labels:
-    app: registry-ingress
+    app: nginx-ingress-microk8s
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
     nginx.ingress.kubernetes.io/use-forwarded-headers: "true"
 spec:
   rules:
