@@ -12,6 +12,8 @@ This project aims to provide a platform for the "MyRecipes" project which was de
 sudo su -
 apt-get update
 
+mkdir -p /mnt/ssd/nfs/microk8s
+
 # Format the disk /dev/sda to have the following partition table:
 $> fdisk /dev/sda
 Command (m for help): p
@@ -33,7 +35,6 @@ PARTUUID=9b9b618a-01 /mnt/ssd/nfs ext4 defaults,nofail 0 2
 
 mount -a
 
-mkdir -p /mnt/ssd/nfs/microk8s
 chown nobody:nogroup /mnt/ssd/nfs/microk8s
 chmod 0777 /mnt/ssd/nfs/microk8s
 apt-get install dnsmasq tcpdump nfs-kernel-server
