@@ -154,8 +154,6 @@ pipeline {
                             }
                         }
                     }
-                    echo "Deploying metallb-ingress Helm Chart"
-                    sh "helm upgrade --install metallb-ingress helm/metallb-ingress -n metallb-system --create-namespace"
                 }
             }
         }
@@ -168,10 +166,18 @@ pipeline {
                             sh "kubectl create namespace argocd || true"
                             echo "Installing ArgoCD manifest"
                             sh "kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml"
-                            echo "Deploying ArgoCD Helm Chart"
-                            sh "helm upgrade --install argocd helm/argocd -n argocd --create-namespace"
                         }
                     }
+                }
+            }
+        }
+        stage('Setup Ingresses') {
+            steps {
+                script {
+                    echo "Deploying metallb-ingress Helm Chart"
+                    sh "helm upgrade --install metallb-ingress helm/metallb-ingress -n metallb-system --create-namespace"
+                    echo "Deploying Ingresses"
+                    sh "helm upgrade --install ingress helm/ingress -n ingress --create-namespace"
                 }
             }
         }
