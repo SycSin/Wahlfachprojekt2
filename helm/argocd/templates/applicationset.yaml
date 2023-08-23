@@ -1,8 +1,8 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: pet-configuration
-  namespace: openshift-gitops
+  name: argocd-configuration
+  namespace: argocd
 spec:
   goTemplate: true
   strategy:
@@ -28,30 +28,21 @@ spec:
   generators:
     #helm chart apps
     - git:
-        repoURL: https://git.lottery.co.at/it-dev/pet/cluster-config.git
-        revision: ${ENVIRONMENT}
+        repoURL: https://github.com/SycSin/Wahlfachprojekt2.git
+        revision: main
         files:
           - path: "helm/*/config.yml"
-          - path: "helm/*/config-${ENVIRONMENT}.yml"
+          - path: "helm/*/config.yaml"
         template:
           metadata: {}
           spec:
             project: "default"
             destination: {}
             source:
-              repoURL: https://git.lottery.co.at/it-dev/pet/cluster-config.git
+              repoURL: https://github.com/SycSin/Wahlfachprojekt2.git
               helm:
                 valueFiles:
-                  - values-${ENVIRONMENT}.yml
-                parameters:
-                  - name: "environment"
-                    value: ${ENVIRONMENT}
-                  - name: "clusterName"
-                    value: ${CLUSTER_NAME}
-                  - name: "clusterActive"
-                    value: "${CLUSTER_ACTIVE}"
-                  - name: "aws.accountId"
-                    value: "${AWS_ACCOUNT}"
+                  - values.yaml
   template:
     metadata:
       name: '{{.path.basename}}'
@@ -62,8 +53,8 @@ spec:
     spec:
       project: "default"
       source:
-        repoURL: https://git.lottery.co.at/it-dev/pet/cluster-config.git
-        targetRevision: ${ENVIRONMENT}
+        repoURL: https://github.com/SycSin/Wahlfachprojekt2.git
+        targetRevision: main
         path: '{{.path.path}}'
       destination:
         server: https://kubernetes.default.svc
@@ -76,4 +67,4 @@ spec:
           - 'ServerSideApply={{.syncOptions.ServerSideApply}}'
         managedNamespaceMetadata:
           labels:
-            argocd.argoproj.io/managed-by: openshift-gitops
+            argocd.argoproj.io/managed-by: argocd
