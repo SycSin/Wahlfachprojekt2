@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: mysql-seed-job
+  name: mysql-plant-and-seed-job
 spec:
   template:
     spec:
@@ -14,12 +14,20 @@ spec:
                 secretKeyRef:
                   name: mariadb
                   key: mariadb-root-password
-          command: ["mysql", "-uroot", "-p${MYSQL_ROOT_PASSWORD}"]
-          args: ["<", "/mnt/seed.sql"]
+          command: [ "/bin/sh", "-c" ]
+          args:
+            - |
+              mysql -uroot -p$MYSQL_ROOT_PASSWORD -h mariadb < /mnt/schema/schema.sql &&
+              mysql -uroot -p$MYSQL_ROOT_PASSWORD -h mariadb < /mnt/seed/seed.sql
           volumeMounts:
+            - name: schema-volume
+              mountPath: /mnt/schema
             - name: seed-volume
-              mountPath: /mnt
+              mountPath: /mnt/seed
       volumes:
+        - name: schema-volume
+          configMap:
+            name: schema-config
         - name: seed-volume
           configMap:
             name: seed-config
