@@ -14,14 +14,14 @@
     msg: "No MicroK8s package found."
   when: microk8s_snap_list.failed
 
-#TODO: Fix me
-- name: Artificial waiting
-  pause:
-    minutes: 3
-
 - name: Install MicroK8s
   when: microk8s_snap_list.failed
   block:
+    - name: Restart snapd
+      systemd:
+        name: "snapd"
+        state: restarted
+
     - name: Load the snapd daemon
       systemd:
         name: snapd
