@@ -1,0 +1,68 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: argocd-configuration
+  namespace: argocd
+spec:
+  goTemplate: true
+  strategy:
+    type: RollingSync
+    rollingSync:
+      steps:
+        - matchExpressions:
+            - key: rolloutOrder
+              operator: In
+              values:
+                - "0"
+        - matchExpressions:
+            - key: rolloutOrder
+              operator: In
+              values:
+                - "1"
+        - matchExpressions:
+            - key: rolloutOrder
+              operator: NotIn
+              values:
+                - "0"
+                - "1"
+  generators:
+    #helm chart apps
+    - git:
+        repoURL: https://github.com/SycSin/Wahlfachprojekt2.git
+        revision: main
+        files:
+          - path: "helm/*/config.yml"
+          - path: "helm/*/config.yaml"
+        template:
+          metadata: {}
+          spec:
+            project: "default"
+            destination: {}
+            source:
+              repoURL: https://github.com/SycSin/Wahlfachprojekt2.git
+              helm:
+                valueFiles:
+                  - values.yaml
+  template:
+    metadata:
+      name: '{{ "{{" }} .path.basename }}'
+      labels:
+        rolloutOrder: '{{ "{{" }} default "2" .rolloutOrder }}'
+    spec:
+      project: "default"
+      source:
+        repoURL: https://github.com/SycSin/Wahlfachprojekt2.git
+        targetRevision: main
+        path: '{{ "{{" }} .path.path }}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{ "{{" }} .path.basename }}'
+      syncPolicy:
+        automated: {}
+        syncOptions:
+          - ApplyOutOfSyncOnly=true
+          - 'CreateNamespace={{ "{{" }} .syncOptions.CreateNamespace }}'
+          - 'ServerSideApply={{ "{{" }} .syncOptions.ServerSideApply }}'
+        managedNamespaceMetadata:
+          labels:
+            argocd.argoproj.io/managed-by: argocd
