@@ -45,26 +45,24 @@ spec:
                   - values.yaml
   template:
     metadata:
-      name: '{{.path.basename}}'
+      name: '{{ "{{" }} .path.basename }}'
       labels:
-        rolloutOrder: '{{default "2" .rolloutOrder}}'
-      annotations:
-        notifications.argoproj.io/subscribe.smtpRelay: '{{ default "" .notification.email }}'
+        rolloutOrder: '{{ "{{" }} default "2" .rolloutOrder }}'
     spec:
       project: "default"
       source:
         repoURL: https://github.com/SycSin/Wahlfachprojekt2.git
         targetRevision: main
-        path: '{{.path.path}}'
+        path: '{{ "{{" }} .path.path }}'
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{.path.basename}}'
+        namespace: '{{ "{{" }} .path.basename }}'
       syncPolicy:
         automated: {}
         syncOptions:
           - ApplyOutOfSyncOnly=true
-          - 'CreateNamespace={{.syncOptions.CreateNamespace}}'
-          - 'ServerSideApply={{.syncOptions.ServerSideApply}}'
+          - 'CreateNamespace={{ "{{" }} .syncOptions.CreateNamespace }}'
+          - 'ServerSideApply={{ "{{" }} .syncOptions.ServerSideApply }}'
         managedNamespaceMetadata:
           labels:
             argocd.argoproj.io/managed-by: argocd
