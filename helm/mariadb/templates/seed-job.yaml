@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mysql-seed-job
+spec:
+  template:
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:latest
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mariadb
+                  key: mariadb-root-password
+          command: ["mysql", "-uroot", "-p${MYSQL_ROOT_PASSWORD}"]
+          args: ["<", "/mnt/seed.sql"]
+          volumeMounts:
+            - name: seed-volume
+              mountPath: /mnt
+      volumes:
+        - name: seed-volume
+          configMap:
+            name: seed-config
+      restartPolicy: Never
