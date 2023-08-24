@@ -1,8 +1,6 @@
 pvc:
-  #storageSize: "40Gi"
-  storageSize: "10Gi"
-  #storageClassName: "nfs-csi"
-  storageClassName: "microk8s-hostpath"
+  storageSize: "40Gi"
+  storageClassName: "nfs-csi"
 
 ingress:
   host: "registry"
