@@ -4,8 +4,7 @@ metadata:
   name: seed-config
 data:
   seed.sql: |
-    use
-    MyRecipes;
+    use MyRecipes;
 
     /* Insert categories */
     INSERT INTO categories (name)
