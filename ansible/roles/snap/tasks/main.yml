@@ -6,9 +6,6 @@
   register: snapd_installation
   when: not ansible_check_mode
 
-- name: Refresh snap list
-  shell: "snap refresh"
-
 - name: Reboot the machine
   reboot:
     reboot_timeout: 900
