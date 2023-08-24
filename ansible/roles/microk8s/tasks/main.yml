@@ -17,10 +17,9 @@
 - name: Install MicroK8s
   when: microk8s_snap_list.failed
   block:
-    - name: Restart snapd
-      systemd:
-        name: "snapd"
-        state: restarted
+    - name: Wait for snapd to start
+      pause:
+        minutes: 1
 
     - name: Load the snapd daemon
       systemd:
