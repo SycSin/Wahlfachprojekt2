@@ -34,5 +34,5 @@ spec:
     app: {{ .Values.ingress.service }}-backend
   ports:
     - protocol: TCP
-      port: {{ .Values.frontend.ports.port }}
-      targetPort: {{ .Values.frontend.ports.targetPort }}
+      port: {{ .Values.backend.ports.port }}
+      targetPort: {{ .Values.backend.ports.targetPort }}
