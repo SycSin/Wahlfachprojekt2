@@ -1,6 +1,10 @@
-pvc:
+persistence:
+  enabled: "true"
   size: "20Gi"
+  accessMode: "ReadWriteOnce"
+  deleteEnabled: "true"
   storageClass: "nfs-csi"
+  existingClaim: "registry-claim"
 
 ingress:
   host: "registry"
