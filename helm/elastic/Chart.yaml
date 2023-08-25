@@ -5,6 +5,6 @@ type: application
 version: 1.0.0
 
 dependencies:
-  - name: elastic
+  - name: elastic/eck-stack
     repository: https://helm.elastic.co
     version: v2.9.0
