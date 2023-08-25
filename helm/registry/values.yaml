@@ -1,7 +1,5 @@
-persistence:
-  enabled: "true"
+pvc:
   size: "20Gi"
-  accessMode: "ReadWriteOnce"
   storageClass: "nfs-csi"
 
 ingress:
