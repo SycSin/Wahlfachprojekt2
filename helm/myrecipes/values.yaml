@@ -19,5 +19,5 @@ ingress:
   domain: "myrecipes.at"
   service: "myrecipes"
   paths:
-    frontend: "/"
-    backend: "/api"
+    frontend: "/(.*)"
+    backend: "/api/(.*)"
