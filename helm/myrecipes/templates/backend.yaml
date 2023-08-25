@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "myrecipes-chart.fullname" . }}-backend
+  name: {{ .Chart.Name }}-backend
   labels:
-    app: {{ include "myrecipes-chart.name" . }}
-    chart: {{ include "myrecipes-chart.chart" . }}
+    app: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ include "myrecipes-chart.name" . }}
+      app: {{ .Chart.Name }}
       release: {{ .Release.Name }}
       component: backend
   template:
     metadata:
       labels:
-        app: {{ include "myrecipes-chart.name" . }}
+        app: {{ .Chart.Name }}
         release: {{ .Release.Name }}
         component: backend
     spec:

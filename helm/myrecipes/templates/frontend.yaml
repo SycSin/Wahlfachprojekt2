@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "myrecipes-chart.fullname" . }}-frontend
+  name: {{ .Chart.Name }}-frontend
   labels:
-    app: {{ include "myrecipes-chart.name" . }}
-    chart: {{ include "myrecipes-chart.chart" . }}
+    app: {{ .Release.Name }}
+    chart: {{ .Chart.Name }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ include "myrecipes-chart.name" . }}
+      app: {{ .Chart.Name }}
       release: {{ .Release.Name }}
       component: frontend
   template:
     metadata:
       labels:
-        app: {{ include "myrecipes-chart.name" . }}
+        app: {{ .Chart.Name }}
         release: {{ .Release.Name }}
         component: frontend
     spec:
@@ -23,4 +23,4 @@ spec:
         - name: frontend
           image: {{ .Values.frontend.image }}:{{ .Values.frontend.version }}
           ports:
-            - containerPort: {{ index .Values.frontend.ports.targetPort }}
+            - containerPort: {{ .Values.frontend.ports.targetPort }}
