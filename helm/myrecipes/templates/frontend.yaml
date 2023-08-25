@@ -21,6 +21,6 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: {{ .Values.frontend.image }}:{{ .Values.backend.version }}
+          image: {{ .Values.frontend.image }}:{{ .Values.frontend.version }}
           ports:
-            - containerPort: {{ index .Values.frontend.ports 0 "targetPort" }}
+            - containerPort: {{ index .Values.frontend.ports.targetPort }}

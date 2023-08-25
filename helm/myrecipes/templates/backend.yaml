@@ -23,4 +23,4 @@ spec:
         - name: backend
           image: {{ .Values.backend.image }}:{{ .Values.backend.version }}
           ports:
-            - containerPort: {{ .Values.backend.ports 0 "targetPort" }}
+            - containerPort: {{ .Values.backend.ports.targetPort }}
