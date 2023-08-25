@@ -7,7 +7,7 @@ frontend:
     targetPort: 8080
 
 backend:
-  image: "registry/myrecipes-backend"
+  image: "registry.myrecipes.at/myrecipes-backend"
   version: "latest"
   ports:
     name: http
