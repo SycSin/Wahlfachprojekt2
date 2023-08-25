@@ -5,6 +5,8 @@ metadata:
   labels:
     app: {{ .Release.Name }}
     chart: {{ .Chart.Name }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
 spec:
   replicas: 1
   selector:
