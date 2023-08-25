@@ -201,12 +201,10 @@ pipeline {
             }
         }
     }
-    stages {
-        stage('Build & Push MyRecipes Images') {
-            steps {
-                script {
-                    def buildPipeline = build job: 'build_images'
-                }
+    stage('Build & Push MyRecipes Images') {
+        steps {
+            script {
+                def buildPipeline = build job: 'build_images'
             }
         }
     }
