@@ -1,0 +1,22 @@
+frontend:
+  image: "registry.myrecipes.at/myrecipes-frontend"
+  version: "latest"
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+
+backend:
+  image: "registry.myrecipes.at/myrecipes-backend"
+  version: "latest"
+  ports:
+    - name: http
+      port: 3000
+      targetPort: 3000
+
+ingress:
+  host: "www"
+  domain: "myrecipes.at"
+  path: "/"
+  serviceName: "myrecipes-frontend"
+  servicePort: "8080"
