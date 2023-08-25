@@ -1,6 +1,6 @@
-pvc:
-  storageSize: "40Gi"
-  storageClassName: "nfs-csi"
+persistence:
+  size: "20Gi"
+  storageClass: "nfs-csi"
 
 ingress:
   host: "registry"
