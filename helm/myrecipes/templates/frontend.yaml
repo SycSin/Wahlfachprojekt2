@@ -23,4 +23,16 @@ spec:
         - name: frontend
           image: {{ .Values.frontend.image }}:{{ .Values.frontend.version }}
           ports:
-            - containerPort: {{ .Values.frontend.ports.targetPort }}
+            - containerPort: {{ .Values.frontend.ports.port }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.ingress.service }}-frontend
+spec:
+  selector:
+    app: {{ .Values.ingress.service }}-frontend
+  ports:
+    - protocol: TCP
+      port: {{ .Values.frontend.ports.port }}
+      targetPort: {{ .Values.frontend.ports.targetPort }}

@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ .Values.ingress.serviceName }}-ingress
+  name: {{ .Values.ingress.service }}-ingress
   labels:
     name: nginx-ingress-microk8s
   annotations:
@@ -14,10 +14,17 @@ spec:
     - host: {{ .Values.ingress.host }}.{{ .Values.ingress.domain }}
       http:
         paths:
-          - path: {{ .Values.ingress.path }}
+          - path: {{ .Values.ingress.paths.frontend }}
             pathType: {{ .Values.ingress.pathType | default "Prefix" }}
             backend:
               service:
-                name: {{ .Values.ingress.serviceName }}
+                name: {{ .Values.ingress.service }}-frontend
                 port:
-                  number: {{ .Values.frontend.ports.targetPort }}
+                  number: {{ .Values.frontend.ports.port }}
+          - path: {{ .Values.ingress.paths.backend }}
+            pathType: {{ .Values.ingress.pathType | default "Prefix" }}
+            backend:
+              service:
+                name: {{ .Values.ingress.service }}-backend
+                port:
+                  number: {{ .Values.backend.ports.port }}

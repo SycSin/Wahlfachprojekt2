@@ -17,5 +17,7 @@ backend:
 ingress:
   host: "www"
   domain: "myrecipes.at"
-  path: "/"
-  serviceName: "myrecipes-frontend"
+  service: "myrecipes"
+  paths:
+    frontend: "/"
+    backend: "/api"
