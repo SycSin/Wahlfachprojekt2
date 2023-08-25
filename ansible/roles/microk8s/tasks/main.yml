@@ -17,10 +17,6 @@
 - name: Install MicroK8s
   when: microk8s_snap_list.failed
   block:
-    - name: Wait for snapd to start
-      pause:
-        minutes: 1
-
     - name: Load the snapd daemon
       systemd:
         name: snapd
@@ -32,6 +28,10 @@
         name: "linux-modules-extra-raspi"
         state: present
       when: ansible_facts['distribution'] == "Ubuntu"
+
+    - name: Wait for snapd to start
+      pause:
+        minutes: 1
 
     - name: Install MicroK8s snap
       snap:
