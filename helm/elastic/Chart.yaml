@@ -1,0 +1,10 @@
+apiVersion: v2
+name: elastic
+description: A Helm chart for deploying the elastic (ECK) stack
+type: application
+version: 1.0.0
+
+dependencies:
+  - name: elastic
+    repository: https://helm.elastic.co
+    version: v2.9.0
