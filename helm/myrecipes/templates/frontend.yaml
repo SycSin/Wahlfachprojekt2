@@ -26,6 +26,12 @@ spec:
           image: {{ .Values.frontend.image }}:{{ .Values.frontend.version }}
           ports:
             - containerPort: {{ .Values.frontend.ports.port }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
 ---
 apiVersion: v1
 kind: Service

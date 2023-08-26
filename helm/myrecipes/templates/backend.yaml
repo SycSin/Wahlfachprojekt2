@@ -26,6 +26,12 @@ spec:
           image: {{ .Values.backend.image }}:{{ .Values.backend.version }}
           ports:
             - containerPort: {{ .Values.backend.ports.port }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
 ---
 apiVersion: v1
 kind: Service
