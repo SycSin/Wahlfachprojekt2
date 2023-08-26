@@ -5,6 +5,11 @@ frontend:
     name: http
     port: 8080
     targetPort: 8080
+  readinessProbe:
+    initialDelaySeconds: 300
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 10
 
 backend:
   image: "registry.myrecipes.at/myrecipes-backend"
@@ -13,6 +18,11 @@ backend:
     name: http
     port: 3000
     targetPort: 3000
+  readinessProbe:
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 10
 
 ingress:
   domain: "myrecipes.at"
