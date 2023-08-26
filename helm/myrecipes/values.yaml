@@ -6,7 +6,7 @@ frontend:
     port: 8080
     targetPort: 8080
   readinessProbe:
-    initialDelaySeconds: 300
+    initialDelaySeconds: 30
     periodSeconds: 10
     timeoutSeconds: 5
     failureThreshold: 10
