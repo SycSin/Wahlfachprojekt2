@@ -204,7 +204,7 @@ pipeline {
         stage('MyRecipes Images') {
             steps {
                 script {
-                    def buildPipeline = build job: 'build_images'
+                    def buildPipeline = build job: 'image_builds'
                 }
             }
         }
