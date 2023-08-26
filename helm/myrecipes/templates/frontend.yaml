@@ -29,7 +29,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /
-              port: 8080
+              port: {{ .Values.frontend.ports.targetPort }}
             initialDelaySeconds: 5
             periodSeconds: 10
 ---
