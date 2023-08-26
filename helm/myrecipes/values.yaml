@@ -15,8 +15,8 @@ backend:
     targetPort: 3000
 
 ingress:
-  host: "www"
   domain: "myrecipes.at"
+  alias: "www.myrecipes.at"
   service: "myrecipes"
   paths:
     frontend: "/(.*)"
