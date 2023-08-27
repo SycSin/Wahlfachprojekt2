@@ -165,6 +165,8 @@ pipeline {
                             sh "kubectl create namespace argocd || true"
                             echo "Installing ArgoCD manifest"
                             sh "kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml"
+                            echo "Installing ArgoCD Image Updater manifest"
+                            sh "kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj-labs/argocd-image-updater/stable/manifests/install.yaml"
                             echo "Deploying ArgoCD Helm Chart"
                             sh "helm upgrade --install argocd helm/argocd -n argocd --create-namespace"
                         }
