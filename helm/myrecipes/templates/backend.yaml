@@ -21,6 +21,7 @@ spec:
         release: {{ .Release.Name }}
         component: backend
     spec:
+      serviceAccountName: {{ .Chart.Name }}-sa
       containers:
         - name: backend
           image: {{ .Values.backend.image }}:{{ .Values.backend.version }}
