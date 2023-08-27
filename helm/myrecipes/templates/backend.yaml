@@ -29,7 +29,7 @@ spec:
             - containerPort: {{ .Values.backend.ports.port }}
           readinessProbe:
             httpGet:
-              path: /
+              path: /recipes
               port: {{ .Values.backend.ports.targetPort }}
             initialDelaySeconds: {{ .Values.backend.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.backend.readinessProbe.periodSeconds }}
