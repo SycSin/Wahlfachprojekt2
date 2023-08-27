@@ -24,6 +24,7 @@ spec:
       containers:
         - name: frontend
           image: {{ .Values.frontend.image }}:{{ .Values.frontend.version }}
+          imagePullPolicy: Always
           ports:
             - containerPort: {{ .Values.frontend.ports.port }}
           readinessProbe:
