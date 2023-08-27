@@ -38,8 +38,8 @@ spec:
             - name: DB_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: mariadb-credentials
-                  key: root-password
+                  name: mariadb
+                  key: mariadb-root-password
 ---
 apiVersion: v1
 kind: Service
