@@ -6,6 +6,7 @@ frontend:
     port: 8080
     targetPort: 8080
   readinessProbe:
+    path: "/"
     initialDelaySeconds: 30
     periodSeconds: 10
     timeoutSeconds: 5
@@ -19,6 +20,7 @@ backend:
     port: 3000
     targetPort: 3000
   readinessProbe:
+    path: "/recipes"
     initialDelaySeconds: 5
     periodSeconds: 10
     timeoutSeconds: 5

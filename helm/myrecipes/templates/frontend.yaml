@@ -29,7 +29,7 @@ spec:
             - containerPort: {{ .Values.frontend.ports.port }}
           readinessProbe:
             httpGet:
-              path: /
+              path: {{ .Values.frontend.readinessProbe.path }}
               port: {{ .Values.frontend.ports.targetPort }}
             initialDelaySeconds: {{ .Values.frontend.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.frontend.readinessProbe.periodSeconds }}
