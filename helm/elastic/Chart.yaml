@@ -5,6 +5,9 @@ type: application
 version: 1.0.0
 
 dependencies:
+  - name: eck-operator
+     repository: https://helm.elastic.co
+     version: 2.9.0
   - name: eck-stack
     repository: https://helm.elastic.co
     version: 0.7.0
