@@ -6,7 +6,8 @@ pipeline {
             steps {
                 checkout([$class: 'GitSCM',
                           branches: [[name: '*/main']],
-                          userRemoteConfigs: [[url: 'https://github.com/SycSin/MyRecipes.git']]
+                          userRemoteConfigs: [[url: 'https://github.com/SycSin/MyRecipes.git']],git
+                          clean: true
                 ])
             }
         }
