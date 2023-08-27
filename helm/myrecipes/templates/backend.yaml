@@ -34,6 +34,12 @@ spec:
             periodSeconds: {{ .Values.backend.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.backend.readinessProbe.timeoutSeconds }}
             failureThreshold: {{ .Values.backend.readinessProbe.failureThreshold }}
+          env:
+            - name: DB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mariadb-credentials
+                  key: root-password
 ---
 apiVersion: v1
 kind: Service
