@@ -33,6 +33,10 @@ spec:
         files:
           - path: "helm/*/config.yml"
           - path: "helm/*/config.yaml"
+          - path: "helm/myrecipes"
+            image_list: "registry.myrecipes.at/myrecipes-backend, registry.myrecipes.at/myrecipes-frontend"
+          - path: "helm/harbor"
+            exclude: true
         template:
           metadata: {}
           spec:
