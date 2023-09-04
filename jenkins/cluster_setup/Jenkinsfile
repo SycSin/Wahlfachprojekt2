@@ -171,7 +171,7 @@ pipeline {
                             sh "helm upgrade --install argocd helm/argocd -n argocd --create-namespace"
                             //ToDo: Add proper waiting timeout to wait for all namespaces after deploying to be available
                             echo "Sleeping for 5 minutes, until all namespaces are avaiable.."
-                            sleep 360
+                            sleep 900
                         }
                     }
                 }
