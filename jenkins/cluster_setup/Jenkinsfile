@@ -169,6 +169,8 @@ pipeline {
                             sh "kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj-labs/argocd-image-updater/stable/manifests/install.yaml"
                             echo "Deploying ArgoCD Helm Chart"
                             sh "helm upgrade --install argocd helm/argocd -n argocd --create-namespace"
+                            //ToDo: Add proper waiting timeout to wait for all namespaces after deploying to be available
+                            sleep 120
                         }
                     }
                 }
