@@ -35,7 +35,7 @@ spec:
         path: '{{ "{{" }} .path.path }}'
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{ "{{" }} default ".path.basename" .namespace }}'
+        namespace: '{{ "{{" }} default .path.basename .namespace }}' # if the .namespace variable is not defined in the config.yaml of the application then the basename of the path is used as the namespace
       syncPolicy:
         automated: {}
         syncOptions:
