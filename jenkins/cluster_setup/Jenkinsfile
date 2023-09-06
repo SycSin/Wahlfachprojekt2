@@ -190,7 +190,7 @@ pipeline {
                             echo namespaces
 
                             // Define a list of skippable namespaces
-                            def skippableNamespaces = ['kube-public', 'kube-node-lease', 'default', 'argocd']
+                            def skippableNamespaces = ['kube-public', 'kube-node-lease', 'default']
 
                             for (String ns : namespaces.split('\n')) {
                                 if (skippableNamespaces.contains(ns)) {
