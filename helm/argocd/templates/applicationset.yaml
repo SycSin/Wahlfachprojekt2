@@ -8,23 +8,23 @@ spec:
   strategy:
     type: RollingSync
     rollingSync:
-       steps:
-          - matchExpressions:
-             - key: rolloutOrder
-               operator: In
-               values:
-                 - "0"
-             - matchExpressions:
-                 - key: rolloutOrder
-                   operator: In
-                   values:
-                     - "1"
-             - matchExpressions:
-                 - key: rolloutOrder
-                   operator: NotIn
-                   values:
-                     - "0"
-                     - "1"
+      steps:
+        - matchExpressions:
+            - key: rolloutOrder
+              operator: In
+              values:
+                - "0"
+        - matchExpressions:
+            - key: rolloutOrder
+              operator: In
+              values:
+                - "1"
+        - matchExpressions:
+            - key: rolloutOrder
+              operator: NotIn
+              values:
+                - "0"
+                - "1"
   generators:
     #helm chart apps
     - git:
