@@ -1,4 +1,4 @@
 namespace: "myrecipes"
 syncOptions:
-  CreateNamespace: "false"
+  CreateNamespace: "true"
   ServerSideApply: "true"
