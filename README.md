@@ -2,9 +2,36 @@
 
 This project aims to provide a platform for the "MyRecipes" project which was developed during the 2nd and 3rd term within the "Web Technologies" and "Software Engineering" lectures.
 
+## Key Specifications
+
+* 4x Raspberry Pi 4B units strategically allocated (3x control plane, 1x dedicated to Jenkins and NFS server)
+* MicroK8s Cluster with High Availability configuration
+* Infrastructure as Code (Ansible, Helm, Groovy)
+* Automated deployment of the web application (MyRecipes) facilitated by ArgoCD using GitOps principles
+* Cluster monitoring implemented through Prometheus with visualizations available on Grafana
+
+## SRS Requirements
+
+### Must:
+* The system must adapt the MyRecipes Application for seamless integration within the Kubernetes Cluster.
+* The system must generate Helm Charts for the MyRecipes Software to ensure efficient deployment and management within the Kubernetes environment.
+* The system must utilize Infrastructure as Code (IaC) through Ansible for node provisioning and the cluster setup, ensuring reproducibility and scalability.
+* The system must establish an automated build pipeline triggered by code changes, ensuring continuous integration and streamlined development workflows.
+* The system must include a MariaDB database running in the Kubernetes cluster to store and provide data to the MyRecipes application.
+
+### Should:
+* The system should incorporate automated deployment processes for the MyRecipes Software, improving efficiency and reducing manual intervention.
+* The system should provide a MicroK8S cluster setup through Jenkins Jobs, streamlining the process and ensuring a controlled deployment pipeline.
+* The system should utilize ArgoCD for GitOps-based configuration management to enhance version control and simplify cluster configuration.
+
+### Could:
+* The system could automatically respond to changed images within the cluster and initiate a new deployment, ensuring efficient updates and maintenance.
+* The system could implement high availability measures not only for the cluster but also the MyRecipes Application, enhancing system resilience.
+* The system could integrate Prometheus for cluster monitoring with a Grafana dashboard, providing insights into performance and potential issues.
+
 ## Kubernetes Cluster for MyRecipes
 
-### Prerequisits 
+### Prerequisites 
 * Prepare the SD cards with Ubuntu Server 22.04 (64-Bit) for the nodes
 
 ### Setting up the nfs01 server
