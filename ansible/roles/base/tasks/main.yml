@@ -15,22 +15,3 @@
 - name: Install packages
   apt:
     name: "{{ base_packages }}"
-
-## https://microk8s.io/docs/troubleshooting
-#- name: Set journald-logging to volatile
-#  block:
-#    - name: Configure journald for volatile logging
-#      template:
-#        src: "journald.conf.j2"
-#        dest: "/etc/systemd/journald.conf"
-#      notify: Restart systemd-journald
-#
-#    - name: Remove persistent journal logs
-#      command: "journalctl --rotate"
-#      ignore_errors: yes
-#      changed_when: false
-#
-#    - name: Clear journal logs
-#      command: "journalctl --vacuum-time=1s"
-#      ignore_errors: yes
-#      changed_when: false
