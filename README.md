@@ -4,7 +4,7 @@ This project aims to provide a platform for the "MyRecipes" project which was de
 
 ## Key Specifications
 
-* 4x Raspberry Pi 4B units strategically allocated (3x control plane, 1x dedicated to Jenkins and NFS server)
+* 4x Raspberry Pi 4B 4GB units strategically allocated (3x control plane, 1x dedicated to Jenkins and NFS server)
 * MicroK8s Cluster with High Availability configuration
 * Infrastructure as Code (Ansible, Helm, Groovy)
 * Automated deployment of the web application (MyRecipes) facilitated by ArgoCD using GitOps principles
@@ -28,6 +28,12 @@ This project aims to provide a platform for the "MyRecipes" project which was de
 * The system could automatically respond to changed images within the cluster and initiate a new deployment, ensuring efficient updates and maintenance.
 * The system could implement high availability measures not only for the cluster but also the MyRecipes Application, enhancing system resilience.
 * The system could integrate Prometheus for cluster monitoring with a Grafana dashboard, providing insights into performance and potential issues.
+
+### Won't:
+* The system won't feature Prometheus alerts as part of its monitoring setup.
+* The system won't include any Secret Management tools managing Kubernetes Secret objects.
+* The system won't provide a cluster backup functionality.
+* The system won't involve multi-platform redundancy; it will focus on local redundancy measures.
 
 ## Kubernetes Cluster for MyRecipes
 
