@@ -38,35 +38,7 @@
         name: microk8s
         classic: yes
         state: present
-    
-    #- name: Stop MicroK8s
-    #  command: "/snap/bin/microk8s stop"
-
-    #- name: Remove the containerd directory
-    #  file:
-    #    path: /var/snap/microk8s/common/var/lib/containerd
-    #    state: absent
-    #    force: yes
-
-    ## This is required since the overlayfs snapshotter is not working with PXE filesystems
-    #- name: Enable 'native' snapshotter for MicroK8s
-    #  lineinfile:
-    #    path: "/var/snap/microk8s/current/args/containerd-template.toml"
-    #    regexp: '^    snapshotter = "\$\{SNAPSHOTTER\}"'
-    #    line: '    snapshotter = "native"'
-    #    backup: yes
-
-##  #  # https://github.com/canonical/microk8s/issues/1587#issuecomment-697207459
-#   # - name: Disable LocalStorageCapacityIsolation
-#   #   lineinfile:
-#   #     path: "/var/snap/microk8s/current/args/kubelet"
-#   #     backrefs: yes
-#   #     regexp: "--feature-gates=DevicePlugins=true"
-#   #     line: '--feature-gates=LocalStorageCapacityIsolation=false'
-
-    #- name: Start the MicroK8s service
-    #  command: "/snap/bin/microk8s start"
-
+        
     - name: Create an alias for kubectl 
       lineinfile:
         path: "/root/.bashrc" 
