@@ -4,7 +4,12 @@ This project aims to provide a platform for the "MyRecipes" project which was de
 
 ## Key Specifications
 
-* 4x Raspberry Pi 4B 4GB units strategically allocated (3x control plane, 1x dedicated to Jenkins and NFS server)
+* Hardware:
+  * 4x Raspberry Pi 4B 4GB (3x control plane, 1x dedicated to Jenkins and NFS server)
+  * 4x 32 GB SD Cards
+  * 1x 256 GB M2 SSD
+  * 1x Raspberry Pi Cluster Case (including fans)
+  * 1x Gigabit Switch
 * MicroK8s Cluster with High Availability configuration
 * Infrastructure as Code (Ansible, Helm, Groovy)
 * Automated deployment of the web application (MyRecipes) facilitated by ArgoCD using GitOps principles
