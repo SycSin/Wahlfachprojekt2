@@ -143,8 +143,7 @@ pipeline {
         stage('Enable MicroK8s Addons') {
             steps {
                 script {
-                    def addons = ['ingress', 'metallb:192.168.1.211-192.168.1.219', 'dns', 'cert-manager', 'rbac', 'observability', 'community', 'argocd']
-//, 'observability']
+                    def addons = ['ingress', 'metallb:192.168.1.211-192.168.1.219', 'dns', 'cert-manager', 'rbac', 'observability', 'community']
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         sshagent(credentials: ['jenkins-private-key']) {
                             for (def addon in addons) {
@@ -156,27 +155,23 @@ pipeline {
                 }
             }
         }
-        //stage('Install ArgoCD') {
-        //    steps {
-        //        script {
-        //            withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
-        //                sshagent(credentials: ['jenkins-private-key']) {
-        //                    echo "Creating namespace 'argocd'"
-        //                    sh "kubectl create namespace argocd || true"
-        //                    echo "Installing ArgoCD manifest"
-        //                    sh "kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml"
-        //                    echo "Installing ArgoCD Image Updater manifest"
-        //                    sh "kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj-labs/argocd-image-updater/stable/manifests/install.yaml"
-        //                    echo "Deploying ArgoCD Helm Chart"
-        //                    sh "helm upgrade --install argocd helm/argocd -n argocd --create-namespace"
-        //                    //ToDo: Add proper waiting timeout to wait for all namespaces after deploying to be available
-        //                    echo "Sleeping for 5 minutes, until all namespaces are avaiable.."
-        //                    sleep 900
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
+        stage('Install ArgoCD') {
+            steps {
+                script {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                        sshagent(credentials: ['jenkins-private-key']) {
+                            echo "Installing ArgoCD addon"
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s enable argocd'"
+                            echo "Deploying ArgoCD Helm Chart"
+                            sh "helm upgrade --install argocd helm/argocd -n argocd --create-namespace"
+                            //ToDo: Add proper waiting timeout to wait for all applications after deploying to be available
+                            echo "Sleeping for 5 minutes, until all applications are avaiable.."
+                            sleep 900
+                        }
+                    }
+                }
+            }
+        }
         stage('Readiness probe') {
             steps {
                 script {
