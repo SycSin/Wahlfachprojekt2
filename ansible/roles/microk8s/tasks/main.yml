@@ -37,8 +37,9 @@
       snap:
         name: microk8s
         classic: yes
+        channel: 1.28
         state: present
-        
+
     - name: Create an alias for kubectl 
       lineinfile:
         path: "/root/.bashrc" 
