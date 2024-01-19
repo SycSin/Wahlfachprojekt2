@@ -5,6 +5,6 @@ type: application
 version: 1.0.0
 
 dependencies:
-  - name: emberstack
+  - name: emberstack/reflector
     repository: https://emberstack.github.io/helm-charts
     version: 7.1.238
