@@ -47,7 +47,7 @@ spec:
     metadata:
       name: '{{ "{{" }} .path.basename }}'
       labels:
-        rolloutOrder: '{{ "{{" }} default "2" .rolloutOrder }}'
+        rolloutOrder: '{{ "{{" }} default "0" .rolloutOrder }}'
     spec:
       project: "default"
       source:

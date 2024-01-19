@@ -1,6 +1,6 @@
 apiVersion: v2
 name: mariadb
-description: A Helm chart for deploying a MariaDB Database Cluster
+description: A Helm chart for deploying a MariaDB Database
 type: application
 version: 1.0.0
 
