@@ -1,4 +1,5 @@
 rollOutOrder: "-1"
+namespace: "mariadb"
 syncOptions:
   CreateNamespace: "true"
   ServerSideApply: "true"
