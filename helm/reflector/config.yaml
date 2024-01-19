@@ -1,4 +1,5 @@
 rollOutOrder: "-1"
+namespace: myrecipes
 syncOptions:
   CreateNamespace: "true"
   ServerSideApply: "true"
