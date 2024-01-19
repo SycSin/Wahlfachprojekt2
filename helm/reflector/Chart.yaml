@@ -1,0 +1,10 @@
+apiVersion: v2
+name: reflector
+description: A Helm chart for deploying the Reflector
+type: application
+version: 1.0.0
+
+dependencies:
+  - name: emberstack
+    repository: https://emberstack.github.io/helm-charts
+    version: 7.1.238
