@@ -4,3 +4,4 @@ reflectors:
       kind: Secret
       name: mariadb
     destinationNamespace: myrecipes
+    createDestination: true
