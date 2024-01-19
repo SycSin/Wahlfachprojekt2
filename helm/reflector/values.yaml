@@ -1,0 +1,6 @@
+reflectors:
+  - sourceNamespace: mariadb
+    sourceResource:
+      kind: Secret
+      name: mariadb
+    destinationNamespace: myrecipes
