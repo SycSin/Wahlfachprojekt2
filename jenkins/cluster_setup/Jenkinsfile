@@ -172,36 +172,19 @@ pipeline {
                 }
             }
         }
-        stage('Readiness probe') {
+        stage('Registry Readiness Probe') {
             steps {
                 script {
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         sshagent(credentials: ['jenkins-private-key']) {
-                            def namespaces = sh(
-                                    returnStdout: true,
-                                    script: "kubectl get namespaces --no-headers -o custom-columns=\":metadata.name\""
-                            ).trim()
-
-                            echo namespaces
-
-                            // Define a list of skippable namespaces
-                            def skippableNamespaces = ['kube-public', 'kube-node-lease', 'default']
-
-                            for (String ns : namespaces.split('\n')) {
-                                if (skippableNamespaces.contains(ns)) {
-                                    echo "Skipping namespace: $ns"
-                                    continue
-                                }
-
-                                echo "Waiting for pods to be ready in namespace: $ns"
-                                sh "kubectl wait --for=condition=ready --timeout=2700s pod --all -n $ns"
-                            }
+                            echo "Waiting for registry to be ready"
+                            sh "kubectl wait --for=condition=ready --timeout=2700s pod --all -n registry"
                         }
                     }
                 }
             }
         }
-        stage('MyRecipes Images') {
+        stage('Trigger MyRecipes Image Build') {
             steps {
                 script {
                     def buildPipeline = build job: 'image_builds'
