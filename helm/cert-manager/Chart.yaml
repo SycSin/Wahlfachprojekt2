@@ -1,0 +1,5 @@
+apiVersion: v2
+name: cert-manager
+description: A Helm chart for issuing letsencrypt certificates using cert-manager
+type: application
+version: 1.0.0
