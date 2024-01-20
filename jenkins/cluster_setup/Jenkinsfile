@@ -163,8 +163,8 @@ pipeline {
                             echo "Deploying ArgoCD Helm Chart"
                             sh "helm upgrade --install argocd helm/argocd -n argocd --create-namespace"
                             //ToDo: Add proper waiting timeout to wait for all applications after deploying to be available
-                            echo "Sleeping for 15 minutes, until all applications are avaiable.."
-                            sleep 900
+                            echo "Sleeping for 10 minutes, until all applications are avaiable.."
+                            sleep 600
                         }
                     }
                 }
