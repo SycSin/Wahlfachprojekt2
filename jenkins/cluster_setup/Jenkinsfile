@@ -189,6 +189,19 @@ pipeline {
                 }
             }
         }
+        stage('Rescale MyRecipes Deployment') {
+            steps {
+                script {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                        sshagent(credentials: ['jenkins-private-key']) {
+                            echo "Waiting for registry to be ready"
+                            sh "kubectl scale --replicas=0 deployment/myrecipes-backend -n myrecipes"
+                            sh "kubectl scale --replicas=0 deployment/myrecipes-frontend -n myrecipes"
+                        }
+                    }
+                }
+            }
+        }
     }
 
     post {
