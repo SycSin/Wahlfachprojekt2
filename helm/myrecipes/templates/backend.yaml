@@ -9,16 +9,16 @@ metadata:
     argocd.argoproj.io/sync-wave: "3"
     argocd-image-updater.argoproj.io/image-list: backend={{ .Values.backend.image }}
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
-      app: {{ .Chart.Name }}
+      app: {{ .Values.ingress.service }}-backend
       release: {{ .Release.Name }}
       component: backend
   template:
     metadata:
       labels:
-        app: {{ .Chart.Name }}
+        app: {{ .Values.ingress.service }}-backend
         release: {{ .Release.Name }}
         component: backend
     spec:
@@ -30,7 +30,7 @@ spec:
                   - key: app
                     operator: In
                     values:
-                      - {{ .Chart.Name }}
+                      - {{ .Values.ingress.service }}-backend
               topologyKey: kubernetes.io/hostname
       containers:
         - name: backend
@@ -59,7 +59,7 @@ metadata:
   name: {{ .Values.ingress.service }}-backend
 spec:
   selector:
-    app: {{ .Chart.Name }}
+    app: {{ .Values.ingress.service }}-backend
   ports:
     - protocol: TCP
       port: {{ .Values.backend.ports.port }}
