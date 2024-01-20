@@ -1,4 +1,4 @@
 rollOutOrder: "3"
 syncOptions:
   CreateNamespace: "true"
-  ServerSideApply: "true"
+  ServerSideApply: "false"
