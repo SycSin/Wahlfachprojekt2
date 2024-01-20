@@ -1,4 +1,4 @@
-rollOutOrder: "-1"
+rollOutOrder: "1"
 namespace: myrecipes
 syncOptions:
   CreateNamespace: "true"
