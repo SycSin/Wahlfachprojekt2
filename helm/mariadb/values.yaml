@@ -1,7 +1,3 @@
 mariadb:
   global:
     storageClass: "nfs-csi"
-    securityContext:
-      enabled: true
-      fsGroup: 1000
-      runAsUser: 1000
