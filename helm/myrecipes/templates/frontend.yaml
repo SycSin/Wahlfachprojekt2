@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ .Chart.Name }}-frontend
   labels:
-    app: {{ .Release.Name }}
+    app: {{ .Values.ingress.service }}-frontend
     chart: {{ .Chart.Name }}
   annotations:
     argocd.argoproj.io/sync-wave: "3"
