@@ -9,7 +9,7 @@ metadata:
     argocd.argoproj.io/sync-wave: "3"
     argocd-image-updater.argoproj.io/image-list: frontend={{ .Values.frontend.image }}
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: {{ .Chart.Name }}
