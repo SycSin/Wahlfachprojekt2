@@ -9,7 +9,7 @@ metadata:
     argocd.argoproj.io/sync-wave: "3"
     argocd-image-updater.argoproj.io/image-list: frontend={{ .Values.frontend.image }}
 spec:
-  replicas: 3
+  replicas: 2 #should survive a node failure and allow for rolling deployments
   selector:
     matchLabels:
       app: {{ .Values.ingress.service }}-frontend
