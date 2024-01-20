@@ -27,3 +27,8 @@ spec:
                 name: {{ .Values.ingress.service }}-backend
                 port:
                   number: {{ .Values.backend.ports.port }}
+  tls:
+    - hosts:
+        - {{ .Values.ingress.domain }}
+        - {{ .Values.ingress.alias }}
+      secretName: tlsCert
