@@ -32,7 +32,7 @@ pipeline {
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         sshagent(credentials: ['jenkins-private-key']) {
                             echo "Draining node01"
-                            sh "kubectl drain node01 --ignore-daemonsets"
+                            sh "kubectl drain node01 --ignore-daemonsets --delete-emptydir-data"
                         }
                     }
                 }
@@ -80,7 +80,7 @@ pipeline {
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         sshagent(credentials: ['jenkins-private-key']) {
                             echo "Draining node02"
-                            sh "kubectl drain node02 --ignore-daemonsets"
+                            sh "kubectl drain node02 --ignore-daemonsets --delete-emptydir-data"
                         }
                     }
                 }
@@ -128,7 +128,7 @@ pipeline {
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         sshagent(credentials: ['jenkins-private-key']) {
                             echo "Draining node03"
-                            sh "kubectl drain node03 --ignore-daemonsets"
+                            sh "kubectl drain node03 --ignore-daemonsets --delete-emptydir-data"
                         }
                     }
                 }
