@@ -3,6 +3,7 @@ kind: Application
 metadata:
   annotations:
     argocd-image-updater.argoproj.io/image-list: frontend={{ .Values.frontend.image }}:latest
+    argocd-image-updater.argoproj.io/write-back-method: argocd
   name: myrecipes
   namespace: myrecipes
 spec:
