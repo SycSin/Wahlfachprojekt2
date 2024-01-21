@@ -5,9 +5,11 @@ metadata:
   labels:
     name: nginx-ingress-microk8s
   annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-microk8s
     nginx.ingress.kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/proxy-body-size: "500m"
     nginx.ingress.kubernetes.io/proxy-pass-headers: "Location"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
 spec:
   rules:
     - host: {{ .Values.ingress.host }}.{{ .Values.ingress.domain }}
@@ -20,3 +22,7 @@ spec:
                 name: {{ .Values.ingress.serviceName }}
                 port:
                   number: {{ .Values.ingress.servicePort }}
+  tls:
+    - hosts:
+        - {{ .Values.ingress.host }}.{{ .Values.ingress.domain }}
+      secretName: tls

@@ -8,10 +8,9 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/ssl-passthrough: 'true'
     nginx.ingress.kubernetes.io/use-forwarded-headers: "true"
-  {{- end }}
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
 spec:
   rules:
-    {{- range $host, $paths := .Values.ingress.hosts }}
     - host: {{ $host }}.{{ $.Values.ingress.domain }}
       http:
         paths:
@@ -23,5 +22,9 @@ spec:
                 name: {{ $path.serviceName }}
                 port:
                   number: {{ $path.servicePort }}
-            {{- end }}
-          {{- end }}
+  tls:
+    - hosts:
+        - {{ $host }}.{{ $.Values.ingress.domain }}
+      secretName: tls
+    {{- end }}
+{{- end }}
