@@ -1,0 +1,174 @@
+pipeline {
+    agent any
+
+    parameters {
+        string(
+                defaultValue: '1.29',
+                description: 'Version to upgrade to',
+                name: 'VERSION'
+        )
+    }
+
+    stages {
+        stage('Retrieve MicroK8s Config') {
+            steps {
+                script {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                        sshagent(credentials: ['jenkins-private-key']) {
+                            echo "Creating .kube directory"
+                            sh "mkdir ~/.kube || true"
+                            echo "Retrieving MicroK8s Config file"
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s config' > ~/.kube/config"
+                            echo "Adapting permissions for kubeconfig"
+                            sh "chmod 600 ~/.kube/config"
+                        }
+                    }
+                }
+            }
+        }
+        stage('Drain Node01') {
+            steps {
+                script {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                        sshagent(credentials: ['jenkins-private-key']) {
+                            echo "Draining node01"
+                            sh "kubectl kubectl drain node01 --ignore-daemonsets"
+                        }
+                    }
+                }
+            }
+        }
+        stage('Upgrade Node01') {
+            steps {
+                script {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                        sshagent(credentials: ['jenkins-private-key']) {
+                            echo "Upgrading node01"
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/usr/bin/snap refresh microk8s --channel=$params.VERSION/stable'"
+                        }
+                    }
+                }
+            }
+        }
+        stage('Uncordon Node01') {
+            steps {
+                script {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                        sshagent(credentials: ['jenkins-private-key']) {
+                            echo "Uncordoning node01"
+                            sh "kubectl kubectl uncordon node01"
+                        }
+                    }
+                }
+            }
+        }
+        stage('Readiness Probe Node01') {
+            steps {
+                script {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                        sshagent(credentials: ['jenkins-private-key']) {
+                            echo "Waiting for node01 to be ready"
+                            sh "kubectl wait --for=condition=Ready node/node01 --timeout=600s"
+                        }
+                    }
+                }
+            }
+        }
+        stage('Drain Node02') {
+            steps {
+                script {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                        sshagent(credentials: ['jenkins-private-key']) {
+                            echo "Draining node02"
+                            sh "kubectl kubectl drain node02 --ignore-daemonsets"
+                        }
+                    }
+                }
+            }
+        }
+        stage('Upgrade Node02') {
+            steps {
+                script {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                        sshagent(credentials: ['jenkins-private-key']) {
+                            echo "Upgrading node01"
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.212 '/usr/bin/snap refresh microk8s --channel=$params.VERSION/stable'"
+                        }
+                    }
+                }
+            }
+        }
+        stage('Uncordon Node02') {
+            steps {
+                script {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                        sshagent(credentials: ['jenkins-private-key']) {
+                            echo "Uncordoning node02"
+                            sh "kubectl kubectl uncordon node02"
+                        }
+                    }
+                }
+            }
+        }
+        stage('Readiness Probe Node02') {
+            steps {
+                script {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                        sshagent(credentials: ['jenkins-private-key']) {
+                            echo "Waiting for node02 to be ready"
+                            sh "kubectl wait --for=condition=Ready node/node02 --timeout=600s"
+                        }
+                    }
+                }
+            }
+        }
+        stage('Drain Node03') {
+            steps {
+                script {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                        sshagent(credentials: ['jenkins-private-key']) {
+                            echo "Draining node03"
+                            sh "kubectl kubectl drain node03 --ignore-daemonsets"
+                        }
+                    }
+                }
+            }
+        }
+        stage('Upgrade Node03') {
+            steps {
+                script {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                        sshagent(credentials: ['jenkins-private-key']) {
+                            echo "Upgrading node03"
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.213 '/usr/bin/snap refresh microk8s --channel=$params.VERSION/stable'"
+                        }
+                    }
+                }
+            }
+        }
+        stage('Uncordon Node03') {
+            steps {
+                script {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                        sshagent(credentials: ['jenkins-private-key']) {
+                            echo "Uncordoning node03"
+                            sh "kubectl kubectl uncordon node03"
+                        }
+                    }
+                }
+            }
+        }
+        stage('Readiness Probe Node03') {
+            steps {
+                script {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                        sshagent(credentials: ['jenkins-private-key']) {
+                            echo "Waiting for node03 to be ready"
+                            sh "kubectl wait --for=condition=Ready node/node03 --timeout=600s"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
