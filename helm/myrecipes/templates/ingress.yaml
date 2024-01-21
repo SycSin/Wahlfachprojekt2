@@ -32,4 +32,4 @@ spec:
     - hosts:
         - {{ .Values.ingress.domain }}
         - {{ .Values.ingress.alias }}
-      secretName: tls
+      secretName: tlsCert
