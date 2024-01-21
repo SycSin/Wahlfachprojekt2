@@ -37,8 +37,7 @@
       snap:
         name: microk8s
         classic: yes
-        #channel: '1.29'
-        channel: '1.28'
+        channel: '1.29'
         state: present
 
     - name: Create an alias for kubectl 
