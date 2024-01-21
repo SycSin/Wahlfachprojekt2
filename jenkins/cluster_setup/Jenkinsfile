@@ -116,7 +116,7 @@ pipeline {
                             echo "Displaying the CSI-Drivers"
                             sh "kubectl get csidrivers"
                             echo "Creating the NFS StorageClass"
-                            sh "helm upgrade --install nfs-storage-class helm/nfs-storage-class"
+                            sh "helm upgrade --install nfs-storage-class helm/cluster-config/nfs-storage-class"
                         }
                     }
                 }
@@ -161,7 +161,7 @@ pipeline {
                             echo "Installing ArgoCD addon"
                             sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s enable argocd'"
                             echo "Deploying ArgoCD Helm Chart"
-                            sh "helm upgrade --install argocd helm/argocd -n argocd --create-namespace"
+                            sh "helm upgrade --install argocd helm/cluster-config/argocd -n argocd --create-namespace"
                             //ToDo: Add proper waiting timeout to wait for all applications after deploying to be available
                             echo "Sleeping for 15 minutes, until all applications are avaiable.."
                             sleep 900
