@@ -6,7 +6,6 @@ metadata:
   labels:
     name: nginx-ingress-microk8s
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-microk8s
     nginx.ingress.kubernetes.io/ssl-passthrough: 'true'
     nginx.ingress.kubernetes.io/use-forwarded-headers: "true"
   {{- end }}
@@ -24,9 +23,5 @@ spec:
                 name: {{ $path.serviceName }}
                 port:
                   number: {{ $path.servicePort }}
-  tls:
-    - hosts:
-        - {{ $host }}.{{ $.Values.ingress.domain }}
-      secretName: tls
-    {{- end }}
-{{- end }}
+            {{- end }}
+          {{- end }}
