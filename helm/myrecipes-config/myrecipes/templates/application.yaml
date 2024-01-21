@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: frontend=registry.myrecipes.at/myrecipes-frontend, backend=registry.myrecipes.at/myrecipes-backend
+  name: myrecipes
+  namespace: myrecipes
+spec:
+  destination:
+    namespace: myrecipes
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: helm/myrecipes-config/myrecipes
+    repoURL: https://github.com/SycSin/Wahlfachprojekt2.git
+    helm:
+      valueFiles:
+        - values.yaml

@@ -31,8 +31,8 @@ spec:
         repoURL: https://github.com/SycSin/Wahlfachprojekt2.git
         revision: main
         files:
-          - path: "helm/*/config.yml"
-          - path: "helm/*/config.yaml"
+          - path: "helm/*/*/config.yml"
+          - path: "helm/*/*/config.yaml"
         template:
           metadata: {}
           spec:
