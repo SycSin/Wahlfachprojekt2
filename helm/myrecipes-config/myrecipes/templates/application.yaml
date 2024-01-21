@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   annotations:
-    argocd-image-updater.argoproj.io/image-list: frontend={{ .Values.frontend.image }}:latest, {{ .Values.backend.image }}:latest
+    argocd-image-updater.argoproj.io/image-list: frontend={{ .Values.frontend.image }}:latest
   name: myrecipes
   namespace: myrecipes
 spec:
