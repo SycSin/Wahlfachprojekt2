@@ -7,7 +7,7 @@ metadata:
     chart: {{ .Chart.Name }}
   annotations:
     argocd.argoproj.io/sync-wave: "3"
-    argocd-image-updater.argoproj.io/image-list: backend={{ .Values.backend.image }}
+    argocd-image-updater.argoproj.io/image-list: backend={{ .Values.backend.image }}:latest
 spec:
   replicas: 2 #should survive a node failure and allow for rolling deployments
   selector:
