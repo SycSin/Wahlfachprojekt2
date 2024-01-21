@@ -10,9 +10,3 @@ spec:
     namespace: myrecipes
     server: https://kubernetes.default.svc
   project: default
-  source:
-    path: helm/myrecipes-config/myrecipes
-    repoURL: https://github.com/SycSin/Wahlfachprojekt2.git
-    helm:
-      valueFiles:
-        - values.yaml
