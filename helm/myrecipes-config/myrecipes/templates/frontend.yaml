@@ -7,7 +7,6 @@ metadata:
     chart: {{ .Chart.Name }}
   annotations:
     argocd.argoproj.io/sync-wave: "3"
-    argocd-image-updater.argoproj.io/image-list: frontend=registry.myrecipes.at/myrecipes-frontend:latest
 spec:
   replicas: 2 #should survive a node failure and allow for rolling deployments
   selector:
