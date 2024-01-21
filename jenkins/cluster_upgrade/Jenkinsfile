@@ -32,7 +32,7 @@ pipeline {
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         sshagent(credentials: ['jenkins-private-key']) {
                             echo "Draining node01"
-                            sh "kubectl kubectl drain node01 --ignore-daemonsets"
+                            sh "kubectl drain node01 --ignore-daemonsets"
                         }
                     }
                 }
@@ -56,7 +56,7 @@ pipeline {
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         sshagent(credentials: ['jenkins-private-key']) {
                             echo "Uncordoning node01"
-                            sh "kubectl kubectl uncordon node01"
+                            sh "kubectl uncordon node01"
                         }
                     }
                 }
@@ -80,7 +80,7 @@ pipeline {
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         sshagent(credentials: ['jenkins-private-key']) {
                             echo "Draining node02"
-                            sh "kubectl kubectl drain node02 --ignore-daemonsets"
+                            sh "kubectl drain node02 --ignore-daemonsets"
                         }
                     }
                 }
@@ -104,7 +104,7 @@ pipeline {
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         sshagent(credentials: ['jenkins-private-key']) {
                             echo "Uncordoning node02"
-                            sh "kubectl kubectl uncordon node02"
+                            sh "kubectl uncordon node02"
                         }
                     }
                 }
@@ -128,7 +128,7 @@ pipeline {
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         sshagent(credentials: ['jenkins-private-key']) {
                             echo "Draining node03"
-                            sh "kubectl kubectl drain node03 --ignore-daemonsets"
+                            sh "kubectl drain node03 --ignore-daemonsets"
                         }
                     }
                 }
@@ -152,7 +152,7 @@ pipeline {
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         sshagent(credentials: ['jenkins-private-key']) {
                             echo "Uncordoning node03"
-                            sh "kubectl kubectl uncordon node03"
+                            sh "kubectl uncordon node03"
                         }
                     }
                 }
