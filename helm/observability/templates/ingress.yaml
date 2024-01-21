@@ -24,11 +24,9 @@ spec:
                 name: {{ $path.serviceName }}
                 port:
                   number: {{ $path.servicePort }}
-          {{- end }}
-    {{- end }}
   tls:
     - hosts:
-    {{- range $host, $paths := .Values.ingress.hosts }}
-        - {{ $host }}.{{ .Values.ingress.domain }}
-    {{- end }}
+        - {{ $host }}.{{ $.Values.ingress.domain }}
       secretName: tlsCert
+    {{- end }}
+{{- end }}

@@ -23,5 +23,5 @@ spec:
                   number: {{ .Values.ingress.servicePort }}
   tls:
     - hosts:
-        - {{ .Values.ingress.domain }}
+        - {{ .Values.ingress.host }}.{{ .Values.ingress.domain }}
       secretName: tlsCert
