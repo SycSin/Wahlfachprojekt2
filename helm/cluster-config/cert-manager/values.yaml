@@ -1,0 +1,12 @@
+issuers:
+  - name: letsencrypt-staging
+    acmeServer: https://acme-staging-v02.api.letsencrypt.org/directory
+    email: denis.radovanovic@web.de
+    secretName: letsencrypt-staging
+    ingressClass: public
+
+  - name: letsencrypt
+    acmeServer: https://acme-v02.api.letsencrypt.org/directory
+    email: denis.radovanovic@web.de
+    secretName: letsencrypt
+    ingressClass: public
