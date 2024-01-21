@@ -27,6 +27,6 @@ spec:
   tls:
     - hosts:
         - {{ $host }}.{{ $.Values.ingress.domain }}
-      secretName: tlsCert
+      secretName: tls
     {{- end }}
 {{- end }}
