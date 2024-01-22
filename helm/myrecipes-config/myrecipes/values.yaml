@@ -27,7 +27,7 @@ backend:
     failureThreshold: 10
 
 ingress:
-  domain: "test.myrecipes.at"
+  domain: "πmyrecipes.at"
   alias: "www.myrecipes.at"
   service: "myrecipes"
   paths:
