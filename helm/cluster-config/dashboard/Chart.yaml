@@ -1,0 +1,5 @@
+apiVersion: v2
+name: dashboard
+description: A Helm chart for deploying the ingress for the kubernetes dashboard
+type: application
+version: 1.0.0
