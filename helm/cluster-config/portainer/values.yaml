@@ -1,0 +1,6 @@
+ingress:
+  host: "portainer"
+  domain: "myrecipes.at"
+  path: "/"
+  serviceName: "portainer"
+  servicePort: "9443"
