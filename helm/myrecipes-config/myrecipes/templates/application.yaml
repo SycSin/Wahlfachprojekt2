@@ -5,7 +5,7 @@ metadata:
     argocd.argoproj.io/managed-by: argocd
   annotations:
     argocd-image-updater.argoproj.io/write-back-method: argocd
-    argocd-image-updater.argoproj.io/image-list: frontend=registry.myrecipes.at/myrecipes-frontend:latest
+    argocd-image-updater.argoproj.io/image-list: frontend=registry.myrecipes.at/myrecipes-frontend:latest,backend=registry.myrecipes.at/myrecipes-backend:latest
   name: myrecipes
   namespace: myrecipes
 spec:
