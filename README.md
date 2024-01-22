@@ -13,7 +13,7 @@ This project aims to provide a platform for the "MyRecipes" project which was de
 * MicroK8s Cluster with High Availability configuration
 * Infrastructure as Code (Ansible, Helm, Groovy)
 * Automated deployment of the web application (MyRecipes) facilitated by ArgoCD using GitOps principles
-* Cluster monitoring implemented through Prometheus with visualizations available on Grafana
+* ~~Cluster monitoring implemented through Prometheus with visualizations available on Grafana~~ (Runs unreliable due to RAM shortage)
 
 ## SRS Requirements
 
