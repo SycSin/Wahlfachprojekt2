@@ -3,4 +3,4 @@ ingress:
   domain: "myrecipes.at"
   path: "/"
   serviceName: "kubernetes-dashboard"
-  servicePort: "8443"
+  servicePort: "443"
