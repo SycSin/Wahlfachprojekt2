@@ -6,13 +6,7 @@ metadata:
   labels:
     name: nginx-ingress-microk8s
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-staging
-    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
-    nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
-    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
-    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
 spec:
   rules:
     - host: {{ .Values.ingress.host }}.{{ .Values.ingress.domain }}
@@ -25,7 +19,3 @@ spec:
                 name: {{ .Values.ingress.serviceName }}
                 port:
                   number: {{ .Values.ingress.servicePort }}
-  tls:
-    - hosts:
-        - {{ .Values.ingress.host }}.{{ .Values.ingress.domain }}
-      secretName: tls
