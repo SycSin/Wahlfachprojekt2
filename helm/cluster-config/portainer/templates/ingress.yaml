@@ -5,7 +5,7 @@ metadata:
   labels:
     name: nginx-ingress-microk8s
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-microk8s
+    cert-manager.io/cluster-issuer: letsencrypt-staging
     nginx.ingress.kubernetes.io/backend-protocol: HTTPS
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
