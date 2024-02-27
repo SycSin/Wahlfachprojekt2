@@ -7,8 +7,6 @@ spec:
   selector:
     matchLabels:
       app: sample-webpage
-      release: {{ .Release.Name }}
-      component: sample-webpage
   template:
     metadata:
       labels:
@@ -27,16 +25,6 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchExpressions:
-                  - key: app
-                    operator: In
-                    values:
-                      - sample-webpage-svc
-              topologyKey: kubernetes.io/hostname
       volumes:
         - name: html-volume
           configMap:
