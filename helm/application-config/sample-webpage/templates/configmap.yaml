@@ -10,6 +10,12 @@ data:
     </head>
     <body>
     <h1>Hostname of the current container:</h1>
-    <p><?php echo "".gethostname(); ?></p>
+    <p id="hostname-placeholder"></p>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var hostname = process.env.HOSTNAME;
+            document.getElementById("hostname-placeholder").innerText = hostname;
+        });
+    </script>
     </body>
     </html>
