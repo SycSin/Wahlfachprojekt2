@@ -13,19 +13,7 @@ spec:
         app: sample-webpage
     spec:
       containers:
-        - name: nginx
-          image: nginx
+        - name: flask
+          image: sbrakl/flask:latest
           ports:
-            - containerPort: 80
-          volumeMounts:
-            - name: html-volume
-              mountPath: /usr/share/nginx/html
-          env:
-            - name: HOSTNAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.name
-      volumes:
-        - name: html-volume
-          configMap:
-            name: sample-webpage-configmap
+            - containerPort: 5000
