@@ -13,3 +13,16 @@ ingress:
       - path: "/"
         serviceName: "kube-prom-stack-kube-prome-alertmanager"
         servicePort: "9093"
+
+prometheus:
+  server:
+    persistentVolume:
+      enabled: true
+  prometheusSpec:
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 10Gi
