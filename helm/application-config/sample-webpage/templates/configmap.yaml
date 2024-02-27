@@ -10,6 +10,6 @@ data:
     </head>
     <body>
     <h1>Hostname of the current container:</h1>
-    <p>{{ .Values.HOSTNAME }}</p>
+    <p><?php echo "".gethostname(); ?></p>
     </body>
     </html>
