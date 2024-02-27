@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: sample-webpage
-          image: lvthillo/python-flask-docker
+          image: registry.myrecipes.at/python-flask-docker:latest
           ports:
             - containerPort: 8080
