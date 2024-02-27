@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kube-prom-stack-grafana
+  namespace: observability
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: kube-prom-stack
+      app.kubernetes.io/name: grafana
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: kube-prom-stack
+        app.kubernetes.io/name: grafana
+    spec:
+      containers:
+        - name: grafana
+          volumeMounts:
+            - mountPath: "/var/lib/grafana"
+              name: nfs-csi
+      volumes:
+        - name: nfs-csi
+          persistentVolumeClaim:
+            claimName: grafana-pvc
