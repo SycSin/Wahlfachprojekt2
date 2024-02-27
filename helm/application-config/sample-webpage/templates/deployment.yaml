@@ -13,7 +13,7 @@ spec:
         app: sample-webpage
     spec:
       containers:
-        - name: flask
-          image: sbrakl/flask:latest
+        - name: sample-webpage
+          image: lvthillo/python-flask-docker
           ports:
-            - containerPort: 5000
+            - containerPort: 8080
