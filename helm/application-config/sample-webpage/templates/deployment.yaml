@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-webpage
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: sample-webpage
+  template:
+    metadata:
+      labels:
+        app: sample-webpage
+    spec:
+      containers:
+        - name: nginx
+          image: nginx
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: html-volume
+              mountPath: /usr/share/nginx/html
+          env:
+            - name: HOSTNAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+      volumes:
+        - name: html-volume
+          configMap:
+            name: sample-webpage-configmap

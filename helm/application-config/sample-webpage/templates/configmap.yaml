@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sample-webpage-configmap
+data:
+  index.html: |
+    <html>
+    <head>
+        <title>Hostname Display</title>
+    </head>
+    <body>
+    <h1>Hostname of the current container:</h1>
+    <p>{{ .Values.HOSTNAME }}</p>
+    </body>
+    </html>
