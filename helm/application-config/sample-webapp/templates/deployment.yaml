@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sample-webpage
+  name: {{ .Release.Name }}
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: sample-webpage
+      app: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: sample-webpage
+        app: {{ .Release.Name }}
     spec:
       containers:
-        - name: sample-webpage
+        - name: {{ .Release.Name }}
           image: registry.myrecipes.at/python-flask-docker:latest
           ports:
             - containerPort: 8080

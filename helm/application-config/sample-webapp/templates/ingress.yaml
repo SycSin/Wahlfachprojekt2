@@ -1,18 +1,18 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: sample-webpage-ingress
+  name: {{ .Release.Name }}
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-    - host: sample-webpage.myrecipes.at
+    - host: {{ .Release.Name }}.myrecipes.at
       http:
         paths:
           - pathType: Prefix
             path: /
             backend:
               service:
-                name: sample-webpage-svc
+                name: {{ .Release.Name }}
                 port:
                   number: 8080
