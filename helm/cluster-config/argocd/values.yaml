@@ -2,5 +2,6 @@ ingress:
   host: "argocd"
   domain: "myrecipes.at"
   path: "/"
-  serviceName: "argo-cd-argocd-server"
+  #serviceName: "argo-cd-argocd-server"
+  serviceName: "argocd-server"
   servicePort: "443"
