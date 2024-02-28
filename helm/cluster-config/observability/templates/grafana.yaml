@@ -18,17 +18,18 @@ spec:
         - name: grafana
           volumeMounts:
             - mountPath: "/var/lib/grafana"
-              name: nfs-csi
+              name: grafana
       volumes:
-        - name: nfs-csi
+        - name: grafana
           persistentVolumeClaim:
-            claimName: grafana-pvc
+            claimName: grafana
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: grafana-pvc
+  name: grafana
 spec:
+  storageClassName: nfs-csi
   accessModes:
     - ReadWriteOnce
   resources:
