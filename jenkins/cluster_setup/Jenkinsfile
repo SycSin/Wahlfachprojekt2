@@ -158,10 +158,14 @@ pipeline {
                 script {
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         sshagent(credentials: ['jenkins-private-key']) {
+                            echo "Installing ArgoCD addon"
+                            //sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s enable argocd'" #caused problems in MicroK8s v1.29 with the annotations for the custom configmap
+                            echo "Deploying ArgoCD Helm Chart"
+                            sh "helm repo add argo https://argoproj.github.io/argo-helm"
+                            sh "helm install argocd argo/argo-cd --version 6.4.1 -n argocd --create-namespace"
                             echo "Deploying custom ArgoCD configs"
                             sh "helm upgrade --install argocd helm/cluster-config/argocd -n argocd --create-namespace"
-                            echo "Installing ArgoCD addon"
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s enable argocd'"
+                            sh "kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2.10.1/manifests/install.yaml"
                             //ToDo: Add proper waiting timeout to wait for all applications after deploying to be available
                             echo "Sleeping for 15 minutes, until all applications are avaiable.."
                             sleep 900
