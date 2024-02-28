@@ -37,7 +37,7 @@ pipeline {
         }
         stage('Build Backend') {
             steps {
-                dir('backend') {
+                dir('MyRecipes/backend') {
                     script {
                         backendImage = docker.build("registry.myrecipes.at/myrecipes-backend:${env.BUILD_NUMBER}")
                     }
@@ -46,7 +46,7 @@ pipeline {
         }
         stage('Build Frontend') {
             steps {
-                dir('frontend') {
+                dir('MyRecipes/frontend') {
                     script {
                         frontendImage = docker.build("registry.myrecipes.at/myrecipes-frontend:${env.BUILD_NUMBER}")
                     }
