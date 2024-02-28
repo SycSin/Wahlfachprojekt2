@@ -27,9 +27,11 @@ pipeline {
             }
         }
         stage('Build Sample-WebApp') {
-            dir('python-flask-docker') {
-                script {
-                    webAppImage = docker.build("registry.myrecipes.at/python-flask-docker")
+            steps {
+                dir('python-flask-docker') {
+                    script {
+                        webAppImage = docker.build("registry.myrecipes.at/python-flask-docker")
+                    }
                 }
             }
         }
