@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: kube-prom-stack-kube-prome-prometheus
+  namespace: observability
+spec:
+  scrapeInterval: "120s"
+  evaluationInterval: "120s"
+  retention: "15d"
+  storage:
+    volumeClaimTemplate:
+      spec:
+        storageClassName: nfs-csi
+        resources:
+          requests:
+            storage: 15Gi
