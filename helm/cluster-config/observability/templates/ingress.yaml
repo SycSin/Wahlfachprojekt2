@@ -1,29 +1,27 @@
-## Works but observability is not running well on the 4GB RPi
-#apiVersion: networking.k8s.io/v1
-#kind: Ingress
-#metadata:
-#  {{- range $host, $paths := .Values.ingress.hosts }}
-#  name: {{ $host }}-ingress
-#  labels:
-#    name: nginx-ingress-microk8s
-#  annotations:
-#    nginx.ingress.kubernetes.io/ssl-passthrough: 'true'
-#    nginx.ingress.kubernetes.io/use-forwarded-headers: "true"
-#  {{- end }}
-#spec:
-#  rules:
-#    {{- range $host, $paths := .Values.ingress.hosts }}
-#    - host: {{ $host }}.{{ $.Values.ingress.domain }}
-#      http:
-#        paths:
-#          {{- range $pathIndex, $path := $paths }}
-#          - path: {{ $path.path }}
-#            pathType: {{ $path.pathType | default "Prefix" }}
-#            backend:
-#              service:
-#                name: {{ $path.serviceName }}
-#                port:
-#                  number: {{ $path.servicePort }}
-#          {{- end }}
-#    {{- end }}
-#
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  {{- range $host, $paths := .Values.ingress.hosts }}
+  name: {{ $host }}-ingress
+  labels:
+    name: nginx-ingress-microk8s
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-passthrough: 'true'
+    nginx.ingress.kubernetes.io/use-forwarded-headers: "true"
+  {{- end }}
+spec:
+  rules:
+    {{- range $host, $paths := .Values.ingress.hosts }}
+    - host: {{ $host }}.{{ $.Values.ingress.domain }}
+      http:
+        paths:
+          {{- range $pathIndex, $path := $paths }}
+          - path: {{ $path.path }}
+            pathType: {{ $path.pathType | default "Prefix" }}
+            backend:
+              service:
+                name: {{ $path.serviceName }}
+                port:
+                  number: {{ $path.servicePort }}
+          {{- end }}
+    {{- end }}
