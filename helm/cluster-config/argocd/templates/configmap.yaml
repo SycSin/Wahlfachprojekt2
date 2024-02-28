@@ -7,6 +7,8 @@ metadata:
     app.kubernetes.io/name: argocd-cm
     app.kubernetes.io/part-of: argocd
   annotations:
-    meta.helm.sh/release-name: "argo-cd" #required in 1.29
+    app.kubernetes.io/managed-by": "argocd"
+    meta.helm.sh/release-name": "argocd"
+    meta.helm.sh/release-namespace": "argocd"
 data:
   timeout.reconciliation: "15s"
