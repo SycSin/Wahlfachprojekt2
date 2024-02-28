@@ -35,7 +35,7 @@
 
     - name: Set MicroK8s version
       set_fact:
-        version: "1.29"
+        version: 1.29
 
     - name: Install MicroK8s snap
       snap:
