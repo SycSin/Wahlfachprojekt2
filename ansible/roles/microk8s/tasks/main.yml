@@ -33,12 +33,25 @@
       pause:
         minutes: 1
 
+    - name: Set MicroK8s version
+      set_fact:
+        version: "1.29"
+
     - name: Install MicroK8s snap
       snap:
         name: microk8s
         classic: yes
-        channel: '1.29/edge'
+        channel: {{ version }}
         state: present
+
+    - name: Workaround for cgroups in v1.29
+      shell:
+        cmd: |
+          echo '
+          --cgroups-per-qos=false
+          --enforce-node-allocatable=""
+          ' | sudo tee -a /var/snap/microk8s/current/args/kubeletConnection
+      when: version == "1.29"
 
     - name: Create an alias for kubectl 
       lineinfile:
