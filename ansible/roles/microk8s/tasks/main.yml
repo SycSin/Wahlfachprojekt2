@@ -50,7 +50,7 @@
           echo '
           --cgroups-per-qos=false
           --enforce-node-allocatable=""
-          ' | sudo tee -a /var/snap/microk8s/current/args/kubeletConnection
+          ' | sudo tee -a /var/snap/microk8s/current/args/kubeletConnection && snap restart microk8s.daemon-kubelite
       when: version == "1.29"
 
     - name: Create an alias for kubectl 
