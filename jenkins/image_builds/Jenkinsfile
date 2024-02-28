@@ -2,13 +2,26 @@ pipeline {
     agent any
 
     stages {
-        stage('Clone Repository') {
+        stage('Clone Webapp Repository') {
+            steps {
+                git 'https://github.com/lvthillo/python-flask-docker.git'
+                sh 'pwd'
+                sh 'ls -lah'
+            }
+        }
+        stage('Clone MyRecipes Repository') {
             steps {
                 checkout([$class: 'GitSCM',
                           branches: [[name: '*/main']],
                           userRemoteConfigs: [[url: 'https://github.com/SycSin/MyRecipes.git']],
                           clean: true
                 ])
+            }
+        }
+        stage('Print current directory') {
+            steps {
+                sh 'pwd'
+                sh 'ls -lah'
             }
         }
         stage('Build Backend') {
@@ -47,6 +60,20 @@ pipeline {
                 }
             }
         }
+
+        stage('Push webapp Image to Registry') {
+            steps {
+                script {
+                    dir('python-flask-docker') {
+                        docker.build("registry.myrecipes.at/python-flask-docker:latest")
+                        docker.withRegistry("https://registry.myrecipes.at") {
+                            docker.image("registry.myrecipes.at/python-flask-docker:latest").push()
+                        }
+                    }
+                }
+            }
+        }
+
         stage('Tag Images') {
             steps {
                 script {
