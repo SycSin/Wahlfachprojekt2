@@ -1,0 +1,110 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: tempo
+  namespace: observability
+  labels:
+    app.kubernetes.io/instance: tempo
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: tempo
+    app.kubernetes.io/version: 2.0.0
+    helm.sh/chart: tempo-1.0.0
+  annotations:
+    meta.helm.sh/release-name: tempo
+    meta.helm.sh/release-namespace: observability
+spec:
+  replicas: 0 #set to 0 due to resource constraints on the rpi4
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: tempo
+      app.kubernetes.io/name: tempo
+  template:
+    spec:
+      volumes:
+        - name: tempo-query-conf
+          configMap:
+            name: tempo-query
+            defaultMode: 420
+        - name: tempo-conf
+          configMap:
+            name: tempo
+            defaultMode: 420
+      containers:
+        - name: tempo
+          image: grafana/tempo:2.0.0
+          args:
+            - '-config.file=/conf/tempo.yaml'
+            - '-mem-ballast-size-mbs=1024'
+          ports:
+            - name: prom-metrics
+              containerPort: 3100
+              protocol: TCP
+            - name: jaeger-thrift-c
+              containerPort: 6831
+              protocol: UDP
+            - name: jaeger-thrift-b
+              containerPort: 6832
+              protocol: UDP
+            - name: jaeger-thrift-h
+              containerPort: 14268
+              protocol: TCP
+            - name: jaeger-grpc
+              containerPort: 14250
+              protocol: TCP
+            - name: zipkin
+              containerPort: 9411
+              protocol: TCP
+            - name: otlp-legacy
+              containerPort: 55680
+              protocol: TCP
+            - name: otlp-grpc
+              containerPort: 4317
+              protocol: TCP
+            - name: otlp-http
+              containerPort: 55681
+              protocol: TCP
+            - name: opencensus
+              containerPort: 55678
+              protocol: TCP
+          resources: {}
+          volumeMounts:
+            - name: tempo-conf
+              mountPath: /conf
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+        - name: tempo-query
+          image: grafana/tempo-query:2.0.0
+          args:
+            - '--query.base-path=/'
+            - '--grpc-storage-plugin.configuration-file=/conf/tempo-query.yaml'
+          ports:
+            - name: jaeger-ui
+              containerPort: 16686
+              protocol: TCP
+            - name: jaeger-metrics
+              containerPort: 16687
+              protocol: TCP
+          resources: {}
+          volumeMounts:
+            - name: tempo-query-conf
+              mountPath: /conf
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      serviceAccountName: tempo
+      serviceAccount: tempo
+      automountServiceAccountToken: true
+      securityContext: {}
+      schedulerName: default-scheduler
+  serviceName: tempo-headless
+  podManagementPolicy: OrderedReady
+  updateStrategy:
+    type: RollingUpdate
+  revisionHistoryLimit: 10
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: Retain
+    whenScaled: Retain
