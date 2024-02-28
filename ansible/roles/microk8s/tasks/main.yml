@@ -45,7 +45,7 @@
         state: present
 
     - name: Workaround for cgroups in v1.29
-      when: version == 1.29
+      when: version == "1.29"
       block:
         - name: Set cgroups-per-qos to false
           lineinfile:
