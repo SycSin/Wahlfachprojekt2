@@ -161,7 +161,7 @@ pipeline {
                             echo "Installing ArgoCD addon"
                             //sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s enable argocd'" #caused problems in MicroK8s v1.29
                             echo "Deploying ArgoCD Helm Chart"
-                            sh "kubectl create namespace argocd"
+                            sh "kubectl create namespace argocd --dry-run=client -o yaml | kubectl apply -f -" // only create the namespace if it does not already exist
                             sh "kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml"
                             sh "helm upgrade --install argocd helm/cluster-config/argocd -n argocd --create-namespace"
                             //ToDo: Add proper waiting timeout to wait for all applications after deploying to be available
