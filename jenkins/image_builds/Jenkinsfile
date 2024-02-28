@@ -20,12 +20,6 @@ pipeline {
                 }
             }
         }
-        stage('Print current directory') {
-            steps {
-                sh 'pwd'
-                sh 'ls -lah'
-            }
-        }
         stage('Build Sample-WebApp') {
             steps {
                 dir('python-flask-docker') {
@@ -53,6 +47,15 @@ pipeline {
                 }
             }
         }
+        stage('Push Sample-WebApp') {
+            steps {
+                script {
+                    docker.withRegistry("https://registry.myrecipes.at") {
+                        webAppImage.push()
+                    }
+                }
+            }
+        }
         stage('Push Backend') {
             steps {
                 script {
@@ -71,16 +74,7 @@ pipeline {
                 }
             }
         }
-        stage('Push WebApp') {
-            steps {
-                script {
-                    docker.withRegistry("https://registry.myrecipes.at") {
-                        webAppImage.push()
-                    }
-                }
-            }
-        }
-        stage('Tag Images') {
+        stage('Tag MyRecipes Images') {
             steps {
                 script {
                     def backendImage = docker.image("registry.myrecipes.at/myrecipes-backend:${env.BUILD_NUMBER}")
