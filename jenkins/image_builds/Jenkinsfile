@@ -2,26 +2,35 @@ pipeline {
     agent any
 
     stages {
-        stage('Clone Webapp Repository') {
+        stage('Clone Repositories') {
             steps {
-                git 'https://github.com/lvthillo/python-flask-docker.git'
-                sh 'pwd'
-                sh 'ls -lah'
-            }
-        }
-        stage('Clone MyRecipes Repository') {
-            steps {
-                checkout([$class: 'GitSCM',
-                          branches: [[name: '*/main']],
-                          userRemoteConfigs: [[url: 'https://github.com/SycSin/MyRecipes.git']],
-                          clean: true
-                ])
+                dir('python-flask-docker') {
+                    checkout([$class           : 'GitSCM',
+                              branches         : [[name: '*/master']],
+                              userRemoteConfigs: [[url: 'https://github.com/lvthillo/python-flask-docker.git']],
+                              clean            : true
+                    ])
+                }
+                dir('MyRecipes') {
+                    checkout([$class           : 'GitSCM',
+                              branches         : [[name: '*/main']],
+                              userRemoteConfigs: [[url: 'https://github.com/SycSin/MyRecipes.git']],
+                              clean            : true
+                    ])
+                }
             }
         }
         stage('Print current directory') {
             steps {
                 sh 'pwd'
                 sh 'ls -lah'
+            }
+        }
+        stage('Build Sample-WebApp') {
+            dir('python-flask-docker') {
+                script {
+                    webAppImage = docker.build("registry.myrecipes.at/python-flask-docker")
+                }
             }
         }
         stage('Build Backend') {
@@ -60,20 +69,15 @@ pipeline {
                 }
             }
         }
-
-        stage('Push webapp Image to Registry') {
+        stage('Push WebApp') {
             steps {
                 script {
-                    dir('python-flask-docker') {
-                        docker.build("registry.myrecipes.at/python-flask-docker:latest")
-                        docker.withRegistry("https://registry.myrecipes.at") {
-                            docker.image("registry.myrecipes.at/python-flask-docker:latest").push()
-                        }
+                    docker.withRegistry("https://registry.myrecipes.at") {
+                        webAppImage.push()
                     }
                 }
             }
         }
-
         stage('Tag Images') {
             steps {
                 script {
@@ -91,7 +95,6 @@ pipeline {
             }
         }
     }
-
     post {
         always {
             cleanWs()
