@@ -45,13 +45,23 @@
         state: present
 
     - name: Workaround for cgroups in v1.29
-      shell:
-        cmd: |
-          echo '
-          --cgroups-per-qos=false
-          --enforce-node-allocatable=""
-          ' | sudo tee -a /var/snap/microk8s/current/args/kubeletConnection && snap restart microk8s.daemon-kubelite
-      when: version == "1.29"
+      when: version == 1.29
+      block:
+        - name: Set cgroups-per-qos to false
+          lineinfile:
+            path: "/var/snap/microk8s/current/args/kubelet"
+            line: '--cgroups-per-qos=false'
+            state: present
+            create: yes
+        - name: Enforce node allocatable
+          lineinfile:
+            path: "/var/snap/microk8s/current/args/kubelet"
+            line: '--enforce-node-allocatable=""'
+            state: present
+            create: yes
+        - name: Restart microk8s.daemon-kubelite
+          shell:
+            cmd: "sudo snap restart microk8s.daemon-kubelite"
 
     - name: Create an alias for kubectl 
       lineinfile:
