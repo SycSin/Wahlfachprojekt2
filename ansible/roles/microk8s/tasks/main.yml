@@ -35,7 +35,7 @@
 
     - name: Set MicroK8s version
       set_fact:
-        version: 1.29
+        version: '1.29'
 
     - name: Install MicroK8s snap
       snap:
@@ -45,8 +45,10 @@
         state: present
 
     - name: Workaround for cgroups in v1.29
-      when: version == "1.29"
+      when: version == '1.29'
       block:
+        - debug:
+            msg: "This is a test message that the block is being entered"
         - name: Set cgroups-per-qos to false
           lineinfile:
             path: "/var/snap/microk8s/current/args/kubelet"
