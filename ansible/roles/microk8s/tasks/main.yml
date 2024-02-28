@@ -41,7 +41,7 @@
       snap:
         name: microk8s
         classic: yes
-        channel: {{ version }}
+        channel: "{{ version }}"
         state: present
 
     - name: Workaround for cgroups in v1.29
