@@ -5,6 +5,6 @@ type: application
 version: 1.0.0
 
 dependencies:
-  - name: joxit
+  - name: joxit/docker-registry-ui
     repository: https://helm.joxit.dev
     version: 1.1.3
