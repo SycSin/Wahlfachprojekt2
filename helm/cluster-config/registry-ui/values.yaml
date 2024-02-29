@@ -146,7 +146,7 @@ ui:
 ## Registry Server
 registry:
   # Enable the registry server.
-  enabled: false
+  enabled: true
   # The name and tag of the docker registry server image
   image: registry:2.8.2
   # Override default image pull secrets
