@@ -13,7 +13,7 @@ ui:
   # Number of replicas for the Deployment.
   replicas: 1
   # Title of the registry
-  title: "Docker registry UI"
+  title: "Docker registry UI Test"
   # UI behave as a proxy of the registry
   proxy: false
   # The URL of your docker registry, may be a service (when proxy is on) or an external URL.
