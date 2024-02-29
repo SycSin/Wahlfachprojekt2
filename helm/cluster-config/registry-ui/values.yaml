@@ -1,7 +1,8 @@
 docker-registry-ui:
   ui:
     #dockerRegistryUrl: http://registry-docker-registry.registry.svc.cluster.local
-    #proxy: true
+    dockerRegistryUrl: http://registry.myrecipes.at
+    proxy: true
     ingress:
       enabled: true
       host: registry-ui.myrecipes.at
