@@ -1,6 +1,6 @@
 docker-registry-ui:
   ui:
-    dockerRegistryUrl: registry-docker-registry.registry.svc.cluster.local:5000
+    dockerRegistryUrl: http://registry-docker-registry.registry.svc.cluster.local:5000
     proxy: true
     ingress:
       enabled: true
