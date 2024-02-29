@@ -1,0 +1,10 @@
+apiVersion: v2
+name: nexus
+description: A Helm chart for deploying a nexus repository
+type: application
+version: 1.0.0
+
+dependencies:
+  - name: nexus-repository-manager
+    repository: https://sonatype.github.io/helm3-charts/
+    version: 64.2.0
