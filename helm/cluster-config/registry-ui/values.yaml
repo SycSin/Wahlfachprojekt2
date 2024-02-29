@@ -1,2 +1,7 @@
+ui:
+  dockerRegistryUrl: "registry.myrecipes.at"
+  ingress:
+    enabled: true
+    host: "registry-ui.myrecipes.at"
 registry:
   enabled: true
