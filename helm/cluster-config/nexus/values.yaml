@@ -2,3 +2,4 @@ nexus3:
   persistence:
     enabled: true
     existingClaim: nexus-pvc
+    storageClass: nfs-csi
