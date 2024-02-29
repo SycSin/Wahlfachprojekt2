@@ -5,6 +5,6 @@ type: application
 version: 1.0.0
 
 dependencies:
-  - name: nexus-repository-manager
-    repository: https://sonatype.github.io/helm3-charts/
-    version: 64.2.0
+  - name: nexus3
+    repository: https://stevehipwell.github.io/helm-charts/
+    version: 4.40.0
