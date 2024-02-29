@@ -6,8 +6,8 @@ docker-registry-ui:
     ingress:
       enabled: true
       host: registry-ui.myrecipes.at
-  registry:
-    enabled: true
-    ingress:
-      enabled: true
-      host: registry-ui.myrecipes.at
+#  registry:
+#    enabled: true
+#    ingress:
+#      enabled: true
+#      host: registry-ui.myrecipes.at
