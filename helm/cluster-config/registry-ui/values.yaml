@@ -2,6 +2,7 @@ docker-registry-ui:
   ui:
     dockerRegistryUrl: http://registry-docker-registry.registry.svc.cluster.local:5000
     proxy: true
+    deleteImages: true
     ingress:
       enabled: true
       host: registry-ui.myrecipes.at
