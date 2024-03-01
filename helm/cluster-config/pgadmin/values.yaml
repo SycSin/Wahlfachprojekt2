@@ -1,6 +1,4 @@
 pgadmin4:
-  image:
-    repository: dpage/pgadmin4
   ingress:
     enabled: true
   persistentVolume:
