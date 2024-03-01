@@ -3,7 +3,5 @@ pgadmin4:
     enabled: true
     hosts:
       - host: "pgadmin.myrecipes.at"
-        paths:
-          - /pgadmin(/|$)(.*)
   persistentVolume:
     storageClass: nfs-csi
