@@ -6,7 +6,7 @@ pgadmin4:
     # When setting `ingress.hosts.paths`, pgAdmin needs additional header to be passed.
     # Ref: https://www.pgadmin.org/docs/pgadmin4/latest/container_deployment.html#http-via-nginx
     nginx.ingress.kubernetes.io/configuration-snippet: |
-    proxy_set_header X-Script-Name /pgadmin4;
+      proxy_set_header X-Script-Name /pgadmin4;
     # If TLS is terminated elsewhere (on external load balancer), you may want
     # to redirect to `https://` URL scheme along with rewriting URL path if
     # `ingress.hosts.paths` is set. This is specific for image version >= 4.22.
