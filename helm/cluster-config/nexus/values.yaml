@@ -1,3 +1,4 @@
 nexus3:
   persistence:
     enabled: true
+    storageClass: nfs-csi
