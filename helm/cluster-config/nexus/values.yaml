@@ -1,4 +1,6 @@
 nexus3:
+  podSecurityContext:
+    fsGroup: 2000
   persistence:
     enabled: true
     storageClass: nfs-csi
