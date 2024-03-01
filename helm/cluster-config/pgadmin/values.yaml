@@ -2,6 +2,8 @@ pgadmin4:
   ingress:
     enabled: true
     hosts:
-      host: "pgadmin.myrecipes.at"
+      - host: "pgadmin.myrecipes.at"
+        paths:
+          - /pgadmin(/|$)(.*)
   persistentVolume:
     storageClass: nfs-csi
