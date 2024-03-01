@@ -26,7 +26,7 @@ spec:
           image: busybox
           command: ["/bin/chown", "-R", "5050:5050", "/var/lib/pgadmin"]
           volumeMounts:
-            - name: pgadminstorage
+            - name: pgadmin-data
               mountPath: /var/lib/pgadmin
       containers:
         - name: pgadmin4
