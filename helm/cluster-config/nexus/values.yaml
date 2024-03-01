@@ -1,4 +1,6 @@
 nexus3:
+  image:
+    repository: klo2k/nexus3
   persistence:
     enabled: true
     storageClass: nfs-csi
