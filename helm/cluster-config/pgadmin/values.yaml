@@ -1,11 +1,4 @@
 pgadmin4:
-  extraInitContainers: |
-    - name: pgadmin-data-permission-fix
-      image: busybox
-      command: ["/bin/chown", "-R", "5050:5050", "/var/lib/pgadmin"]
-      volumeMounts:
-        - name: pgadmin-data
-          mountPath: /var/lib/pgadmin
   ingress:
     enabled: true
   persistentVolume:
