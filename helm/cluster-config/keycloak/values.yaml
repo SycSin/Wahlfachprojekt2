@@ -5,3 +5,10 @@ keycloak:
   auth:
     adminUser: "admin"
     adminPassword: "keycloak-test123"
+
+ingress:
+  host: "keycloak"
+  domain: "myrecipes.at"
+  path: "/"
+  serviceName: "keycloak"
+  servicePort: "80"
