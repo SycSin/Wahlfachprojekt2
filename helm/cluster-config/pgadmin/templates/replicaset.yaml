@@ -3,38 +3,6 @@ kind: ReplicaSet
 metadata:
   name: pgadmin-pgadmin4-7df986d44
   namespace: pgadmin
-  labels:
-    app.kubernetes.io/instance: pgadmin
-    app.kubernetes.io/name: pgadmin4
-    pod-template-hash: 7df986d44
-  annotations:
-    deployment.kubernetes.io/desired-replicas: '1'
-    deployment.kubernetes.io/max-replicas: '2'
-    deployment.kubernetes.io/revision: '1'
-  ownerReferences:
-    - apiVersion: apps/v1
-      kind: Deployment
-      name: pgadmin-pgadmin4
-      uid: fa2c16f9-588a-4a61-ae65-70c6212d4e6d
-      controller: true
-      blockOwnerDeletion: true
-  managedFields:
-    - manager: kubelite
-      operation: Update
-      apiVersion: apps/v1
-      time: '2024-03-01T11:53:03Z'
-      fieldsType: FieldsV1
-      fieldsV1:
-        f:status:
-          f:fullyLabeledReplicas: {}
-          f:observedGeneration: {}
-          f:replicas: {}
-      subresource: status
-  selfLink: /apis/apps/v1/namespaces/pgadmin/replicasets/pgadmin-pgadmin4-7df986d44
-status:
-  replicas: 1
-  fullyLabeledReplicas: 1
-  observedGeneration: 1
 spec:
   replicas: 1
   selector:
