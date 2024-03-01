@@ -5,6 +5,6 @@ type: application
 version: 1.0.0
 
 dependencies:
-  - name: runix
+  - name: pgadmin4
     repository: https://helm.runix.net/
     version: 1.23.3
