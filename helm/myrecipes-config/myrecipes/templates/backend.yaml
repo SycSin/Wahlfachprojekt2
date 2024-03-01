@@ -8,7 +8,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "3"
 spec:
-  replicas: 2 #should survive a node failure and allow for rolling deployments
+  replicas: 0 #2 #should survive a node failure and allow for rolling deployments
   selector:
     matchLabels:
       app: {{ .Values.ingress.service }}-backend
