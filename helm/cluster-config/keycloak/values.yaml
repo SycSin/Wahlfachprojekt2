@@ -1,0 +1,4 @@
+keycloak:
+  postgresql:
+    auth:
+      password: "keycloak-test123"
