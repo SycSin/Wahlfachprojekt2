@@ -1,7 +1,7 @@
 nexus3:
   image:
     repository: klo2k/nexus3
-    tag: latest
+    tag: 3.61.0-02
   persistence:
     enabled: true
     storageClass: nfs-csi
