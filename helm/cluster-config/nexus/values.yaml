@@ -6,8 +6,8 @@ nexus3:
       volumeMounts:
         - name: nexus-nexus3-data
           mountPath: /nexus-data
-  image:
-    repository: klo2k/nexus3
+  #image:
+  #  repository: klo2k/nexus3
   persistence:
     enabled: true
     storageClass: nfs-csi
