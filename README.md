@@ -80,7 +80,7 @@ apt-get install dnsmasq tcpdump nfs-kernel-server
 systemctl enable dnsmasq.service
 systemctl restart dnsmasq.service
 
-echo "/mnt/ssd/nfs/microk8s 192.168.1.0/24(rw,sync,no_subtree_check)" > /etc/exports
+echo "/mnt/ssd/nfs/microk8s 192.168.1.0/24(rw,sync,no_subtree_check,no_root_squash)" > /etc/exports
 
 systemctl enable rpcbind
 systemctl restart rpcbind
