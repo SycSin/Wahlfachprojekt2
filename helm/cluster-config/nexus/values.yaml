@@ -1,5 +1,5 @@
 nexus3:
-  extraInitContainers: |
+  extraInitContainers:
     - name: volume-mount-hack
       image: busybox
       command: ["sh", "-c", "chown -R 200:200 /nexus-data"]
