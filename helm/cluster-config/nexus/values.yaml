@@ -4,8 +4,8 @@ nexus3:
       image: busybox
       command: ["sh", "-c", "chown -R 200:200 /nexus-data"]
       volumeMounts:
-      - name: nexus-nexus3-data
-        mountPath: /nexus-data
+        - name: nexus-nexus3-data
+          mountPath: /nexus-data
   image:
     repository: klo2k/nexus3
   persistence:
