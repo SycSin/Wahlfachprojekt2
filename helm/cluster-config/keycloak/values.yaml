@@ -3,6 +3,7 @@ keycloak:
   postgresql:
     auth:
       password: "keycloak-test123"
+      postgresPassword: "keycloak-test123"
   auth:
     adminUser: "admin"
     adminPassword: "keycloak-test123"
