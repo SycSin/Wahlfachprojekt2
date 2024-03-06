@@ -3,3 +3,8 @@ name: argocd
 description: A Helm chart for deploying ArgoCD
 type: application
 version: 0.1.0
+
+dependencies:
+  - name: argo-cd
+    repository: https://argoproj.github.io/argo-helm
+    version: 6.6.0
