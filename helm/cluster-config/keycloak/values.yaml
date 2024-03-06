@@ -1,7 +1,5 @@
 keycloak:
   proxy: edge
-  hostAliases:
-    - keycloak.myrecipes.at
   postgresql:
     auth:
       password: "keycloak-test123"
