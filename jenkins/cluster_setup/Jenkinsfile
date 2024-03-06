@@ -159,9 +159,11 @@ pipeline {
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         sshagent(credentials: ['jenkins-private-key']) {
                             //sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s enable argocd'" #caused problems in MicroK8s v1.29 with the annotations for the custom configmap
+                            echo "Installing ArgoCD CRDs"
+                            sh "kubectl apply -k https://github.com/argoproj/argo-cd/manifests/crds\\?ref\\=stable"
                             echo "Deploying ArgoCD"
                             sh "helm dependency build helm/cluster-config/argocd"
-                            sh "helm upgrade --install argocd helm/cluster-config/argocd -n argocd --create-namespace --skip-crds" //crds skipped as they are not present prior to the ArgoCD installation
+                            sh "helm upgrade --install argocd helm/cluster-config/argocd -n argocd --create-namespace"
                             //ToDo: Add proper waiting timeout to wait for all applications after deploying to be available
                             echo "Sleeping for 15 minutes, until all applications are avaiable.."
                             sleep 900
