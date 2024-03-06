@@ -8,19 +8,19 @@ argo-cd:
     enabled: true
   controller:
     replicas: 1
-  server:
-    autoscaling:
+  certificate:
       enabled: true
-      minReplicas: 2
+  server:
     ingress:
       enabled: true
       ingressClassName: nginx
       annotations:
         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-        nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-      extraTls:
-        - hosts:
-            - argocd.myrecipes.at
+        nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+      tls: true
+    autoscaling:
+      enabled: true
+      minReplicas: 2
   repoServer:
     autoscaling:
       enabled: true
