@@ -1,11 +1,9 @@
-ingress:
-  host: "argocd"
-  domain: "myrecipes.at"
-  path: "/"
-  #serviceName: "argo-cd-argocd-server"
-  serviceName: "argocd-server"
-  servicePort: "443"
 argo-cd:
+  global:
+    domain: argocd.myrecipes.at
+  configs:
+    params:
+      server.insecure: true
   redis-ha:
     enabled: true
   controller:
@@ -14,6 +12,15 @@ argo-cd:
     autoscaling:
       enabled: true
       minReplicas: 2
+    ingress:
+      enabled: true
+      ingressClassName: nginx
+      annotations:
+        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+        nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+      extraTls:
+        - hosts:
+            - argocd.myrecipes.at
   repoServer:
     autoscaling:
       enabled: true

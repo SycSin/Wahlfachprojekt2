@@ -161,8 +161,7 @@ pipeline {
                             //sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s enable argocd'" #caused problems in MicroK8s v1.29 with the annotations for the custom configmap
                             echo "Deploying ArgoCD"
                             sh "helm dependency build helm/cluster-config/argocd"
-                            sh "helm upgrade --install argocd helm/cluster-config/argocd -n argocd --create-namespace"
-                            sh "kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2.10.1/manifests/install.yaml"
+                            sh "helm upgrade --install argocd helm/cluster-config/argocd -n argocd --create-namespace --skip-crds" //crds skipped as they are not present prior to the ArgoCD installation
                             //ToDo: Add proper waiting timeout to wait for all applications after deploying to be available
                             echo "Sleeping for 15 minutes, until all applications are avaiable.."
                             sleep 900
