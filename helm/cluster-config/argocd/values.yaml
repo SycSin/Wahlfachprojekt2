@@ -17,6 +17,7 @@ argo-cd:
       annotations:
         nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
         nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+        nginx.ingress.kubernetes.io/cors-expose-headers: "*, X-CustomResponseHeader"
       tls: true
     autoscaling:
       enabled: true
