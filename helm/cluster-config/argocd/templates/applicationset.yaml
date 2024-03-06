@@ -3,6 +3,8 @@ kind: ApplicationSet
 metadata:
   name: argocd-configuration
   namespace: argocd
+annotations:
+    "helm.sh/hook": post-install
 spec:
   goTemplate: true
   strategy:
