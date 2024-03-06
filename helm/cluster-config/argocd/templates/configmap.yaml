@@ -4,7 +4,7 @@ metadata:
   name: argocd-cm
   namespace: argocd
   annotations:
-    "helm.sh/hook": "post-install"
+    "helm.sh/hook": post-install,post-upgrade
   labels:
     app.kubernetes.io/name: argocd-cm
     app.kubernetes.io/part-of: argocd
