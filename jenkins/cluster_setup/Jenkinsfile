@@ -178,7 +178,7 @@ pipeline {
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         sshagent(credentials: ['jenkins-private-key']) {
                             echo "Waiting for registry to be ready"
-                            sh "kubectl wait --for=condition=ready --timeout=5400s pod --all -n registry"
+                            sh "kubectl wait --for=condition=ready --timeout=2700s pod --all -n registry"
                         }
                     }
                 }
