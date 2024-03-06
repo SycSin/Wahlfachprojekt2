@@ -11,3 +11,7 @@ spec:
           env:
             - name: ARGOCD_CONTROLLER_REPLICAS
               value: "2"
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: argocd-application-controller
+  serviceName: argocd-application-controller
