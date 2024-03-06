@@ -25,8 +25,6 @@ pipeline {
                         sshagent(credentials: ['jenkins-private-key']) {
                             echo "Removing MicroK8s"
                             sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@${nodeIP} 'snap remove microk8s --purge || true'"
-                            echo "Cleanup persistent volumes"
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.210 'rm -r /mnt/ssd/nfs/microk8s/*'"
                         }
                     }
                 }
