@@ -4,6 +4,8 @@ argo-cd:
   configs:
     params:
       server.insecure: true
+    cm:
+      timeout.reconciliation: 5s
   redis-ha:
     enabled: true
   controller:
