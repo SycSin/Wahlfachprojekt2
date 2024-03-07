@@ -155,6 +155,10 @@ RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/s
     && mv ./kubectl /usr/local/bin/kubectl \
     && curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 \
     && chmod +x get_helm.sh && ./get_helm.sh
+# Retrieving argocd binaries
+RUN curl -sSL -o argocd-linux-arm4 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-arm64 
+    && sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
+    && rm argocd-linux-arm64
 USER jenkins
 " > Dockerfile
 
