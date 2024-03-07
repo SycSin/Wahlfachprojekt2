@@ -9,8 +9,6 @@ keycloak:
     adminPassword: "keycloak-test123"
   ingress:
     enabled: true
-    console:
-      enabled: true
     hostname: keycloak.myrecipes.at
     servicePort: https
     tls:
