@@ -1,4 +1,7 @@
 pgadmin4:
+  env:
+    email: "admin@myrecipes.at"
+    password: pgadmin-test123
   serverDefinitions:
     enabled: true
     servers:
