@@ -2,7 +2,7 @@ pgadmin4:
   env:
     ## Define user and password to access pgadmin4
     email: "admin@myrecipes.at"
-    password: ""
+    password: "test"
     serverDefinitions:
       enabled: true
       servers:
@@ -11,6 +11,7 @@ pgadmin4:
           Group: "Servers"
           Port: 5432
           Username: "postgres"
+          Password: "keycloak-test123"
           Host: "keycloak-postgresql.keycloak.svc.cluster.local"
           SSLMode: "prefer"
           MaintenanceDB: "postgres"
