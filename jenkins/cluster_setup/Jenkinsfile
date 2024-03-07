@@ -182,8 +182,8 @@ pipeline {
                             echo "Install custom resources for ArgoCD"
                             sh "helm upgrade --install argocd helm/cluster-config/argocd -n argocd --create-namespace"
                             //ToDo: Add proper waiting timeout to wait for all applications after deploying to be available
-                            echo "Sleeping for 5 minutes, until argocd is ready"
-                            sleep 300
+                            echo "Sleeping for 10 minutes, until argocd is ready"
+                            sleep 600
                         }
                     }
                 }
@@ -195,8 +195,8 @@ pipeline {
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         sshagent(credentials: ['jenkins-private-key']) {
                             echo "Waiting for registry to be ready"
-                            sh "argocd login argocd.myrecipes.at --username admin --password \$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath=\"{.data.password}\" | base64 -d) --insecure"
-                            sh "argocd app sync registry"
+                            //sh "argocd login argocd.myrecipes.at --username admin --password \$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath=\"{.data.password}\" | base64 -d) --insecure"
+                            //sh "argocd app sync registry"
                             sh "kubectl wait --for=condition=ready --timeout=2700s pod --all -n registry"
                         }
                     }
