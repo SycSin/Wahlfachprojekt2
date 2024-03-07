@@ -132,6 +132,7 @@ pipeline {
                             echo "Installing kube-image-keeper"
                             sh "helm dependency build helm/cluster-config/kuik-system"
                             sh "helm upgrade --install kube-image-keeper helm/cluster-config/kuik-system -n kuik-system --create-namespace"
+                            sh "kubectl wait --for=condition=ready --timeout=2700s pod --all -n kuik-system"
                         }
                     }
                 }
@@ -176,7 +177,7 @@ pipeline {
                         sshagent(credentials: ['jenkins-private-key']) {
                             //sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s enable argocd'" #caused problems in MicroK8s v1.29 with the annotations for the custom configmap
                             echo "Install ArgoCD"
-                            sh "helm dependency build helm/cluster-config/argocd"
+                            sh "helm dependency update helm/cluster-config/argocd"
                             sh "helm upgrade --install argocd helm/cluster-config/argocd -n argocd --create-namespace"
                             echo "Install custom resources for ArgoCD"
                             sh "helm upgrade --install argocd helm/cluster-config/argocd -n argocd --create-namespace"
