@@ -180,7 +180,9 @@ pipeline {
                             sh "helm upgrade --install argocd helm/cluster-config/argocd -n argocd --create-namespace"
                             //ToDo: Add proper waiting timeout to wait for all applications after deploying to be available
                             echo "Sleeping for 15 minutes, until all applications are avaiable.."
-                            sleep 900
+                            sleep 600
+                            //sh "kubectl exec  \"echo y | argocd login argocd-server --username admin --password \$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath=\"{.data.password}\" | base64 -d)\""
+                            //sh "argocd login argocd.myrecipes.at --username admin --password \$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath=\"{.data.password}\" | base64 -d) --insecure"
                         }
                     }
                 }
