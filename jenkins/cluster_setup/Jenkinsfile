@@ -182,8 +182,8 @@ pipeline {
                             echo "Install custom resources for ArgoCD"
                             sh "helm upgrade --install argocd helm/cluster-config/argocd -n argocd --create-namespace"
                             //ToDo: Add proper waiting timeout to wait for all applications after deploying to be available
-                            echo "Sleeping for 10 minutes, until argocd is ready"
-                            sleep 600
+                            echo "Sleeping for 15 minutes, until argocd is ready"
+                            sleep 900
                         }
                     }
                 }
