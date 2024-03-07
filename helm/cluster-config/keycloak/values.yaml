@@ -1,4 +1,5 @@
 keycloak:
+  fullnameOverride: keycloak.myrecipes.at
   proxy: edge
   postgresql:
     auth:
