@@ -130,8 +130,8 @@ pipeline {
                             echo "Installing cert-manager"
                             sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s enable cert-manager'"
                             echo "Installing kube-image-keeper"
-                            sh "helm dependency build helm/cluster-config/kiuk-system"
-                            sh "helm upgrade --install kube-image-keeper helm/cluster-config/kiuk-system -n kiuk-system --create-namespace"
+                            sh "helm dependency build helm/cluster-config/kuik-system"
+                            sh "helm upgrade --install kube-image-keeper helm/cluster-config/kuik-system -n kuik-system --create-namespace"
                         }
                     }
                 }
