@@ -1,0 +1,10 @@
+apiVersion: v2
+name: kube-image-keeper
+description: A Helm chart for deploying kube-image-keeper
+type: application
+version: 1.0.0
+
+dependencies:
+  - name: kube-image-keeper
+    repository: https://charts.enix.io/
+    version: 1.6.0

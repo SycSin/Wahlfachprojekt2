@@ -100,20 +100,6 @@ pipeline {
                 }
             }
         }
-        stage('Install kube-image-keeper') {
-            steps {
-                script {
-                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
-                        sshagent(credentials: ['jenkins-private-key']) {
-                            echo "Installing cert-manager"
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s enable cert-manager'"
-                            echo "Installing kube-image-keeper"
-                            sh "helm upgrade --install --create-namespace --namespace kuik-system kube-image-keeper kube-image-keeper --repo https://charts.enix.io/"
-                        }
-                    }
-                }
-            }
-        }
         stage('Activate NFS-CSI Driver') {
             steps {
                 script {
@@ -131,6 +117,21 @@ pipeline {
                             sh "kubectl get csidrivers"
                             echo "Creating the NFS StorageClass"
                             sh "helm upgrade --install nfs-storage-class helm/cluster-config/nfs-storage-class"
+                        }
+                    }
+                }
+            }
+        }
+        stage('Install kube-image-keeper') {
+            steps {
+                script {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                        sshagent(credentials: ['jenkins-private-key']) {
+                            echo "Installing cert-manager"
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s enable cert-manager'"
+                            echo "Installing kube-image-keeper"
+                            sh "helm dependency build helm/cluster-config/kiuk-system"
+                            sh "helm upgrade --install kube-image-keeper helm/cluster-config/kiuk-system -n kiuk-system --create-namespace"
                         }
                     }
                 }
