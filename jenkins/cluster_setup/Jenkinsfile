@@ -106,7 +106,7 @@ pipeline {
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         sshagent(credentials: ['jenkins-private-key']) {
                             echo "Installing cert-manager"
-                            sh "kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.14.3/cert-manager.yaml"
+														sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s enable cert-manager'"
                             echo "Installing kube-image-keeper"
                             sh "helm upgrade --install --create-namespace --namespace kuik-system kube-image-keeper kube-image-keeper --repo https://charts.enix.io/"
                         }
