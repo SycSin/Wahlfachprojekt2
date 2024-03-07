@@ -144,7 +144,7 @@ echo "{
 }" > /etc/docker/daemon.json
 systemctl restart docker
 
-echo "FROM jenkins/jenkins:lts
+echo "FROM jenkins/jenkins:2.448
 USER root
 #Installing ansible & docker packages
 RUN apt-get update \
