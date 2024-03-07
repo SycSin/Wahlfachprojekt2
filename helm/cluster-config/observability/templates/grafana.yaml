@@ -1,3 +1,4 @@
+{{ if .Capabilities.APIVersions.Has "monitoring.coreos.com/v1" -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -59,3 +60,4 @@ data:
     provisioning = /etc/grafana/provisioning
     [server]
     domain = ''
+{{ end -}}
