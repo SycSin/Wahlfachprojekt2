@@ -30,7 +30,7 @@ pgadmin4:
     hosts:
       - host: pgadmin.myrecipes.at
         paths:
-          - path: /
+          - path: /pgadmin4
             pathType: ImplementationSpecific
   persistentVolume:
     storageClass: nfs-csi
