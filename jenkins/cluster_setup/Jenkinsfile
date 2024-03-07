@@ -106,7 +106,7 @@ pipeline {
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         sshagent(credentials: ['jenkins-private-key']) {
                             echo "Installing cert-manager"
-														sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s enable cert-manager'"
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s enable cert-manager'"
                             echo "Installing kube-image-keeper"
                             sh "helm upgrade --install --create-namespace --namespace kuik-system kube-image-keeper kube-image-keeper --repo https://charts.enix.io/"
                         }
@@ -179,10 +179,8 @@ pipeline {
                             echo "Install custom resources for ArgoCD"
                             sh "helm upgrade --install argocd helm/cluster-config/argocd -n argocd --create-namespace"
                             //ToDo: Add proper waiting timeout to wait for all applications after deploying to be available
-                            echo "Sleeping for 15 minutes, until all applications are avaiable.."
-                            sleep 600
-                            //sh "kubectl exec  \"echo y | argocd login argocd-server --username admin --password \$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath=\"{.data.password}\" | base64 -d)\""
-                            //sh "argocd login argocd.myrecipes.at --username admin --password \$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath=\"{.data.password}\" | base64 -d) --insecure"
+                            echo "Sleeping for 5 minutes, until argocd is ready"
+                            sleep 300
                         }
                     }
                 }
@@ -194,6 +192,8 @@ pipeline {
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         sshagent(credentials: ['jenkins-private-key']) {
                             echo "Waiting for registry to be ready"
+                            sh "argocd login argocd.myrecipes.at --username admin --password \$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath=\"{.data.password}\" | base64 -d) --insecure"
+                            sh "argocd app sync registry"
                             sh "kubectl wait --for=condition=ready --timeout=2700s pod --all -n registry"
                         }
                     }
