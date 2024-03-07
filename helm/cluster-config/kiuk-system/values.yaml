@@ -3,3 +3,4 @@ kube-image-keeper:
     persistence:
       enabled: true
       storageClass: nfs-csi
+  architectures: [arm64, arm]
