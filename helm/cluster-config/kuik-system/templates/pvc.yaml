@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-kube-image-keeper-registry
+spec:
+  storageClassName: nfs-csi
+  capacity:
+    storage: 20Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  claimRef:
+    namespace: {{ .Release.Namespace }}
+    name: data-{{ .Release.Name }}
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: data-{{ .Release.Name }}
+spec:
+  storageClassName: nfs-csi
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
