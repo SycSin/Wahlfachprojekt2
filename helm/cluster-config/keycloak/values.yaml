@@ -19,7 +19,7 @@ ingress:
         proxy_set_header X-Forwarded-Proto $scheme;
       }
   enabled: true
-  hostname: hostname.de
+  hostname: keycloak.myrecipes.at
   tls: true
   certManager: true
 #  ingress:
