@@ -1,5 +1,5 @@
 keycloak:
-  #proxy: edge
+  proxy: edge
   postgresql:
     auth:
       password: "keycloak-test123"
