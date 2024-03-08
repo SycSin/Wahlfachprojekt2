@@ -13,11 +13,6 @@ keycloak:
   ingress:
     annotations:
       kubernetes.io/ingress.class: nginx
-      nginx.org/server-snippets: |
-        location / {
-          proxy_set_header X-Forwarded-For $host;
-          proxy_set_header X-Forwarded-Proto $scheme;
-        }
     enabled: true
     hostname: keycloak.myrecipes.at
     tls: true
