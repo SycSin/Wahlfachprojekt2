@@ -1,7 +1,7 @@
 nfs-subdir-external-provisioner:
   nfs:
     server: 192.168.1.210
-    path: /mnt/ssd/nfs/microk8s
+    path: /mnt/ssd/nfs/microk8s/
     #mountOptions: "nfsvers=4"
   storageClass:
     defaultClass: true
