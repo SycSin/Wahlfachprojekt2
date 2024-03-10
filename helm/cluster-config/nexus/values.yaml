@@ -4,7 +4,7 @@ nexus3:
     tag: 3.61.0-02 #required since it used the Helm Chart version per default for the image tag
   persistence:
     enabled: true
-    storageClass: nfs-csi
+    storageClass: nfs
   ingress:
     enabled: true
     hosts:

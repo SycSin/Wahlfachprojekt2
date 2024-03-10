@@ -33,4 +33,4 @@ pgadmin4:
           - path: /pgadmin4
             pathType: ImplementationSpecific
   persistentVolume:
-    storageClass: nfs-csi
+    storageClass: nfs

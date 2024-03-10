@@ -30,7 +30,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: grafana
 spec:
-  storageClassName: nfs-csi
+  storageClassName: nfs
   accessModes:
     - ReadWriteOnce
   resources:

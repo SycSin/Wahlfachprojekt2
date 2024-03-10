@@ -2,5 +2,5 @@ kube-image-keeper:
   registry:
     persistence:
       enabled: true
-      storageClass: nfs-csi
+      storageClass: nfs
   architectures: [arm64, arm]

@@ -3,7 +3,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: data-keycloak-postgresql-0
 spec:
-  storageClassName: nfs-csi
+  storageClassName: nfs
   accessModes:
     - ReadWriteOnce
   resources:

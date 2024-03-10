@@ -1,5 +1,5 @@
 mariadb:
   global:
-    storageClass: "nfs-csi"
+    storageClass: nfs
 
 initialPassword: "test"

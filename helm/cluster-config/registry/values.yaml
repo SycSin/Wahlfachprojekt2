@@ -4,7 +4,7 @@ docker-registry:
     size: 20Gi
     accessMode: "ReadWriteOnce"
     deleteEnabled: true
-    storageClass: "nfs-csi"
+    storageClass: nfs
 
 ingress:
   host: "registry"
