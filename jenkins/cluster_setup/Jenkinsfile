@@ -111,6 +111,7 @@ pipeline {
                             //echo "Creating the NFS StorageClass"
                             //sh "helm upgrade --install nfs-storage-class helm/cluster-config/nfs-storage-class"
                             echo "Deploying nfs-subdir-external-provisioner"
+                            sh "helm dependency update helm/cluster-config/nfs-subdir-external-provisioner"
                             sh "helm upgrade --install nfs-subdir-external-provisioner helm/cluster-config/nfs-subdir-external-provisioner -n nfs-subdir-external-provisioner --create-namespace"
                         }
                     }
