@@ -1,5 +1,6 @@
 base_packages:
   - curl
   - ntp
+  - nfs-common
 
 timezone: "UTC"
