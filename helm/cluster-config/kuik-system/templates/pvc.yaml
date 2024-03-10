@@ -10,4 +10,3 @@ spec:
   resources:
     requests:
       storage: 20Gi
-  volumeName: data-kube-image-keeper-registry-0

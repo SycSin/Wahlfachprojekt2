@@ -5,4 +5,7 @@ nfs-subdir-external-provisioner:
   storageClass:
     name: nfs
     defaultClass: true
+    mountOptions:
+      - hard
+      - nfsvers=4
 
