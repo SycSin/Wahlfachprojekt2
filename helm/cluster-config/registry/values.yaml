@@ -1,5 +1,5 @@
 pvc:
-  name: docker-docker-registry
+  name: registry-docker-registry
   size: 20Gi
 
 ingress:
