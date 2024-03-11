@@ -93,23 +93,11 @@ pipeline {
                 }
             }
         }
-        stage('Activate NFS-CSI Driver') {
+        stage('Activate NFS Provisioner') {
             steps {
                 script {
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         sshagent(credentials: ['jenkins-private-key']) {
-                            //echo "Adding csi-driver-nfs helm repository"
-                            //sh "helm repo add csi-driver-nfs https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/master/charts"
-                            //echo "Updating helm repository cache"
-                            //sh "helm repo update"
-                            //echo "Installing helm chart"
-                            //sh "helm upgrade --install csi-driver-nfs csi-driver-nfs/csi-driver-nfs --namespace kube-system --set kubeletDir=/var/snap/microk8s/common/var/lib/kubelet"
-                            //echo "Waiting for CSI controller to come up"
-                            //sh "kubectl wait pod --selector app.kubernetes.io/name=csi-driver-nfs --for condition=ready --timeout=2700s --namespace kube-system"
-                            //echo "Displaying the CSI-Drivers"
-                            //sh "kubectl get csidrivers"
-                            //echo "Creating the NFS StorageClass"
-                            //sh "helm upgrade --install nfs-storage-class helm/cluster-config/nfs-storage-class"
                             echo "Deploying nfs-subdir-external-provisioner"
                             sh "helm dependency update helm/cluster-config/nfs-subdir-external-provisioner"
                             sh "helm upgrade --install nfs-subdir-external-provisioner helm/cluster-config/nfs-subdir-external-provisioner -n nfs-subdir-external-provisioner --create-namespace"
