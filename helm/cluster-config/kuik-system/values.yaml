@@ -7,6 +7,4 @@ kube-image-keeper:
     persistence:
       enabled: true
       storageClass: nfs
-  registryUI:
-    enabled: true
   architectures: [arm64, arm]
