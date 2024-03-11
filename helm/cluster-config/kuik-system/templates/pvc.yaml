@@ -1,12 +1,29 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Values.pvc.name }}
+spec:
+  storageClassName: nfs
+  capacity:
+    storage: {{ .Values.pvc.size }}
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  claimRef:
+    namespace: {{ .Release.Namespace }}
+    name: {{ .Values.pvc.name }}
+  nfs:
+    path: /mnt/ssd/nfs/microk8s/{{ .Release.Namespace }}-{{ .Values.pvc.name }}
+    server: 192.168.1.210
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: data-kube-image-keeper-registry-0
+  name: {{ .Values.pvc.name }}
 spec:
   storageClassName: nfs
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 20Gi
+      storage: {{ .Values.pvc.size }}

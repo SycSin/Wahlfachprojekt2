@@ -1,3 +1,7 @@
+pvc:
+  name: pgadmin-pgadmin4
+  size: 10Gi
+
 pgadmin4:
   env:
     email: "admin@myrecipes.at"
@@ -32,5 +36,3 @@ pgadmin4:
         paths:
           - path: /pgadmin4
             pathType: ImplementationSpecific
-  persistentVolume:
-    storageClass: nfs

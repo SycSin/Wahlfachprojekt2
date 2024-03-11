@@ -1,3 +1,7 @@
+pvc:
+  name: data-kube-image-keeper-registry-0
+  size: 20Gi
+
 kube-image-keeper:
   registry:
     persistence:

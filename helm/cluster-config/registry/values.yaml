@@ -1,10 +1,6 @@
-docker-registry:
-  persistence:
-    enabled: true
-    size: 20Gi
-    accessMode: "ReadWriteOnce"
-    deleteEnabled: true
-    storageClass: nfs
+pvc:
+  name: docker-docker-registry
+  size: 20Gi
 
 ingress:
   host: "registry"
@@ -12,3 +8,10 @@ ingress:
   path: "/"
   serviceName: "registry-docker-registry"
   servicePort: "5000"
+
+docker-registry:
+  persistence:
+    enabled: true
+    size: 20Gi
+    accessMode: "ReadWriteOnce"
+    deleteEnabled: true

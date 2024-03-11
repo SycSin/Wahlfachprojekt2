@@ -5,7 +5,7 @@ nfs-subdir-external-provisioner:
   storageClass:
     name: nfs
     defaultClass: true
+    reclaimPolicy: Retain
     mountOptions:
       - hard
       - nfsvers=4
-

@@ -1,3 +1,7 @@
+pvc:
+  name: data-keycloak-postgresql-0
+  size: 8Gi
+
 keycloak:
   proxy: edge
   postgresql:

@@ -1,5 +1,9 @@
+pvc:
+  name: data-mariadb-0
+  size: 8Gi
+
+initialPassword: "test"
+
 mariadb:
   global:
     storageClass: nfs
-
-initialPassword: "test"
