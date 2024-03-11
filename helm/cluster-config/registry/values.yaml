@@ -12,6 +12,5 @@ ingress:
 docker-registry:
   persistence:
     enabled: true
-    size: 20Gi
     accessMode: "ReadWriteOnce"
     deleteEnabled: true
