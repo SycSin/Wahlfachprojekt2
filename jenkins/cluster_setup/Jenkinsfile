@@ -160,7 +160,7 @@ pipeline {
                         }
                     }
                 }
-                stage('Install MyRecipes Registry') {
+                stage('Install Docker Registry') {
                     steps {
                         script {
                             withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
