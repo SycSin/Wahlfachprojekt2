@@ -1,2 +1,4 @@
 harbor:
   exposureType: ingress
+  ingress:
+    hostname: harbor.myrecipes.at
