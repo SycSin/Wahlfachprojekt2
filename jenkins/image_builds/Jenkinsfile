@@ -85,7 +85,9 @@ pipeline {
 
                     backendImage = docker.image("harbor.myrecipes.at/myrecipes/myrecipes-backend:latest")
                     frontendImage = docker.image("registry.myrecipes.at/myrecipes-frontend:latest")
-                    backendImage.push()
+                    docker.withRegistry("https://harbor.myrecipes.at", "harbor") {
+                        backendImage.push()
+                    }
                     frontendImage.push()
                 }
             }
