@@ -33,7 +33,7 @@ pipeline {
             steps {
                 dir('MyRecipes/backend') {
                     script {
-                        backendImage = docker.build("registry.myrecipes.at/myrecipes-backend:${env.BUILD_NUMBER}")
+                        backendImage = docker.build("harbor.myrecipes.at/myrecipes-backend:${env.BUILD_NUMBER}")
                     }
                 }
             }
