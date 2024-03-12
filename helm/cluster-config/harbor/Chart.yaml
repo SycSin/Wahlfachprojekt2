@@ -1,0 +1,10 @@
+apiVersion: v2
+name: harbor
+description: A Helm chart for deploying harbor
+type: application
+version: 1.0.0
+
+dependencies:
+  - name: harbor
+    repository: https://charts.bitnami.com/bitnami
+    version: 20.1.1
