@@ -118,7 +118,7 @@ ff02::3 ip6-allhosts
 192.168.1.211 node01
 192.168.1.212 node02
 192.168.1.213 node03
-192.168.1.214 registry.myrecipes.at argocd.myrecipes.at" > /etc/hosts
+192.168.1.214 registry.myrecipes.at harbor.myrecipes.at argocd.myrecipes.at" > /etc/hosts
 ````
 
 ### node01, node02, node03
@@ -140,7 +140,10 @@ mkdir -p /mnt/ssd/nfs/docker/jenkins_docker
 cd /mnt/ssd/nfs/docker/jenkins_docker
 
 echo "{
-  "insecure-registries" : ["registry.myrecipes.at"]
+  \"insecure-registries\" : [
+    \"registry.myrecipes.at\",
+    \"harbor.myrecipes.at\"
+    ]
 }" > /etc/docker/daemon.json
 systemctl restart docker
 
