@@ -4,4 +4,6 @@ harbor:
     core:
       ingressClassName: nginx
       hostname: harbor.myrecipes.at
+      tls: true
+      selfSigned: true
   externalURL: https://harbor.myrecipes.at
