@@ -142,22 +142,6 @@ pipeline {
        //        }
        //    }
        //}
-        stage('Install ArgoCD') {
-            steps{
-                script {
-                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
-                        sshagent(credentials: ['jenkins-private-key']) {
-                            echo "Install ArgoCD"
-                            sh "helm dependency update helm/cluster-config/argocd"
-                            sh "helm upgrade --install argocd helm/cluster-config/argocd -n argocd --create-namespace"
-                            echo "Install custom resources for ArgoCD"
-                            sh "helm upgrade --install argocd helm/cluster-config/argocd -n argocd --create-namespace"
-                            sh "kubectl wait --for=condition=Ready --timeout=2700s pods --all -n argocd"
-                        }
-                    }
-                }
-            }
-        }
         stage('Enable addons') {
             steps {
                 script {
@@ -174,10 +158,25 @@ pipeline {
                 }
             }
         }
+        stage('Install ArgoCD') {
+            steps{
+                script {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                        sshagent(credentials: ['jenkins-private-key']) {
+                            echo "Install ArgoCD"
+                            sh "helm dependency update helm/cluster-config/argocd"
+                            sh "helm upgrade --install argocd helm/cluster-config/argocd -n argocd --create-namespace"
+                            sh "kubectl wait --for=condition=Ready --timeout=2700s pods --all -n argocd"
+                        }
+                    }
+                }
+            }
+        }
         stage('Trigger Image Build Pipeline') {
             steps{
                 script {
                     sh "kubectl wait --for=condition=Ready --timeout=2700s pods --all -n harbor"
+                    sh "kubectl wait --for=condition=Ready --timeout=2700s pods --all -n registry"
                     def buildPipeline = build job: 'image_builds'
                 }
             }
