@@ -177,6 +177,7 @@ pipeline {
         stage('Trigger Image Build Pipeline') {
             steps{
                 script {
+                    sh "kubectl wait --for=condition=Ready --timeout=2700s pods --all -n harbor"
                     def buildPipeline = build job: 'image_builds'
                 }
             }
