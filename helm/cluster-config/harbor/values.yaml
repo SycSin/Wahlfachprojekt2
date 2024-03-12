@@ -1,6 +1,5 @@
 harbor:
   exposureType: ingress
-  externalURL: http://harbor.myrecipes.at
   ingress:
     core:
       ingressClassName: nginx
