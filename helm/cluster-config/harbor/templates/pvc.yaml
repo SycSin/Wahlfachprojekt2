@@ -3,7 +3,7 @@ kind: PersistentVolume
 metadata:
   name: data-harbor-postgresql-0
 spec:
-  storageClassName: nfs
+  storageClassName: manual
   capacity:
     storage: 8Gi
   accessModes:
@@ -21,7 +21,7 @@ apiVersion: v1
 metadata:
   name: data-harbor-postgresql-0
 spec:
-  storageClassName: nfs
+  storageClassName: ""
   accessModes:
     - ReadWriteOnce
   resources:
@@ -33,7 +33,7 @@ kind: PersistentVolume
 metadata:
   name: data-harbor-trivy-0
 spec:
-  storageClassName: nfs
+  storageClassName: ""
   capacity:
     storage: 5Gi
   accessModes:
@@ -51,7 +51,7 @@ apiVersion: v1
 metadata:
   name: data-harbor-trivy-0
 spec:
-  storageClassName: nfs
+  storageClassName: ""
   accessModes:
     - ReadWriteOnce
   resources:
@@ -63,7 +63,7 @@ kind: PersistentVolume
 metadata:
   name: harbor-jobservice
 spec:
-  storageClassName: nfs
+  storageClassName: ""
   capacity:
     storage: 1Gi
   accessModes:
@@ -81,7 +81,7 @@ apiVersion: v1
 metadata:
   name: harbor-jobservice
 spec:
-  storageClassName: nfs
+  storageClassName: ""
   accessModes:
     - ReadWriteOnce
   resources:
@@ -93,7 +93,7 @@ kind: PersistentVolume
 metadata:
   name: harbor-registry
 spec:
-  storageClassName: nfs
+  storageClassName: ""
   capacity:
     storage: 40Gi
   accessModes:
@@ -111,7 +111,7 @@ apiVersion: v1
 metadata:
   name: harbor-registry
 spec:
-  storageClassName: nfs
+  storageClassName: ""
   accessModes:
     - ReadWriteOnce
   resources:
@@ -123,7 +123,7 @@ kind: PersistentVolume
 metadata:
   name: redis-data-harbor-redis-master-0
 spec:
-  storageClassName: nfs
+  storageClassName: ""
   capacity:
     storage: 8Gi
   accessModes:
@@ -141,7 +141,7 @@ apiVersion: v1
 metadata:
   name: redis-data-harbor-redis-master-0
 spec:
-  storageClassName: nfs
+  storageClassName: ""
   accessModes:
     - ReadWriteOnce
   resources:
