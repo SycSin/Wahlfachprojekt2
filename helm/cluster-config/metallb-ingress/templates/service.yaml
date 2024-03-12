@@ -17,7 +17,3 @@ spec:
       protocol: TCP
       port: 443
       targetPort: 443
-    - name: registry
-      protocol: TCP
-      port: 5000
-      targetPort: 5000
