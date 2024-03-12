@@ -59,7 +59,7 @@ pipeline {
         stage('Push Backend') {
             steps {
                 script {
-                    docker.withRegistry("https://registry.myrecipes.at") {
+                    docker.withRegistry("https://harbor.myrecipes.at", "harbor") {
                         backendImage.push()
                     }
                 }
@@ -77,13 +77,13 @@ pipeline {
         stage('Tag MyRecipes Images') {
             steps {
                 script {
-                    def backendImage = docker.image("registry.myrecipes.at/myrecipes-backend:${env.BUILD_NUMBER}")
+                    def backendImage = docker.image("harbor.myrecipes.at/myrecipes-backend:${env.BUILD_NUMBER}")
                     def frontendImage = docker.image("registry.myrecipes.at/myrecipes-frontend:${env.BUILD_NUMBER}")
 
                     backendImage.tag("latest")
                     frontendImage.tag("latest")
 
-                    backendImage = docker.image("registry.myrecipes.at/myrecipes-backend:latest")
+                    backendImage = docker.image("harbor.myrecipes.at/myrecipes-backend:latest")
                     frontendImage = docker.image("registry.myrecipes.at/myrecipes-frontend:latest")
                     backendImage.push()
                     frontendImage.push()
