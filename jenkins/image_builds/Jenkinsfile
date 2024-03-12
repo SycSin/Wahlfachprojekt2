@@ -33,7 +33,7 @@ pipeline {
             steps {
                 dir('MyRecipes/backend') {
                     script {
-                        backendImage = docker.build("harbor.myrecipes.at/myrecipes-backend:${env.BUILD_NUMBER}")
+                        backendImage = docker.build("harbor.myrecipes.at/myrecipes/myrecipes-backend:${env.BUILD_NUMBER}")
                     }
                 }
             }
@@ -77,13 +77,13 @@ pipeline {
         stage('Tag MyRecipes Images') {
             steps {
                 script {
-                    def backendImage = docker.image("harbor.myrecipes.at/myrecipes-backend:${env.BUILD_NUMBER}")
+                    def backendImage = docker.image("harbor.myrecipes.at/myrecipes/myrecipes-backend:${env.BUILD_NUMBER}")
                     def frontendImage = docker.image("registry.myrecipes.at/myrecipes-frontend:${env.BUILD_NUMBER}")
 
                     backendImage.tag("latest")
                     frontendImage.tag("latest")
 
-                    backendImage = docker.image("harbor.myrecipes.at/myrecipes-backend:latest")
+                    backendImage = docker.image("harbor.myrecipes.at/myrecipes/myrecipes-backend:latest")
                     frontendImage = docker.image("registry.myrecipes.at/myrecipes-frontend:latest")
                     backendImage.push()
                     frontendImage.push()
