@@ -167,6 +167,7 @@ pipeline {
                             sh "helm dependency update helm/cluster-config/argocd"
                             sh "helm upgrade --install argocd helm/cluster-config/argocd -n argocd --create-namespace"
                             sh "kubectl wait --for=condition=Ready --timeout=2700s pods --all -n argocd"
+														sh "sleep 60" //wait for resources to be available
                         }
                     }
                 }
