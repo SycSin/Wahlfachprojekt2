@@ -4,7 +4,7 @@ nfs-subdir-external-provisioner:
     path: /mnt/ssd/nfs/microk8s/
   storageClass:
     name: nfs
-    defaultClass: true
+    defaultClass: false
     reclaimPolicy: Retain
     mountOptions:
       - hard
