@@ -6,4 +6,6 @@ harbor:
       hostname: harbor.myrecipes.at
       tls: true
       selfSigned: true
+      annotations: |
+        nginx.ingress.kubernetes.io/ssl-redirect: "false"
   externalURL: https://harbor.myrecipes.at
