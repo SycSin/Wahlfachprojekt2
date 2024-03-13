@@ -1,5 +1,5 @@
 frontend:
-  image: "harbor.myrecipes.at/myrecipes/myrecipes-frontend"
+  image: "registry.myrecipes.at/myrecipes/myrecipes-frontend"
   version: "latest"
   ports:
     name: http
@@ -13,7 +13,7 @@ frontend:
     failureThreshold: 10
 
 backend:
-  image: "harbor.myrecipes.at/myrecipes/myrecipes-backend"
+  image: "registry.myrecipes.at/myrecipes/myrecipes-backend"
   version: "latest"
   ports:
     name: http

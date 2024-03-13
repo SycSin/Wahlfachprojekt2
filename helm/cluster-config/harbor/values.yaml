@@ -3,9 +3,9 @@ harbor:
   ingress:
     core:
       ingressClassName: nginx
-      hostname: harbor.myrecipes.at
+      hostname: registry.myrecipes.at
       tls: true
       selfSigned: true
       annotations:
         nginx.ingress.kubernetes.io/ssl-redirect: "false"
-  externalURL: https://harbor.myrecipes.at
+  externalURL: https://registry.myrecipes.at

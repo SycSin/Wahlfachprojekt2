@@ -24,7 +24,7 @@ pipeline {
             steps {
                 dir('python-flask-docker') {
                     script {
-                        webAppImage = docker.build("harbor.myrecipes.at/sample-webapp/python-flask-docker")
+                        webAppImage = docker.build("registry.myrecipes.at/sample-webapp/python-flask-docker")
                     }
                 }
             }
@@ -33,7 +33,7 @@ pipeline {
             steps {
                 dir('MyRecipes/backend') {
                     script {
-                        backendImage = docker.build("harbor.myrecipes.at/myrecipes/myrecipes-backend:${env.BUILD_NUMBER}")
+                        backendImage = docker.build("registry.myrecipes.at/myrecipes/myrecipes-backend:${env.BUILD_NUMBER}")
                     }
                 }
             }
@@ -42,7 +42,7 @@ pipeline {
             steps {
                 dir('MyRecipes/frontend') {
                     script {
-                        frontendImage = docker.build("harbor.myrecipes.at/myrecipes/myrecipes-frontend:${env.BUILD_NUMBER}")
+                        frontendImage = docker.build("registry.myrecipes.at/myrecipes/myrecipes-frontend:${env.BUILD_NUMBER}")
                     }
                 }
             }
@@ -50,7 +50,7 @@ pipeline {
         stage('Push Sample-WebApp') {
             steps {
                 script {
-                    docker.withRegistry("https://harbor.myrecipes.at", "harbor") {
+                    docker.withRegistry("https://registry.myrecipes.at", "harbor") {
                         webAppImage.push()
                     }
                 }
@@ -59,7 +59,7 @@ pipeline {
         stage('Push Backend') {
             steps {
                 script {
-                    docker.withRegistry("https://harbor.myrecipes.at", "harbor") {
+                    docker.withRegistry("https://registry.myrecipes.at", "harbor") {
                         backendImage.push()
                     }
                 }
@@ -68,7 +68,7 @@ pipeline {
         stage('Push Frontend') {
             steps {
                 script {
-                    docker.withRegistry("https://harbor.myrecipes.at", "harbor") {
+                    docker.withRegistry("https://registry.myrecipes.at", "harbor") {
                         frontendImage.push()
                     }
                 }
@@ -77,15 +77,15 @@ pipeline {
         stage('Tag MyRecipes Images') {
             steps {
                 script {
-                    def backendImage = docker.image("harbor.myrecipes.at/myrecipes/myrecipes-backend:${env.BUILD_NUMBER}")
-                    def frontendImage = docker.image("harbor.myrecipes.at/myrecipes/myrecipes-frontend:${env.BUILD_NUMBER}")
+                    def backendImage = docker.image("registry.myrecipes.at/myrecipes/myrecipes-backend:${env.BUILD_NUMBER}")
+                    def frontendImage = docker.image("registry.myrecipes.at/myrecipes/myrecipes-frontend:${env.BUILD_NUMBER}")
 
                     backendImage.tag("latest")
                     frontendImage.tag("latest")
 
-                    backendImage = docker.image("harbor.myrecipes.at/myrecipes/myrecipes-backend:latest")
-                    frontendImage = docker.image("harbor.myrecipes.at/myrecipes/myrecipes-frontend:latest")
-                    docker.withRegistry("https://harbor.myrecipes.at", "harbor") {
+                    backendImage = docker.image("registry.myrecipes.at/myrecipes/myrecipes-backend:latest")
+                    frontendImage = docker.image("registry.myrecipes.at/myrecipes/myrecipes-frontend:latest")
+                    docker.withRegistry("https://registry.myrecipes.at", "harbor") {
                         backendImage.push()
                         frontendImage.push()
                     }
