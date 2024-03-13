@@ -1,0 +1,13 @@
+#pvc:
+#  name: data-keycloak-postgresql-0
+#  size: 8Gi
+
+kube-prometheus-stack:
+  grafana:
+    ingress:
+      enabled: true
+      hosts:
+        - grafana.myrecipes.at
+    persistence:
+      enabled: true
+      storageClassName: nfs
