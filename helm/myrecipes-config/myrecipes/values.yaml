@@ -1,5 +1,5 @@
 frontend:
-  image: "registry.myrecipes.at/myrecipes-frontend"
+  image: "harbor.myrecipes.at/myrecipes/myrecipes-frontend"
   version: "latest"
   ports:
     name: http
