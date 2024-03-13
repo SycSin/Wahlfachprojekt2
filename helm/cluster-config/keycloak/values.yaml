@@ -18,7 +18,7 @@ keycloak:
     ingressClass: nginx
     enabled: true
     hostname: keycloak.myrecipes.at
-    servicePort: https
+    servicePort: http
     tls:
       - hosts:
           - keycloak.myrecipes.at
