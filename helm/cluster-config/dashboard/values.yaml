@@ -1,6 +1,0 @@
-ingress:
-  host: "dashboard"
-  domain: "myrecipes.at"
-  path: "/"
-  serviceName: "kubernetes-dashboard"
-  servicePort: "443"

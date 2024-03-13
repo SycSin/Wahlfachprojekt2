@@ -1,4 +1,0 @@
-rollOutOrder: "1"
-syncOptions:
-  CreateNamespace: "false"
-  ServerSideApply: "false"
