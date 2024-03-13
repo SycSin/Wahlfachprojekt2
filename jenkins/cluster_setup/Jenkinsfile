@@ -192,8 +192,8 @@ pipeline {
                             echo "Waiting for registry to be ready"
                             sh "kubectl scale --replicas=0 deployment/myrecipes-backend -n myrecipes"
                             sh "kubectl scale --replicas=0 deployment/myrecipes-frontend -n myrecipes"
-                            sh "kubectl scale --replicas=2 deployment/myrecipes-backend -n myrecipes"
-                            sh "kubectl scale --replicas=2 deployment/myrecipes-frontend -n myrecipes"
+                            //sh "kubectl scale --replicas=2 deployment/myrecipes-backend -n myrecipes"
+                            //sh "kubectl scale --replicas=2 deployment/myrecipes-frontend -n myrecipes"
                             echo "Sleeping for 1 minute, until the deployments have been rescaled."
                             sleep 60
                             sh "kubectl wait --for=condition=ready --timeout=2700s pod --all -n myrecipes"
