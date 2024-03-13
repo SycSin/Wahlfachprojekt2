@@ -5,11 +5,7 @@ argo-cd:
     params:
       server.insecure: true
     cm:
-      timeout.reconciliation: 5s
-  redis-ha:
-    enabled: true
-  controller:
-    replicas: 1
+      timeout.reconciliation: 15s
   certificate:
       enabled: true
   server:
@@ -24,12 +20,16 @@ argo-cd:
         nginx.ingress.kubernetes.io/ssl-passthrough: "true"
         nginx.ingress.kubernetes.io/ssl-redirect: "false"
       tls: true
-    autoscaling:
-      enabled: true
-      minReplicas: 2
-  repoServer:
-    autoscaling:
-      enabled: true
-      minReplicas: 2
-  applicationSet:
-    replicas: 2
+  #  autoscaling:
+  #    enabled: true
+  #    minReplicas: 2
+  #repoServer:
+  #  autoscaling:
+  #    enabled: true
+  #    minReplicas: 2
+  #applicationSet:
+  #  replicas: 2
+  #redis-ha:
+  #  enabled: true
+  #controller:
+  #  replicas: 1
