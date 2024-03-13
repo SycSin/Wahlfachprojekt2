@@ -1,6 +1,6 @@
-#pvc:
-#  name: data-keycloak-postgresql-0
-#  size: 8Gi
+pvc:
+  name: kube-prometheus-stack-grafana
+  size: 10Gi
 
 kube-prometheus-stack:
   grafana:
