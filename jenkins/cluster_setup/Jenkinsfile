@@ -169,8 +169,8 @@ pipeline {
                             echo "Install custom resources for ArgoCD"
                             sh "helm upgrade --install argocd helm/cluster-config/argocd -n argocd --create-namespace" //running twice since there is a condition in the ApplicationSet Helm Template
                             sh "kubectl wait --for=condition=Ready --timeout=2700s pods --all -n argocd"
-                            echo "Sleeping for 1 minute, until the resources are initialized."
-                            sleep 60
+                            echo "Sleeping for 3 minutes, until the resources are initialized."
+                            sleep 180
                         }
                     }
                 }
