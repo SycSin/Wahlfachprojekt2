@@ -1,8 +1,6 @@
 pipeline {
     agent {
-        node {
-            label: pi4
-        }
+        node: pi4
     }
     stages {
         stage('Clone Repositories') {
