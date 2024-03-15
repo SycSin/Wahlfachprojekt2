@@ -147,7 +147,8 @@ pipeline {
                 script {
                     //def addons = ['ingress', 'metallb:192.168.1.211-192.168.1.214', 'dns', 'metrics-server', 'community', 'observability']
                     //def addons = ['ingress', 'metallb:192.168.1.211-192.168.1.214', 'dns', 'metrics-server', 'community']
-                    def addons = ['ingress', 'dns', 'metrics-server']
+                    //def addons = ['ingress', 'dns', 'metrics-server']
+                    def addons = ['dns', 'metrics-server']
                     withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
                         sshagent(credentials: ['jenkins-private-key']) {
                             for (def addon in addons) {
