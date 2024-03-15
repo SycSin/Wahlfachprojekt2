@@ -1,5 +1,5 @@
 pvc:
-  name: kube-prometheus-stack-grafana
+  name: monitoring-grafana
   size: 10Gi
 
 kube-prometheus-stack:
