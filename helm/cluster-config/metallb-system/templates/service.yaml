@@ -9,6 +9,7 @@ spec:
   selector:
     name: nginx-ingress-microk8s
   type: LoadBalancer
+  loadBalancerIP: {{ .Values.loadBalancerIP }}
   ports:
     - name: http
       protocol: TCP
