@@ -3,3 +3,8 @@ name: metallb-ingress
 description: A Helm chart for deploying an ingress loadbalancer with metallb
 type: application
 version: 0.1.0
+
+dependencies:
+  - name: metallb
+    repository: https://charts.bitnami.com/bitnami
+    version: 5.0.0
