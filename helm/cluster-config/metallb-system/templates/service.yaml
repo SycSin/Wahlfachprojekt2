@@ -7,7 +7,7 @@ metadata:
     metallb.universe.tf/loadBalancerIPs: {{ .Values.loadBalancerIP }}
 spec:
   selector:
-    app: ingress-ingress-nginx-controller
+    app: ingress-nginx-controller
   type: LoadBalancer
   ports:
     - name: http
