@@ -6,7 +6,7 @@ metadata:
     metallb.universe.tf/loadBalancerIPs: 192.168.1.214
 spec:
   ports:
-    - name: https
+    - name: http
       port: 80
       targetPort: 80
     - name: https
