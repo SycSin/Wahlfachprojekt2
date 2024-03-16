@@ -24,4 +24,5 @@ spec:
               service:
                 name: keycloak
                 port:
-                  number: 443
+                  #number: 443
+                  number: 80
