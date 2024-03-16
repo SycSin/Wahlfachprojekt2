@@ -6,9 +6,8 @@ spec:
   addresses:
     - 192.168.1.211-192.168.1.214
   autoAssign: true
-#---
-#apiVersion: metallb.io/v1beta1
-#kind: L2Advertisement
-#metadata:
-#  name: default-advertise-all-pools
-#  namespace: {{ .Release.Namespace }}
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: default-advertise-all-pools
