@@ -1,0 +1,10 @@
+apiVersion: v2
+name: oauth2-proxy
+description: A Helm chart for deploying an oauth2 proxy
+type: application
+version: 0.1.0
+
+dependencies:
+  - name: oauth2-proxy
+    repository: https://charts.bitnami.com/bitnami
+    version: 4.10.3
