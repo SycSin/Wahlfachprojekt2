@@ -28,6 +28,10 @@ argo-cd:
             - groups
   certificate:
       enabled: true
+  ###
+  applicationSet:
+    enabled: true
+  ###
   server:
     ingress:
       ###
