@@ -3,7 +3,7 @@ pvc:
   size: 8Gi
 
 keycloak:
-  proxy: edge
+  #proxy: edge
   postgresql:
     auth:
       password: "keycloak-test123"
