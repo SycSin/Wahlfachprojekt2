@@ -28,6 +28,7 @@ argo-cd:
   server:
     ingress:
       enabled: true
+      hostname: argocd.myrecipes.at
       ingressClassName: nginx
       annotations:
         nginx.ingress.kubernetes.io/backend-protocol: HTTP
