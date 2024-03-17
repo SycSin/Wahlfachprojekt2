@@ -12,10 +12,10 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-pass-headers: "*"
 spec:
   ingressClassName: nginx
-  #tls:
-  #  - hosts:
-  #      - keycloak.myrecipes.at
-  #    secretName: keycloak-crt
+  tls:
+    - hosts:
+        - keycloak.myrecipes.at
+      secretName: keycloak-crt
   rules:
     - host: "keycloak.myrecipes.at"
       http:

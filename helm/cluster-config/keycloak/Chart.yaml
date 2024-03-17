@@ -7,4 +7,4 @@ version: 1.0.0
 dependencies:
   - name: keycloak
     repository: https://charts.bitnami.com/bitnami
-    version: 19.3.3
+    version: 18.7.1
