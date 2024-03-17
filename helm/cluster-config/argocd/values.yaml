@@ -12,9 +12,7 @@ argo-cd:
       #  clientID: argocd
       #  clientSecret: $oidc.keycloak.clientSecret
       #  requestedScopes: ["openid", "profile", "email", "groups"]
-      oidc:
-        enabled: true
-        config:
+      oidc.config: |
           name: Keycloak
           issuer: http://keycloak.myrecipes.at/realms/master
           clientID: argocd
