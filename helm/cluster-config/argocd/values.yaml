@@ -6,12 +6,23 @@ argo-cd:
       server.insecure: true
     cm:
       timeout.reconciliation: 15s
-      oidc.config: |
-        name: Keycloak
-        issuer: http://keycloak.myrecipes.at/realms/master
-        clientID: argocd
-        clientSecret: $oidc.keycloak.clientSecret
-        requestedScopes: ["openid", "profile", "email", "groups"]
+      #oidc.config: |
+      #  name: Keycloak
+      #  issuer: http://keycloak.myrecipes.at/realms/master
+      #  clientID: argocd
+      #  clientSecret: $oidc.keycloak.clientSecret
+      #  requestedScopes: ["openid", "profile", "email", "groups"]
+    oidc:
+      enabled: true
+      name: Keycloak
+      issuer: http://keycloak.myrecipes.at/realms/master
+      clientID: argocd
+      clientSecret: "RFg4d21WVUxLcjlUOHM4eHJnakllSnNZcDRZRVRnSDg="
+      requestedScopes:
+        - openid
+        - profile
+        - email
+        - groups
   certificate:
       enabled: true
   server:
