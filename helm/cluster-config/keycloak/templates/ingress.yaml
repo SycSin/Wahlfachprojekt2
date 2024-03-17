@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: keycloak-ingress
   annotations:
-    nginx.ingress.kubernetes.io/backend-protocol: "https"
+    nginx.ingress.kubernetes.io/backend-protocol: "http"
     nginx.ingress.kubernetes.io/ssl-passthrough: "false"
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
     nginx.ingress.kubernetes.io/cors-allow-methods: "PUT, GET, POST, DELETE, PATCH, OPTIONS"
@@ -26,4 +26,4 @@ spec:
               service:
                 name: keycloak
                 port:
-                  number: 443
+                  number: 80

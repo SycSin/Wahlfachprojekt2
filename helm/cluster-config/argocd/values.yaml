@@ -14,9 +14,9 @@ argo-cd:
       #  requestedScopes: ["openid", "profile", "email", "groups"]
       oidc.config: |
           name: Keycloak
-          issuer: https://keycloak.myrecipes.at:80/realms/master
+          issuer: http://keycloak.myrecipes.at/realms/master
           clientID: argocd
-          clientSecret: RFg4d21WVUxLcjlUOHM4eHJnakllSnNZcDRZRVRnSDg=
+          clientSecret: $oidc.keycloak.clientSecret
           requestedScopes:
             - openid
             - profile
