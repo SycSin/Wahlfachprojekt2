@@ -30,6 +30,9 @@ argo-cd:
       enabled: true
   server:
     ingress:
+      ###
+      hostname: argocd.myrecipes.at
+      ###
       enabled: true
       ingressClassName: nginx
       annotations:
