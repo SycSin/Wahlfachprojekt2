@@ -6,6 +6,12 @@ argo-cd:
       server.insecure: true
     cm:
       timeout.reconciliation: 15s
+      oidc.config: |
+        name: Keycloak
+        issuer: https://keycloak.myrecipes.at/realms/master
+        clientID: argocd
+        clientSecret: $oidc.keycloak.clientSecret
+        requestedScopes: ["openid", "profile", "email", "groups"]
   certificate:
       enabled: true
   server:
