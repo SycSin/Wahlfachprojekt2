@@ -1,3 +1,7 @@
+pvc:
+  name: redis-data-argocd-redis-master-0
+  size: 8Gi
+
 argo-cd:
   global:
     domain: argocd.myrecipes.at
