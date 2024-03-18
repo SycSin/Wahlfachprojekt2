@@ -10,7 +10,12 @@ keycloak:
   auth:
     adminUser: "admin"
     adminPassword: "keycloak-test123"
-  #proxy: edge
+  proxy: edge
+  extraEnvVars:
+    - name: KC_HOSTNAME_ADMIN_URL
+      value: http://keycloak.myrecipes.at
+    - name: KC_HOSTNAME_URL
+      value: http://keycloak.myrecipes.at
   ###
   #production: true
   #proxy: reencrypt
