@@ -10,15 +10,18 @@ keycloak:
   auth:
     adminUser: "admin"
     adminPassword: "keycloak-test123"
-  production: true
-  proxy: reencrypt
-  extraEnvVars:
-    - name: PROXY_ADDRESS_FORWARDING
-      value: 'true'
-    - name: KEYCLOAK_ENABLE_HTTPS
-      value: 'true'
-    - name: KEYCLOAK_EXTRA_ARGS
-      value: "-Dkeycloak.frontendUrl=https://keycloak.myrecipes.at/"
+  proxy: edge
+  ###
+  #production: true
+  #proxy: reencrypt
+  #extraEnvVars:
+  #  - name: PROXY_ADDRESS_FORWARDING
+  #    value: 'true'
+  #  - name: KEYCLOAK_ENABLE_HTTPS
+  #    value: 'true'
+  #  - name: KEYCLOAK_EXTRA_ARGS
+  #    value: "-Dkeycloak.frontendUrl=https://keycloak.myrecipes.at/"
+  ###
   #ingress:
   #  enabled: true
   #  annotations:
