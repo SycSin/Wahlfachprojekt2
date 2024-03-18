@@ -9,7 +9,7 @@ argo-cd:
       timeout.reconciliation: 15s
       oidc.config: |
         name: Keycloak
-        issuer: https://localhost:8443/realms/master
+        issuer: http://localhost:8085/realms/master
         clientID: argocd
         clientSecret: $oidc.keycloak.clientSecret
         requestedScopes: ["openid", "profile", "email", "groups"]
