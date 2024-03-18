@@ -154,7 +154,7 @@ pipeline {
                                 echo "Enabling addon: ${addon}"
                                 sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s enable ${addon}'"
                             }
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s disable hostpath-storage'"
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s disable hostpath-storage || true'"
                         }
                     }
                 }
