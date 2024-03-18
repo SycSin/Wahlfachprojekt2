@@ -4,6 +4,9 @@ argo-cd:
   configs:
     params:
       server.insecure: true
+    rbac:
+      policy.csv: |
+        g, ArgoCDAdmins, role:admin
     cm:
       timeout.reconciliation: 15s
       oidc.config: |
@@ -12,19 +15,12 @@ argo-cd:
         clientID: argocd
         clientSecret: $oidc.keycloak.clientSecret
         requestedScopes: ["openid", "profile", "email", "groups"]
-    rbac:
-      policy.csv: |    
-        g, ArgoCDAdmins, role:admin
       #oidc.config: |
-      #    name: Keycloak
-      #    issuer: http://keycloak.myrecipes.at/realms/master
-      #    clientID: argocd
-      #    clientSecret: $oidc.keycloak.clientSecret
-      #    requestedScopes:
-      #      - openid
-      #      - profile
-      #      - email
-      #      - groups
+      #  name: Keycloak
+      #  issuer: https://keycloak.myrecipes.at/realms/master
+      #  clientID: argocd
+      #  clientSecret: $oidc.keycloak.clientSecret
+      #  requestedScopes: ["openid", "profile", "email", "groups"]
   certificate:
       enabled: true
   server:
