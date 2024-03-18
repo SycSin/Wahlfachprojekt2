@@ -1,21 +1,17 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: keycloak-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/backend-protocol: "http"
-    nginx.ingress.kubernetes.io/ssl-passthrough: "false"
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+  name: nginx
 spec:
-  ingressClassName: nginx
   rules:
-    - host: "keycloak.myrecipes.at"
+    - host: keycloak.myrecipes.at
       http:
         paths:
-          - pathType: Prefix
-            path: "/"
+          - path: /
+            pathType: Prefix
             backend:
               service:
                 name: keycloak
                 port:
-                  number: 80
+                  number: 8080
+  ingressClassName: nginx
