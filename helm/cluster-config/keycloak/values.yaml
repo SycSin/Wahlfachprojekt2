@@ -10,7 +10,7 @@ keycloak:
   auth:
     adminUser: "admin"
     adminPassword: "keycloak-test123"
-  proxy: edge
+  proxy: passthroughπ
   ###
   #production: true
   #proxy: reencrypt
