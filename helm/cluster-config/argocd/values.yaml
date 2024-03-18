@@ -8,7 +8,7 @@ argo-cd:
       timeout.reconciliation: 15s
       oidc.config: |
         name: Keycloak
-        issuer: http://keycloak.myrecipes.at/auth/realms/master
+        issuer: http://keycloak.myrecipes.at/realms/master
         clientID: argocd
         clientSecret: $oidc.keycloak.clientSecret
         requestedScopes: ["openid", "profile", "email", "groups"]
