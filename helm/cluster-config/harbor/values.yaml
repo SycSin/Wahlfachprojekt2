@@ -1,4 +1,5 @@
 harbor:
+  externalURL: https://registry.myrecipes.at
   exposureType: ingress
   ingress:
     core:
@@ -8,7 +9,6 @@ harbor:
       selfSigned: true
       annotations:
         nginx.ingress.kubernetes.io/ssl-redirect: "false"
-  externalURL: https://registry.myrecipes.at
   core:
     extraEnvVars:
       - name: configOverwriteJson
