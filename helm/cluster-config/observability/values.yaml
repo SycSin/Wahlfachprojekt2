@@ -5,14 +5,14 @@ ingress:
       - path: "/"
         serviceName: "kube-prom-stack-grafana"
         servicePort: "3000"
-    prometheus:
-      - path: "/"
-        serviceName: "kube-prom-stack-kube-prome-prometheus"
-        servicePort: "9090"
-    alertmanager:
-      - path: "/"
-        serviceName: "kube-prom-stack-kube-prome-alertmanager"
-        servicePort: "9093"
+#    prometheus:
+#      - path: "/"
+#        serviceName: "kube-prom-stack-kube-prome-prometheus"
+#        servicePort: "9090"
+#    alertmanager:
+#      - path: "/"
+#        serviceName: "kube-prom-stack-kube-prome-alertmanager"
+#        servicePort: "9093"
 
 prometheus:
   server:
