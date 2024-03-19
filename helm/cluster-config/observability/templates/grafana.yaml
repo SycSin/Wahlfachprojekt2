@@ -59,7 +59,7 @@ data:
     plugins = /var/lib/grafana/plugins
     provisioning = /etc/grafana/provisioning
     [server]
-    domain = 'grafana.myrecipes.at
+    domain = grafana.myrecipes.at
     root_url = https://grafana.myrecipes.at/grafana/
     [auth.generic_oauth]
     enabled = true
