@@ -62,7 +62,7 @@ data:
     domain = ''
     [auth.generic_oauth]
     enabled = true
-    name = Keycloak-OAuth
+    name = Keycloak
     allow_sign_up = true
     client_id = grafana
     client_secret = NGxAzFLqjMCsy9AgDB0j0p5aKuEvYfWK
