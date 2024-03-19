@@ -4,7 +4,7 @@ ingress:
     grafana:
       - path: "/"
         serviceName: "kube-prom-stack-grafana"
-        servicePort: "3000"
+        servicePort: "80"
 #    prometheus:
 #      - path: "/"
 #        serviceName: "kube-prom-stack-kube-prome-prometheus"
