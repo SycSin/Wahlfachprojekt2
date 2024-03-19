@@ -13,7 +13,7 @@ argo-cd:
         name: Keycloak
         issuer: https://keycloak.myrecipes.at/realms/master
         clientID: argocd
-        clientSecret: $oidc.keycloak.clientSecret
+        clientSecret: o89fWWodU3Zn0zATjtFUcNboxhOJ9oXG
         requestedScopes: ["openid", "profile", "email", "groups"]
       #oidc.config: |
       #  name: Keycloak
