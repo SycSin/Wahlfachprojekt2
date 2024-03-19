@@ -12,7 +12,7 @@ harbor:
   core:
     extraEnvVars:
       - name: configOverwriteJson
-        value: |
+        value:
           {
             "auth_mode": "oidc_auth",
             "oidc_name": "Keycloak",
