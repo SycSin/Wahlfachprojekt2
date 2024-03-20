@@ -12,4 +12,17 @@ harbor:
   core:
     extraEnvVars:
       - name: CONFIG_OVERWRITE_JSON
-        value: {"auth_mode":"oidc_auth", "oidc_name":"Keycloak", "oidc_endpoint":"https://keycloak.myrecipes.at/realms/master", "oidc_groups_claim":"groups", "oidc_admin_group":"HarborAdmins", "oidc_client_id":"harbor", "oidc_client_secret":"BQ3xIZsv3FWXDEOX5u7hDfifmQwC7CFS", "oidc_scope":"openid,email,profile,offline_access", "oidc_verify_cert":"false", "oidc_auto_onboard":"true", "oidc_user_claim":"preferred_username"}
+        value: |
+          {
+            "auth_mode": "oidc_auth",
+            "oidc_name": "Keycloak",
+            "oidc_endpoint": "https://keycloak.myrecipes.at/realms/master", 
+            "oidc_groups_claim": "groups",
+            "oidc_admin_group": "HarborAdmins",
+            "oidc_client_id": "harbor",
+            "oidc_client_secret": "BQ3xIZsv3FWXDEOX5u7hDfifmQwC7CFS",
+            "oidc_scope": "openid,email,profile,offline_access",
+            "oidc_verify_cert": "false",
+            "oidc_auto_onboard": "true",
+            "oidc_user_claim": "preferred_username"
+          }
