@@ -5,6 +5,7 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/ssl-passthrough: "false"
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    cert-manager.io/cluster-issuer: letsencrypt-staging
 spec:
   ingressClassName: nginx
   rules:
@@ -18,3 +19,8 @@ spec:
                 name: keycloak
                 port:
                   number: 80
+  tls:
+    - hosts:
+        - keycloak.myrecipes.at
+      secretName: letsencrypt-microk8s
+
