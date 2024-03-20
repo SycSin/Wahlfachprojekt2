@@ -7,7 +7,7 @@ spec:
     server: https://acme-staging-v02.api.letsencrypt.org/directory
     email: denis.radovanovic@web.de
     privateKeySecretRef:
-      name: letsencrypt-microk8s
+      name: letsencrypt
     solvers:
       - http01:
           ingress:
@@ -22,7 +22,7 @@ spec:
     server: https://acme-v02.api.letsencrypt.org/directory
     email: denis.radovanovic@web.de
     privateKeySecretRef:
-      name: letsencrypt-microk8s
+      name: letsencrypt
     solvers:
       - http01:
           ingress:

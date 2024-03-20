@@ -22,5 +22,5 @@ spec:
   tls:
     - hosts:
         - keycloak.myrecipes.at
-      secretName: letsencrypt-microk8s
+      secretName: letsencrypt
 
