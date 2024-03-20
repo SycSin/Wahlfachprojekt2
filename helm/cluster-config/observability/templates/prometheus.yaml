@@ -11,8 +11,26 @@ spec:
   storage:
     volumeClaimTemplate:
       spec:
-        storageClassName: nfs
+        storageClassName: ""
         resources:
           requests:
             storage: 15Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: prometheus-kube-prom-stack-kube-prome-prometheus-db-prometheus-kube-prom-stack-kube-prome-prometheus-0
+spec:
+  storageClassName: ""
+  capacity:
+    storage: 15Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  claimRef:
+    namespace: {{ .Release.Namespace }}
+    name: prometheus-kube-prom-stack-kube-prome-prometheus-db-prometheus-kube-prom-stack-kube-prome-prometheus-0
+  nfs:
+    path: /mnt/ssd/nfs/microk8s/{{ .Release.Namespace }}-prometheus-kube-prom-stack-kube-prome-prometheus-db-prometheus-kube-prom-stack-kube-prome-prometheus-0
+    server: 192.168.1.210
 {{ end -}}
