@@ -14,7 +14,7 @@ metadata:
     meta.helm.sh/release-name: tempo
     meta.helm.sh/release-namespace: observability
 spec:
-  replicas: 0 #set to 0 due to resource constraints on the rpi4
+  replicas: 1 #set to 0 due to resource constraints on the rpi4
   selector:
     matchLabels:
       app.kubernetes.io/instance: tempo
