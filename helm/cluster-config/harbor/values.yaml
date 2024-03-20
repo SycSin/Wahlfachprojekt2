@@ -22,5 +22,5 @@ harbor:
             "oidc_client_id": "harbor",
             "oidc_client_secret": "BQ3xIZsv3FWXDEOX5u7hDfifmQwC7CFS",
             "oidc_scope": "openid,email,profile,offline_access",
-            "oidc_verify_cert": "false",
+            "oidc_verify_cert": "false"
           }
