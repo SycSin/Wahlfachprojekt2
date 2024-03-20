@@ -3,7 +3,7 @@ pipeline {
 
     parameters {
         choice(
-            choices: ['node01', 'node02', 'node03'],
+            choices: ['pi4', 'node01', 'node02', 'node03'],
             description: 'Select a node',
             name: 'NODE'
         )
@@ -141,6 +141,8 @@ pipeline {
 
 def getNodeIP(selectedNode) {
     switch (selectedNode) {
+        case 'pi4':
+            return '192.168.1.247'
         case 'node01':
             return '192.168.1.211'
         case 'node02':

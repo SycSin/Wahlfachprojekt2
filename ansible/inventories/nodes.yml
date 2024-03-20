@@ -8,4 +8,5 @@ all:
           ansible_host: 192.168.1.212
         node03:
           ansible_host: 192.168.1.213
-
+        pi4:
+          ansible_host: 192.168.1.247
