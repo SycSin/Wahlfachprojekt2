@@ -34,14 +34,16 @@ pipeline {
                                     returnStdout: true
                             ).trim()
                             echo "Register node02"
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.212 '/snap/bin/${addNodeCommand}'"
+                            //sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.212 '/snap/bin/${addNodeCommand}'"
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.212 '/snap/bin/${addNodeCommand} --worker'"
                             echo "Retrieving new token"
                             addNodeCommand = sh(
                                     script: "ssh -o StrictHostKeyChecking=no -i \$SSH_PRIVATE_KEY root@192.168.1.211 '/snap/bin/microk8s add-node | grep \"microk8s join 192.168.1.211\" | head -1'",
                                     returnStdout: true
                             ).trim()
                             echo "Register node03"
-                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.213 '/snap/bin/${addNodeCommand}'"
+                            //sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.213 '/snap/bin/${addNodeCommand}'"
+                            sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.213 '/snap/bin/${addNodeCommand} --worker'"
                             echo "Retrieving new token"
                             addNodeCommand = sh(
                                     script: "ssh -o StrictHostKeyChecking=no -i \$SSH_PRIVATE_KEY root@192.168.1.211 '/snap/bin/microk8s add-node | grep \"microk8s join 192.168.1.211\" | head -1'",
@@ -50,35 +52,35 @@ pipeline {
                             echo "Register pi4"
                             sh "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.247 '/snap/bin/${addNodeCommand} --worker'"
 
-                            echo "Verify that High Availability is enabled"
-                            def timeoutSeconds = 1800
-                            def startTime = currentBuild.startTimeInMillis
-                            def endTime = startTime + timeoutSeconds * 1000
-                            def haStatus = ""
+                            //echo "Verify that High Availability is enabled"
+                            //def timeoutSeconds = 1800
+                            //def startTime = currentBuild.startTimeInMillis
+                            //def endTime = startTime + timeoutSeconds * 1000
+                            //def haStatus = ""
 
-                            while (System.currentTimeMillis() < endTime) {
-                                try {
-                                    withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
-                                        sshagent(credentials: ['jenkins-private-key']) {
-                                            haStatus = sh(returnStdout: true, script: "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s status'").trim()
-                                        }
-                                    }
-                                    echo haStatus
-                                    if (haStatus.contains("high-availability: yes")) {
-                                        echo "High Availability is enabled."
-                                        break
-                                    } else {
-                                        echo "High Availability is not yet enabled. Retrying in 5 seconds..."
-                                        sleep 5
-                                    }
-                                } catch (Exception e) {
-                                    echo "Error checking HA status. Retrying in 5 seconds..."
-                                    sleep 5
-                                }
-                            }
-                            if (!haStatus.contains("high-availability: yes")) {
-                                error "High Availability was not enabled within the specified timeout."
-                            }
+                            //while (System.currentTimeMillis() < endTime) {
+                            //    try {
+                            //        withCredentials([sshUserPrivateKey(credentialsId: 'jenkins-private-key', keyFileVariable: 'SSH_PRIVATE_KEY')]) {
+                            //            sshagent(credentials: ['jenkins-private-key']) {
+                            //                haStatus = sh(returnStdout: true, script: "ssh -o StrictHostKeyChecking=no -i ${SSH_PRIVATE_KEY} root@192.168.1.211 '/snap/bin/microk8s status'").trim()
+                            //            }
+                            //        }
+                            //        echo haStatus
+                            //        if (haStatus.contains("high-availability: yes")) {
+                            //            echo "High Availability is enabled."
+                            //            break
+                            //        } else {
+                            //            echo "High Availability is not yet enabled. Retrying in 5 seconds..."
+                            //            sleep 5
+                            //        }
+                            //    } catch (Exception e) {
+                            //        echo "Error checking HA status. Retrying in 5 seconds..."
+                            //        sleep 5
+                            //    }
+                            //}
+                            //if (!haStatus.contains("high-availability: yes")) {
+                            //    error "High Availability was not enabled within the specified timeout."
+                            //}
                         }
                     }
                 }
