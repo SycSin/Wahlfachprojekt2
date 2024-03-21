@@ -9,6 +9,7 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/ssl-passthrough: 'true'
     nginx.ingress.kubernetes.io/use-forwarded-headers: "true"
+    cert-manager.io/cluster-issuer: letsencrypt
   {{- end }}
 spec:
   ingressClassName: nginx
@@ -25,6 +26,10 @@ spec:
                 name: {{ $path.serviceName }}
                 port:
                   number: {{ $path.servicePort }}
+  tls:
+    - hosts:
+        - grafana.myrecipes.at
+      secretName: letsencrypt
           {{- end }}
     {{- end }}
 {{- end }}
