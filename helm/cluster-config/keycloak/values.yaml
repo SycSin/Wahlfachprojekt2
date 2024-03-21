@@ -3,6 +3,7 @@ pvc:
   size: 8Gi
 
 keycloak:
+  replicaCount: 2
   autoscaling:
     enabled: true
     autoscaling:
