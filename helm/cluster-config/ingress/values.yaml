@@ -1,6 +1,7 @@
 loadBalancerIP: 192.168.1.214
 controller:
   replicaCount: 3
+  allowSnippetAnnotations: true
   affinity:
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
