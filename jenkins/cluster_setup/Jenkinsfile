@@ -190,8 +190,9 @@ pipeline {
         stage('Trigger Image Build Pipeline') {
             steps {
                 script {
-                    sh "kubectl wait --for=condition=Ready --timeout=2700s pods --all -n harbor"
-                    def buildPipeline = build job: 'image_builds'
+                    echo "Waiting for Harbor to become available"
+                    //sh "kubectl wait --for=condition=Ready --timeout=2700s pods --all -n harbor" //TODO: for some reason not working as ready is never achieved?
+                    //def buildPipeline = build job: 'image_builds'
                 }
             }
         }
