@@ -1,9 +1,0 @@
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  name:  {{ .Release.Namespace }}-ingress-nginx-controller
-  namespace:  {{ .Release.Namespace }}
-data:
-  use-forwarded-headers: "true"
-  forwarded-for-header: "X-Forwarded-For"
-  allow-snippet-annotations: "true"
