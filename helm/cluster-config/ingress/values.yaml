@@ -1,9 +1,9 @@
 loadBalancerIP: 192.168.1.214
 ingress-nginx:
   controller:
-    #replicaCount: 3
+    replicaCount: 2
     allowSnippetAnnotations: true
-    config: |
+    config:
       use-forwarded-headers: "true"
       forwarded-for-header: "X-Forwarded-For"
     affinity:
