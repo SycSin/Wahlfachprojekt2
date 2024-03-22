@@ -9,6 +9,7 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/ssl-passthrough: 'true'
     nginx.ingress.kubernetes.io/use-forwarded-headers: "true"
+    nginx.ingress.kubernetes.io/proxy_set_header: Authorization ""; # stop nginx forwarding the basic auth header for nginx .htpasswd to grafana
     cert-manager.io/cluster-issuer: letsencrypt-staging
   {{- end }}
 spec:
