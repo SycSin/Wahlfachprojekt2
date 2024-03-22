@@ -1,14 +1,15 @@
 loadBalancerIP: 192.168.1.214
-controller:
-  replicaCount: 3
-  allowSnippetAnnotations: true
-  affinity:
-    podAntiAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        - labelSelector:
-            matchExpressions:
-              - key: app
-                operator: In
-                values:
-                  - nginx-ingress
-          topologyKey: "kubernetes.io/hostname"
+ingress-nginx:
+  controller:
+    replicaCount: 3
+    allowSnippetAnnotations: true
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                    - nginx-ingress
+            topologyKey: "kubernetes.io/hostname"
