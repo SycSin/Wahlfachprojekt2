@@ -6,3 +6,4 @@ metadata:
 data:
   use-forwarded-headers: "true"
   forwarded-for-header: "X-Forwarded-For"
+  allow-snippet-annotations: "true"
